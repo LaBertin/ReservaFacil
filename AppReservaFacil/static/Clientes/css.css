@@ -2,7 +2,6 @@
 
 header {
     overflow: hidden;
-    background-color: #f1f1f1;
     height: 80px;
     background-color: #42444E;
 }
@@ -81,6 +80,13 @@ body{
 
 #div-body{
     padding: 150px 200px;
-    font-family:inherit;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
-    
+
+footer {
+    height: 80px;
+    background-color: #42444E;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
