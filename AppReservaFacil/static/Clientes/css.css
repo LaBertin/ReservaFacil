@@ -1,0 +1,86 @@
+/*Header*/
+
+header {
+    overflow: hidden;
+    background-color: #f1f1f1;
+    height: 80px;
+    background-color: #42444E;
+}
+
+.btn-naranja-mediano{
+    color: #42444E;
+    height: 40px;
+    width: 140px;
+    background-color: #FAA92F;
+    text-decoration: none;
+    border-style: none;
+    border-radius: 5px;
+}
+
+/*Div que mueve la imagen a la izquierda*/
+header div#div-nav-left{
+    float: left;
+}
+/*Div que mueve la lista de items a la derecha*/
+header div#div-nav-right{
+    float: right;
+}
+/*Posición de la imagen*/
+header div img{
+    padding-left: 20px;
+    padding-top: 10px;
+    
+}
+/*Style del div nav*/
+header div nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    padding-right: 20px;
+    display: flex;
+
+}
+    /*Style lista*/
+    header div nav ul li {
+        display: inline-block;
+        line-height: 80px;
+        text-decoration: none;
+    }
+        /*Style texto lista*/
+        header div nav ul li a {
+            font-size: 17px;
+            display: block;
+            padding: 0 10px;
+            color: #D9D9D9;
+            text-decoration: none;
+            transition: background-color .7s;
+        }
+            /*Efecto al pasar mouse*/
+            header div nav ul li a:hover {
+                background: gray;
+
+            }
+        /*Style botón header*/
+        header div nav ul li .btn-naranja-mediano a {
+            transition: none;
+            color: #42444E;
+        }
+            /*Si es un botón en el nav se le quita el efecto*/
+            header div nav ul li .btn-naranja-mediano a{
+                background: none;
+            }
+            
+
+/*Body*/
+
+body{
+    margin: 0;
+    background-image:url("background.jpg");
+    background-repeat: no-repeat   ;
+}
+
+#div-body{
+    padding: 150px 200px;
+    font-family:inherit;
+}
+    
