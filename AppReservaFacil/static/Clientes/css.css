@@ -108,3 +108,18 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
+
+/*admin_Sesiones*/
+
+.container_RRHH{
+    box-sizing: border-box;
+
+    position: absolute;
+    width: 1224px;
+    height: 851px;
+
+    background: #D9D9D9;
+    border: 1px solid #000000;
+    border-radius: 33px;
+}
