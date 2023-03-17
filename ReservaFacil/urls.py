@@ -20,4 +20,7 @@ from AppReservaFacil import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
+    path('inicio/', views.inicio),
+    path('inicioSesion/', views.inicioSesion),
+    path('registro/', views.registrousuario)
 ]
