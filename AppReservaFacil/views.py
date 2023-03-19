@@ -32,6 +32,13 @@ def admin_RRHH(request):
 def admin_Sesiones(request):
     return render(request, 'admin/admin_Sesiones.html')
 
+def admin_Agregar(request):
+    return render(request, 'admin/admin_Agregar.html')
+
+def admin_crearUsuario(request):
+    return render(request, 'admin/admin_crearUsuario.html')
+
+
 
 
 def registrousuario(request):

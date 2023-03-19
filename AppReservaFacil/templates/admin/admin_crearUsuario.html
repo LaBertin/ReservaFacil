@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'clientes/css.css'%}">
-    <title>ReservaFácil - Inicio</title>
+   
+    <title> Crear Usuario </title>
 
     
 </head>
@@ -34,69 +35,43 @@
 
 <body>
 
-    <div class= "container_RRHH"> 
+    <div class= "container_CrearUsuarios"> 
 
-        <h1>Formulario</h1>
+        <div id="contenido">
 
-            <!-- Grupo: Nombre -->
-        <div class="formulario__grupo" id="grupo__nombre">
-            <label for="nombre" class="formulario__label">Nombre completo </label>
-            <input type="text" name="nombre" placeholder="nombre usuario" >
-         </div>
+            <div id="section">
 
-            <!-- Grupo: Cargo -->
-        <div class="formulario__grupo" id="grupo__cargo">
-            <label for="cargo" class="formulario__label">cargo</label>
-            <input type="text" name="cargo" placeholder="cargo usuario" >
-        </div>
-
-            <!-- Grupo: Rut -->
-         <div class="formulario__grupo" id="grupo__rut">
-            <label for="rut" class="formulario__label">rut</label>
-            <input type="text" name="rut" placeholder="rut usuario" >
-        </div>
-            
-            <!-- Grupo: Correo -->
-        <div class="formulario__grupo" id="grupo__correo">
-            <label for="correo" class="formulario__label">Correo electronico</label>
-            <input type="text" name="correo" placeholder="correo usuario" >
-        </div>
-
-            <!-- Grupo: telefono celular-->
-        <div class="formulario__grupo" id="grupo__telefono">
-            <label for="telefono" class="formulario__label">telefono</label>
-            <input type="number" name="telefono" placeholder="telefono usuario" >
             </div>
 
-        <!-- Grupo: telefono -->
-        <div class="formulario__grupo" id="grupo__telefono">
-            <label for="telefono" class="formulario__label">telefono fijo</label>
-            <input type="number" name="telefono" placeholder="telefono" >
+            <div id="crearUsuario"> 
+
+                <!-- Grupo: Nombre -->
+                <div class="formulario__grupo" id="grupo__nombre">
+                    <label for="nombre" class="formulario__label"> Nombre de Usuario </label>
+                    <input type="text" name="nombre" placeholder=" Ej: JuanMJ " >
+                </div>
+
+                 <!-- Grupo: Contrasenna -->
+                <div class="formulario__grupo" id="grupo__Contrasenna">
+                     <label for="Contrasenna" class="formulario__label"> Contraseña </label>
+                    <input type="password" name="password" placeholder="clave">
+                </div>
+
+                <!-- Grupo: repetir Contrasenna -->
+                <div class="formulario__grupo" id="grupo__Contrasenna2">
+                    <label for="Contrasenna2" class="formulario__label"> Repetir Contraseña </label>
+                    <input type="password" name="password" placeholder="clave">
+                </div>
+
+            </div>
         </div>
-
-            <!-- Grupo: telefono de contacto-->
-        <div class="formulario__grupo" id="grupo__telefono">
-            <label for="telefono" class="formulario__label">telefono de contacto</label>
-            <input type="number" name="telefono" placeholder="telefono" >
-        </div>
-
-            <!-- Grupo: Contrasenna -->
-        <div class="formulario__grupo" id="grupo__correo">
-            <label for="correo" class="formulario__label"> Contraseña </label>
-            <input type="password" name="password" placeholder="clave">
-        </div>   
-
-        <input type="button">
-
     </div>
     
 </body>
 
 <footer>
     <nav id="RedesSociales">
-        <br>
-    <h4>Redes Sociales</h4>
-    <br>
+
     <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.instagram.com/"><img src="{% static 'img/icons8-instagram-48.png' %}" alt=""></a></button>
     <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.facebook.com/"><img src="{% static 'img/icons8-facebook-48.png' %}" alt=""></a></button>
     <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.twitter.com/"><img src="{% static 'img/icons8-twitter-48.png' %}" alt=""></a></button>
