@@ -24,4 +24,12 @@ urlpatterns = [
     path('inicioSesion/', views.iniciarsesionusuario),
     path('registro/', views.registrousuario),
     path('cerrarSesion/', views.cerrarsesionusuario),
+    path('home/', views.home, name="home"),
+    path('admin_Finanzas/', views.admin_Finanzas, name="admin_Finanzas"),
+    path('admin_RRHH/', views.admin_RRHH, name="admin_RRHH"),
+    path('admin_Sesiones/', views.admin_Sesiones, name="admin_Sesiones"),
+    path('admin_Agregar/', views.admin_Agregar, name="admin_admin_Agregar"),
+    path('admin_crearUsuario/', views.admin_crearUsuario, name="admin_crearUsuario"), 
+    
+    
 ]
