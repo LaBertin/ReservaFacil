@@ -6,21 +6,29 @@ header {
 }
     /*Btn mediano, este botón se usará mas veces pero lo creé en el header así que lo dejo identado*/
     .btn-naranja-mediano{
-        color: #42444E;
         height: 40px;
         width: 140px;
         background-color: #FAA92F;
-        text-decoration: none;
         border-style: none;
         border-radius: 5px;
+        margin: auto;
     }
-
+        /*Modifico el text dentro del btn para que no aparezca el underline*/
+        .btn-naranja-mediano a{
+            text-decoration: none;
+            color: #42444E;
+        }
+        /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+        .btn-naranja-mediano a:hover{
+            text-decoration: none;
+            color: #42444E;
+        }
     /*Div que mueve la imagen a la izquierda*/
-    header div#div-nav-left{
+    div#div-nav-left{
         float: left;
     }
     /*Div que mueve la lista de items a la derecha*/
-    header div#div-nav-right{
+    div#div-nav-right{
         float: right;
     }
     /*Posición de la imagen*/
@@ -56,18 +64,9 @@ header {
                 /*Efecto al pasar mouse*/
                 header div nav ul li a:hover {
                     background: gray;
-
+                    text-decoration: none;
+                    color: #FFFFFF;
                 }
-            /*Style botón header*/
-            header div nav ul li .btn-naranja-mediano a {
-                transition: none;
-                color: #42444E;
-            }
-                /*Si es un botón en el nav se le quita el efecto*/
-                header div nav ul li .btn-naranja-mediano a{
-                    background: none;
-                }
-                
 
 /*Body identaré todo lo que esté en el body para diferenciar entre items*/
 
@@ -77,14 +76,16 @@ body{
     background-repeat: no-repeat   ;
     
 }
+    body div form div#div-nav-left{
+        margin-left: 20px;
+    }
 
     #div-body{
         padding: 150px 200px;
         font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-
+    
     /*Div Pequeño de Inicio Sesión*/
-
     .div-pequeño{
         height: 500px;
         width: 500px;
@@ -94,11 +95,15 @@ body{
         border-radius: 10px;
         box-shadow: 0px 1px 1px;
     }
+        /*Se modifica el texto del div para que tenga una fuente mas agradable a la vista del usuario*/
         .div-pequeño h2{
             font-family:Verdana, Geneva, Tahoma, sans-serif;
             text-align: center;
             padding-top: 30px;
         }
+    #btn-home-cerrar-sesion{
+        padding-top: 100px;
+    }
 
 /*Footer identaré todo lo que esté en el Footer para diferenciar entre items*/
 footer {

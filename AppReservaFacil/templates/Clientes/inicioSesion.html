@@ -1,8 +1,26 @@
 {% extends "./index.html" %}
 {% block footer %}
+<head>
+    <title>ReservaFácil - Inicio Sesión</title>
+</head>
 <body>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
     <div class="div-pequeño">
         <h2 id="titulo-inicio-sesion">Inicio de sesión</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ formIniciarSesionUsuario.as_p }}
+            <br>
+            <input id="btn-inicio-sesion" type="submit" value="Iniciar Sesion" class="btn-naranja-mediano">
+        </form>
+        <button id="btn-inicio-sesion" class="btn-naranja-mediano"><a href="/registro">Registrate</a></button>
     </div>
 </body>
 {% endblock %}
