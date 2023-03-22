@@ -6,43 +6,116 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'clientes/css.css'%}">
-    <title>ReservaFácil - Inicio</title>
+    <title> ReservaFácil - Inicio</title>
 
     
 </head>
 
-<!--Header-->
-<header>
-    <!--Div de Imagen-->
-    <div id="div-nav-left">
-        <img src="../../static/img/logo.png" width="28px" height="60px">
+
+<body class= "formulario_Agregar">
+
+    <!--container general del formulario-->
+    <div class="container_agregar">
+
+        <span class="titulo"> Formulario </span>
+
+    <form action="#">
+        <div class="form first"> 
+            <div class="details personal">
+
+           <!-- Formulario para agregar nuevo personal -->
+
+            <div class="fields">
+           <!--Nombre Completo-->
+                    <div class="input-field">
+                        <label class= "formu"> *Nombre Completo: </label>
+                        <input type="text" placeholder =" Enter your name ">
+                    </div>
+                
+            <!--Cargo del Empleado-->
+                    <div class="input-field">
+                        <label class= "formu"> *Cargo del Empleado: </label>
+                        <input type="text" placeholder =" Su cargo es ...... ">
+                    </div>
+                
+           <!--Rut del Empleado-->
+                    <div class="input-field">
+                        <label class= "formu"> *Rut: </label>
+                        <input type="number" placeholder =" 17.223.276-k ">
+                    </div>
+
+                   <!--Rut del Empleado-->
+                    <div class="input-field">
+                        <label class= "formu"> *Sexo: </label>
+                        <input type="text" placeholder =" Masculino ">
+                    </div>
+
+                    <!--Correo del Empleado-->
+                    <div class="input-field">
+                        <label class= "formu"> *Correo personal: </label>
+                        <input type="text" placeholder =" juanm@gmail.com ">
+                    </div>
+
+                    <!--telefono celular-->
+                    <div class="input-field">
+                        <label class= "formu"> *Telefono celular: </label>
+                        <input type="number" placeholder =" 923547613 ">
+                    </div>
+
+
+                    <!--telefono fijo-->
+                    <div class="input-field">
+                        <label class= "formu"> Telefono Fijo: </label>
+                        <input type="number" placeholder =" 322876576 ">
+                    </div>
+
+                    <!--telefono de Contacto de Emergencia-->
+                    <div class="input-field">
+                        <label class= "formu"> *Contacto de Emergencia: </label>
+                        <input type="number" placeholder =" 923547613 ">
+                    </div>
+
+                    <!--Fecha de Nacimineto-->
+                    <div class="input-field">
+                        <label class= "formu"> *Fecha de Nacimiento: </label>
+                        <input type="date" placeholder =" 26/07/1978 ">
+                    </div>
+
+                    <!--Fecha de Contratacion-->
+                    <div class="input-field">
+                        <label class= "formu"> *Fecha de Contratación: </label>
+                        <input type="date" placeholder =" 26/07/2023 ">
+                    </div>
+
+                <div class"buttons">
+
+                    <div class="nextBtn">
+                        <span class="btnText"> Siguiente  </span>
+                        <i class="uil uil-navigator"></i>
+                    </div>
+    
+                    <button class="backtBtn">
+                        <span class="btnText"> volver </span>
+                        <i class="uil uil-navigator"></i>
+                    </button >
+
+                </div>
+                    
+            </div>
+
+            </div> 
+
+        </div>
+
     </div>
-    <!--Div Opciones-->
-    <div id="div-nav-right">
-        <nav>
-            <ul>
-                <li><a href="">Administrar Sesiones</a></li>
-                <li><a href="">Finanazas</a></li>
-                <li><a href="">R.R.H.H</a></li>
-                <li><a href="">Administrar</a></li>
-               
-            </ul>
             
-        </nav>
-    </div>
-</header>
 
-<body>
+<br>
+<br>
+<br>
 
-  <br> 
 
-    <div class= "container-Sesiones"> 
-        <h1>Formulario</h1>
-    </div>
 </body>
 
-<footer>
-
-</footer>
 
 </html>
