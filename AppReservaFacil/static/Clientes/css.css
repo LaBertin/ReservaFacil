@@ -127,6 +127,8 @@ footer {
 /*--------- Estilos de contenedor formulario-------*/
 /*-------------------------------------------------*/
 
+/*----nombre del Body-------*/
+
 .formulario_Agregar{
     display: flex;
     align-items: center;
@@ -134,8 +136,9 @@ footer {
 
 }
 
-.container_agregar{
+/*----nombre del Container principal-------*/
 
+.container_agregar{
     position: relative;
     max-width: 900px;
     width: 100%;
@@ -177,6 +180,8 @@ footer {
     transition: 0.3s ease;
 }
 
+/*----efecto de transicion entre containers-------*/
+
 .container_agregar form .form.second{
     opacity: 0;
     pointer-events: none;
@@ -211,9 +216,11 @@ form.secActive .form.first{
     flex-wrap: wrap;
 }
 
+/*---- cantidad de columnas -------*/
+
 form .fields .input-field{
     display: flex;
-    width: calc(100% / 2 - 20px);
+    width: calc(100% / 2 - 15px);
     flex-direction: column;
     margin: 4px 0;
 }
@@ -248,6 +255,8 @@ form .fields .input-field{
     color: #333;
 }
 
+/*----diseño, forma y ubicación del botón-------*/
+
 .container_agregar form button, .backBtn{
     display: flex;
     align-items: center;
@@ -271,10 +280,10 @@ form .fields .input-field{
     font-weight: 400;;
 }
 
+/*----efecto del botón al acercar el mause-------*/
 form button:hover{
     background-color: #265df2;
 }
-
 
 form button i,
 form .backBtn i{
@@ -293,6 +302,8 @@ form .buttons{
 form .buttons button, .backBtn{
     margin-right: 14px;
 }
+
+/*---- responsiva del formulario -------*/
 
 @media (max-width: 750px) {
     .container_agregar form{

@@ -1,6 +1,8 @@
 let dataTable;
 let dataTableIsInitialized = false;
 
+/* opciones para descargar el listado*/
+
 let dataTableOptions = {
   dom: 'Bfrtilp',
   buttons: [
@@ -23,6 +25,9 @@ let dataTableOptions = {
       className: 'btn btn-info',
     },
   ],
+
+  /* numeral para escoger la cantidad de datos a observar*/
+
   lengthMenu: [5, 10, 15, 20, 100, 200, 500],
   columnDefs: [
     { className: 'centered', targets: [0, 1, 2, 3, 4, 5] },
@@ -267,6 +272,8 @@ let dataTableOptions = {
     },
   },
 };
+
+/* llamado de datatable para mostrar los datos por pantalla*/
 
 const initDataTable = async () => {
   if (dataTableIsInitialized) {
