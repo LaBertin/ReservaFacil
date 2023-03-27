@@ -6,6 +6,7 @@ const expresiones = {
 	nombre: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, /* Letras y espacios, pueden llevar acentos.*/
     cargo: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, /* Letras y espacios, pueden llevar acentos.*/
     rut: /^\d{7,14}$/, /* 7 a 14 numeros.*/
+	sexo: /^[a-zA-ZÀ-ÿ\s]{1,40}$/, /* Letras y espacios, pueden llevar acentos.*/
 	correo: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
 	telefonoCelular: /^\d{7,14}$/, /* 7 a 14 numeros.*/
     telefono: /^\d{7,14}$/, /* 7 a 14 numeros.*/
@@ -19,6 +20,7 @@ const campos = {
 	nombre: false,
 	cargo: false,
 	rut: false,
+	sexo: false,
 	correo: false,
 	telefonoCelular: false,
     telefono: false,
@@ -37,6 +39,9 @@ const validarFormulario = (e) => {
 		break;
         case "rut":
 			validarCampo(expresiones.rut, e.target, 'rut');
+		break;
+		case "sexo":
+			validarCampo(expresiones.sexo, e.target, 'sexo');
 		break;
         case "correo":
 			validarCampo(expresiones.correo, e.target, 'correo');
@@ -85,7 +90,7 @@ formulario.addEventListener('submit', (e) => {
 
 	
 
-	if(campos.nombre && campos.cargo && campos.rut && campos.correo && campos.telefonoCelular && campos.telefono && campos.telefonoContacto /*&& campos.fecha && campos.hora*/){
+	if(campos.nombre && campos.cargo && campos.rut && campos.sexo && campos.correo && campos.telefonoCelular && campos.telefono && campos.telefonoContacto /*&& campos.fecha && campos.hora*/){
 		formulario.reset();
 
 		document.getElementById('formulario__mensaje-exito').classList.add('formulario__mensaje-exito-activo');
