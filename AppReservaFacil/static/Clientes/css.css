@@ -1,14 +1,20 @@
 html{
     height: 100%;
 }
+/*Header, identaré todo lo que esté en el header para diferenciar entre items*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
 *{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins','sans-serif';
 }
 /*Header, identaré todo lo que esté en el header para diferenciar entre items*/
 header {
     height: 80px;
     background-color: #42444E;
+    
 }
     /*Btn mediano, este botón se usará mas veces pero lo creé en el header así que lo dejo identado*/
     .btn-naranja-mediano{
@@ -166,136 +172,229 @@ footer {
     position:relative;
     bottom: 0;
     width: 100%;
+    text-align: center;
+
+    font-family: 'Lobster', cursive;
+    margin-top: 80px;
+    text-decoration: none;
+
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+}
+/* ----- -----iconos de las redes sociales ----- ----*/
+
+@media (min-width: 550px) {
+    .RedesSociales {
+        display: block;
+        position: center;
+        font-size: 100%;
+        padding: 100%;
+        background-color: var(--blanco);
+        color: var(--blanco);
+    }
 }
 
 
-/*----------------container_agregar----------------------*/
+
+
+/*-------------------------------------------------*/
+/*--------- Estilos de contenedor formulario-------*/
+/*-------------------------------------------------*/
+
+/*----nombre del Body-------*/
+
+.formulario_Agregar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+/*----nombre del Container principal-------*/
 
 .container_agregar{
-
-    background: #D9D9D9;
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 6px;
+    padding: 30px;
+    margin: 0 15px;
+    background-color: #D9D9D9;
+    box-shadow: 0 5px 10 px rgba(0,0,0,0.1);
     border: 1px solid #000000;
-    border-radius: 33px;
-
-    /*Largo y ancho del container principal*/
-    width: 80%;
-    max-width: 100%;
-    height: 500px;
-    width: 1000px;
-    
-    /*centrar div*/
-    display: grid;
-    place-items: center;
-    
-    /*centrar container al medio de la pagina*/
-    margin: 15%;
-    
 }
 
-/*----------------container-Sesiones----------------------*/
-.container-Sesiones{
-
-    background: #D9D9D9;
-    border: 1px solid #000000;
-    border-radius: 33px;
-
-    /*Largo y ancho del container principal*/
-    width: 80%;
-    max-width: 100%;
-    height: 500px;
-    width: 1000px;
-    
-    /*centrar div*/
-    display: grid;
-    place-items: center;
-
-    /*centrar container al medio de la pagina*/
-    margin: 15%;
-    
+.container_agregar .titulo{
+    font-size: 30px;
+    font-weight: 600;
+    color: #000000;
 }
 
-/*----------------admin_crear_Usuario----------------------*/
-
-.container_CrearUsuarios{
-
-    background: #D9D9D9;
-    border: 1px solid #000000;
-    border-radius: 33px;
-
-    /*Largo y ancho del container principal*/
-    width: 80%;
-    max-width: 100%;
-    height: 700px;
-    width: 1000px;
-    
-    /*centrar div*/
-    display: grid;
-    place-items: center;
-
-    /*centrar container al medio de la pagina*/
-    margin: 15%;
-    
+.container_agregar .titulo::before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 3px;
+    width: 27px;
+    border-radius: 8px;
 }
 
-#section{
-
-    /*centrar div*/
-    display: grid;
-    place-items: center;
-
-    /*borde*/
-    box-sizing: border-box;
-    border-radius: 27px;
-
-    /*Tamaño*/
-    width: 65%;
-    height: 95%;
-
-    height: 500px;
-    width: 400px;
-
-    /*Color*/
-    background: #FDFCFC;
-    border: 2px solid #000000;
-    
-    /*Ubicacion*/
-
-    float: left;
-    
+.container_agregar form{
+    position: relative;
+    margin-top: 16px;
+    min-height: 490px;
+    background-color: #D9D9D9;
+    overflow: hidden;
 }
 
-#crearUsuario{
-
-    /*centrar div*/
-    display: grid;
-    place-items: center;
-
-    /*borde*/
-    box-sizing: border-box;
-    border-radius: 27px;
-
-    /*Tamaño*/
-    width: 25%;
-    height: 95%;
-
-    height: 500px;
-    width: 400px;
-
-    /*Color*/
-    background: #FDFCFC;
-    border: 2px solid #000000;
-    
-    /*Ubicacion*/
-    float: right;
-  
+.container_agregar form .form{
+    position: absolute;
+    background-color: #D9D9D9;
+    transition: 0.3s ease;
 }
 
-.btn_Aceptar{
-    color: #42444E;
-    height: 40px;
-    width: 140px;
-    background-color: #FAA92F;
-    text-decoration: none;
-    border-style: none;
+/*----efecto de transicion entre containers-------*/
+
+.container_agregar form .form.second{
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+}
+
+form.secActive .form.second{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+
+form.secActive .form.first{
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-100%);
+}
+
+.container_agregar form .titulo{
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 6px 0;
+    color: #333;
+}
+
+.container_agregar form .fields{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/*---- cantidad de columnas -------*/
+
+form .fields .input-field{
+    display: flex;
+    width: calc(100% / 2 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+
+.input-field label{
+    font-size: 12px;
+    font-weight: 500;
+    color: #2e2e2e;
+}
+
+.input-field input{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
     border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+
+.input-field input:is(:focus, :valid){
+    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
+}
+
+.input-field input[type="date"]{
+    color: #707070;
+}
+
+.input-field input[type="date"]:valid{
+    color: #333;
+}
+
+/*----diseño, forma y ubicación del botón-------*/
+
+.container_agregar form button, .backBtn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    margin: 25px;
+    background-color: #6425e2;
+    transition: all 0.3s linear;
+    cursor: pointer;
+}
+
+.container_agregar form button,
+.container_agregar form .backBtn{
+    font-size: 14px;
+    font-weight: 400;;
+}
+
+/*----efecto del botón al acercar el mause-------*/
+form button:hover{
+    background-color: #265df2;
+}
+
+form button i,
+form .backBtn i{
+    margin: 0 6px;
+}
+
+form .backBtn i{
+    transform: rotate(180deg);
+}
+
+form .buttons{
+    display: flex;
+    align-items: center;
+}
+
+form .buttons button, .backBtn{
+    margin-right: 14px;
+}
+
+/*---- responsiva del formulario -------*/
+
+@media (max-width: 750px) {
+    .container_agregar form{
+        overflow-y: scroll;
+    }
+    .container_agregar form::-webkit-scrollbar{
+        display: none;
+    }
+    form .fields .input-field{
+        width: calc(100% / 2 - 15px);
+    }    
+}
+
+@media (max-width: 550px){
+    form .fields .input-field{
+        width: 100%;
+    }
 }
