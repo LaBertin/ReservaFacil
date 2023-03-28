@@ -1,9 +1,11 @@
-/*Header, identaré todo lo que esté en el header para diferenciar entre items*/
+html{
+    height: 100%;
+}
 *{
     margin: 0;
     padding: 0;
 }
-
+/*Header, identaré todo lo que esté en el header para diferenciar entre items*/
 header {
     height: 80px;
     background-color: #42444E;
@@ -77,9 +79,33 @@ header {
 body{
     margin: auto;
     background-image:url("background.jpg");
-    background-repeat: no-repeat   ;
-    
+    background-repeat: no-repeat;   
+    height: 100%;
 }
+    #container-fila-agendar-hora{
+        padding: 50px 0px;
+    }
+    svg.icono-grande{
+        width: 128px;
+        height: 128px;
+    }
+    #main-content{
+        height: 100%;
+        
+    }
+    .col-sm{
+        text-decoration: none;
+        color:#212529;
+    }
+    .col-sm:hover{
+        color:#212529;
+    }
+    /*Content usado para centrar div en el agendar hora*/
+    #main-content-centro{
+        height: 100%;
+        display: grid;
+        place-content: center;
+    }
     body div form div#div-nav-left{
         margin-left: 20px;
     }
@@ -89,15 +115,39 @@ body{
         font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
     
+    .btn_agendar_hora{
+        padding: 0;
+        border: none;
+        background: none;
+    }
     /*Div Pequeño de Inicio Sesión*/
     .div-pequeño{
         height: 500px;
         width: 500px;
         background-color: #ffffff;
         text-align: center;
-        margin: auto;
         border-radius: 10px;
         box-shadow: 0px 1px 1px;
+    }
+    /*Div Mediano usado en agendar hora*/
+    .div-mediano{
+        height: 600px;
+        width: 1200px;
+        background-color: #ffffff;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+    .div-grande{
+        height: 700px;
+        width: 1300px;
+        background-color: #ffffff;
+        text-align: center;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+    #titulo-seleccionar-area{
+        margin-top: 20px;
     }
         /*Se modifica el texto del div para que tenga una fuente mas agradable a la vista del usuario*/
         .div-pequeño h2{
@@ -106,14 +156,14 @@ body{
             padding-top: 30px;
         }
     #btn-home-cerrar-sesion{
-        padding-top: 100px;
+        margin-top: 100px;
     }
 
 /*Footer identaré todo lo que esté en el Footer para diferenciar entre items*/
 footer {
     height: 80px;
     background-color: #42444E;
-    position: fixed;
+    position:relative;
     bottom: 0;
     width: 100%;
 }

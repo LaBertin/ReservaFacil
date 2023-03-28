@@ -1,0 +1,38 @@
+{% extends "./index.html" %}
+{% block footer %}
+<div id="main-content-centro">
+
+    <div class="div-grande">
+
+        <h2 id="titulo-inicio-sesion">Seleccione Hora</h2>
+        <div id="container-fila-agendar-hora" class="container">
+
+            <div class="row">
+
+                <table>
+                    {% for x in hora.hora %}
+                    <tr>
+                        
+                            <td>Año: {{año.año}}</td>
+                            <td>Mes: {{mes.mes}}</td>
+                            <td>Día: {{dia.dia}}</td>
+                            <td>Hora: {{x}}:00:00</td>
+                            <td>
+                            <form method="post">
+                                {% csrf_token %}
+                                <button value="{{año.año}} {{mes.mes}} {{dia.dia}} {{x}}" type="submit"
+                                        name="hora_seleccionada">
+                                        Seleccionar hora
+                                </button>
+                            </form>
+                            </td>
+                        
+                    </tr>  
+                    {% endfor %}
+                </table>
+            </div>      
+        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+        </div>
+  
+</div>
+{% endblock %}

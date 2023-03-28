@@ -1,6 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
-<body>
+<div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
@@ -21,7 +21,6 @@
             <br>
             <div id=div-nav-left>
                 {{ formRegistarUsuario.username }}
-                {{ formRegistarUsuario.error }}
             </div>
             <br>
             <br>
@@ -32,7 +31,6 @@
             <br>
             <div id=div-nav-left>
                 {{ formRegistarUsuario.password1 }}
-                {{ formRegistarUsuario.error }}
             </div>
             <br>
             <br>
@@ -43,18 +41,12 @@
             <br>
             <div id=div-nav-left>
                 {{ formRegistarUsuario.password2 }}
-                {{ formRegistarUsuario.error }}
             </div>
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    {{ form.errors }}
-                </div>
-            {% endif %}
             <br>
             <br>
-            <input type="submit" value="Registrar" class="btn-naranja-mediano">
+            <button type="submit" value="Registrar" class="btn-naranja-mediano">Registrar</button>
         </form>
     </div>
-</body>
+</div>
 {% endblock %}
 </html>
