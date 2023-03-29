@@ -3,7 +3,7 @@
 <head>
     <title>ReservaFácil - Inicio Sesión</title>
 </head>
-<body>
+<div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
@@ -16,12 +16,33 @@
         <h2 id="titulo-inicio-sesion">Inicio de sesión</h2>
         <form action="" method="post">
             {% csrf_token %}
-            {{ formIniciarSesionUsuario.as_p }}
+            <div id="div-nav-left">
+                <h6>Usuario</h6>
+            </div>
+            <br>
+            <br>
+            <div id=div-nav-left>
+                {{ formIniciarSesionUsuario.username }}
+            </div>
+            <br>
+            <br>
+            <div id="div-nav-left">
+                <h6>Contraseña</h6>
+            </div>
+            <br>
+            <br>
+            <div id=div-nav-left>
+                {{ formIniciarSesionUsuario.password }}
+            </div>
+            <br>
             <br>
             <input id="btn-inicio-sesion" type="submit" value="Iniciar Sesion" class="btn-naranja-mediano">
+            <br>
+            ¿No tienes cuenta?
+            <br>
         </form>
         <button id="btn-inicio-sesion" class="btn-naranja-mediano"><a href="/registro">Registrate</a></button>
     </div>
-</body>
+</div>
 {% endblock %}
 </html>
