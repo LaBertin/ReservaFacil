@@ -5,101 +5,109 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'clientes/css.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css.css'%}">
+
     <title>ReservaFácil - Inicio</title>
 
     
 </head>
 
-<!--Header-->
-<header>
-    <!--Div de Imagen-->
-    <div id="div-nav-left">
-        <img src="../../static/img/logo.png" width="28px" height="60px">
-    </div>
-    <!--Div Opciones-->
-    <div id="div-nav-right">
-        <nav>
-            <ul>
-                <li><a href="">Administrar Sesiones</a></li>
-                <li><a href="">Finanazas</a></li>
-                <li><a href="">R.R.H.H</a></li>
-                <li><a href="">Administrar</a></li>
-               
-            </ul>
-            
-        </nav>
-    </div>
-</header>
 
-<body>
 
-    <div class= "container_agregar"> 
+<body class= "formulario_Agregar">
 
-        <h1>Formulario</h1>
-
-            <!-- Grupo: Nombre -->
-        <div class="formulario__grupo" id="grupo__nombre">
-            <label for="nombre" class="formulario__label"> *Nombre completo </label>
-            <input type="text" name="nombre" placeholder="nombre usuario" >
-         </div>
-
-            <!-- Grupo: Cargo -->
-        <div class="formulario__grupo" id="grupo__cargo">
-            <label for="cargo" class="formulario__label"> *cargo </label>
-            <input type="text" name="cargo" placeholder="cargo usuario" >
-        </div>
-
-            <!-- Grupo: Rut -->
-         <div class="formulario__grupo" id="grupo__rut">
-            <label for="rut" class="formulario__label"> *RUT </label>
-            <input type="text" name="rut" placeholder="rut usuario" >
-        </div>
-            
-            <!-- Grupo: Correo -->
-        <div class="formulario__grupo" id="grupo__correo">
-            <label for="correo" class="formulario__label"> *Correo electronico </label>
-            <input type="text" name="correo" placeholder="correo usuario" >
-        </div>
-
-            <!-- Grupo: telefono celular-->
-        <div class="formulario__grupo" id="grupo__telefono">
-            <label for="telefono" class="formulario__label"> *Telefono </label>
-            <input type="number" name="telefono" placeholder="telefono usuario" >
-            </div>
-
-        <!-- Grupo: telefono -->
-        <div class="formulario__grupo" id="grupo__telefono">
-            <label for="telefono" class="formulario__label"> Telefono Fijo </label>
-            <input type="number" name="telefono" placeholder="telefono" >
-        </div>
-
-            <!-- Grupo: telefono de contacto-->
-        <div class="formulario__grupo" id="grupo__telefono">
-            <label for="telefono" class="formulario__label"> *Telefono de Contacto </label>
-            <input type="number" name="telefono" placeholder="telefono" >
-        </div>
-
-            <!-- Grupo: Fecha de Nacimiento -->
-        <div class="formulario__grupo" id="grupo__nacimiento">
-            <label for="nacimiento" class="formulario__label"> *Fecha de Nacimiento </label>
-            <input type="date" name="date" placeholder="Ej:26/07/1978">
-        </div>   
-
-            <!-- Grupo: Fecha de Contratacion -->
-        <div class="formulario__grupo" id="grupo__contratacion">
-            <label for="contratacion" class="formulario__label"> *Fecha de contratación </label>
-            <input type="date" name="date" placeholder="Ej:26/07/1978">
-        </div>   
-
-        <input type="button" id="btn_Aceptar" value="Volver">
-        <input type="button" id="btn_Aceptar" value="Enviar">
+    <!--container general del formulario-->
+    <div class="container_agregar">
+        <span class="titulo"> Formulario </span>
         
+            <form action="#">
+                <div class="form first"> 
+                    <div class="details personal">
+
+                    <!-- Formulario para agregar nuevo personal -->
+
+                        <div class="fields">
+                            <!--Nombre Completo-->
+                                <div class="input-field" id="grupo__nombre">
+                                    <label for="nombre" class= "formu"> *Nombre Completo: </label>
+                                    <input type="text" id="nombre" placeholder =" Enter your name ">
+                                </div>
+                            
+                            <!--Cargo del Empleado-->
+                                <div class="input-field" id="grupo__cargo">
+                                    <label for="cargo" class= "formu"> *Cargo del Empleado: </label>
+                                    <input type="text" id="cargo" placeholder =" Su cargo es ...... ">
+                                </div>
+                            
+                            <!--Rut del Empleado-->
+                                <div class="input-field" id="grupo__rut">
+                                    <label for="rut" class= "formu"> *Rut: </label>
+                                    <input type="number" id="rut" placeholder =" 17.223.276-k ">
+                                </div>
+
+
+                            <!--sexo del Empleado-->
+                                <div class= "select">
+                                    <select name="format" id="format">
+                                        <option selected> tipo de sexo <option>
+                                        <option value="hombre"> Hombre <option>
+                                        <option value="mujer"> Mujer <option>
+                                        <option value="otro"> Otro <option>
+                                    </select> 
+                                </div>
+
+                            <!--Correo del Empleado-->
+                                <div class="input-field" id="grupo__correo">
+                                    <label for="correo" class= "formu"> *Correo personal: </label>
+                                    <input type="text" id="correo" placeholder =" juanm@gmail.com ">
+                                </div>
+                                
+
+                            <!--telefono celular-->
+                                <div class="input-field" id="grupo__celular">
+                                    <label for="telefonoCelular" class= "formu"> *Telefono celular: </label>
+                                    <input type="number" id="telefonoCelular" placeholder =" 923547613 ">
+                                </div>
+
+
+                            <!--telefono fijo-->
+                                <div class="input-field" id="grupo__telefono">
+                                    <label for="telefono" class= "formu"> Telefono Fijo: </label>
+                                    <input type="number" id="telefono" placeholder =" 322876576 ">
+                                </div>
+
+                            <!--telefono de Contacto de Emergencia-->
+                                <div class="input-field" id="grupo__telefonoEmergencia">
+                                    <label for="telefonoContacto" class= "formu"> *Contacto de Emergencia: </label>
+                                    <input type="number" id="telefonoContacto" placeholder =" 923547613 ">
+                                </div>
+
+                            <!--Fecha de Nacimineto-->
+                                <div class="input-field" id="grupo__nacimiento">
+                                    <label for="nacimiento" class= "formu"> *Fecha de Nacimiento: </label>
+                                    <input type="date" id="nacimiento" placeholder =" 26/07/1978 ">
+                                </div>
+
+                            <!--Fecha de Contratacion-->
+                                <div class="input-field" id="grupo__contratacion">
+                                    <label for="contratacion" class= "formu"> *Fecha de Contratación: </label>
+                                    <input type="date" id="contratacion" placeholder =" 26/07/2023 ">
+                                </div>
+                        </div>
+
+
+                    </div> 
+                </div>
+
+
+            </form> 
     </div>
 
-    <script src="js/fromularioJQUARY.js"></script>
-    
+
 </body>
+
+
+
 
 <footer>
     <nav id="RedesSociales">
