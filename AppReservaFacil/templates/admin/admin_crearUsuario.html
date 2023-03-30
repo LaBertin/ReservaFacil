@@ -48,6 +48,8 @@
                 
                 <form action="#">
                     <form action="" class="formulario" id="formulario">
+                        {% csrf_token %}
+
                         <h1>Crear Sesión</h1>
                         <br>
                     <div class="form first"> 
@@ -106,6 +108,11 @@
                         </div>
 
                     </form> 
+
+                    {% if mensaje %}
+                    {{ mensaje }}
+                    {% endif %}
+    
                 
                 </form> 
                 

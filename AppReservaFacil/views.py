@@ -187,3 +187,45 @@ def cliente_Agendar_hora(request):
     print('FINAL')
     return render(request, 'clientes/cliente_Agendar_Hora.html')
 
+#####################################################################################
+#####################################################################################
+########################## Base de Datos de Admin_Agregar ############################
+
+def AppReservaFacil(request):
+    articulo = AdminAgregar.objects.all()
+    if request.method == "POST":
+        
+        nombre = request.POST["nombre"]
+        cargo = request.POST["cargo"]
+        rut = request.POST["rut"]
+        correo = request.POST["correo"]
+        telefonoCelular = request.POST["telefonoCelular"]
+        telefono = request.POST["telefono"]
+        telefonoContacto = request.POST["telefonoContacto"]
+        
+        obj = AdminAgregar( nombre=nombre, cargo=cargo, rut=rut, correo=correo, telefonoCelular=telefonoCelular, telefono=telefono, telefonoContacto=telefonoContacto )
+        obj.save()
+        
+        mensaje = "Se registro exitosamente exitosamente"
+        return render(request,"admin/admin_Agregar.html", {"articulo":articulo,"rut": rut})
+    
+    return render(request,"admin/admin_Agregar.html",{"articulo":articulo})
+
+
+########################## Base de Datos de Nuevo_Usuario ############################
+
+def AppReservaFacil(request):
+    articulos = AdminAgregar.objects.all()
+    if request.method == "POST":
+        
+        nombreUser = request.POST["nombreUser"]
+        password = request.POST["password"]
+        password2 = request.POST["password"]
+        
+        obj = NuevoUsuarios(nombreUser = nombreUser, password = password ,password2 = password2)
+        obj.save()
+        
+        mensaje = "Se registro exitosamente exitosamente"
+        return render(request,"nuevoUsuario.html", {"articulos":articulos,"password": password})
+    
+    return render(request,"nuevoUsuario.html",{"articulos":articulos})

@@ -49,3 +49,33 @@ class Cita(models.Model):
     def __datetime__ (self):
         return self.ID_Cita
     
+    
+    
+ # Base de Datos para Admin_Agregar
+ 
+class AdminAgregar(models.Model):
+    
+    nombre= models.CharField(max_length=50, verbose_name='Nombre del Empleado') # maximo de caracteres
+    cargo = models.CharField(max_length=40, verbose_name='Cargo del Empleado')
+    rut= models.CharField(max_length=10, verbose_name='Rut del Empleado')
+    correo = models.CharField(max_length=40, verbose_name='sexo del Empleado')
+    telefonoCelular= models.CharField(max_length=10, verbose_name='telefono celular')
+    telefono= models.CharField(max_length=10, verbose_name='telefono fijo')
+    telefonoContacto= models.CharField(max_length=10, verbose_name='telefono de Contacto de Emergencia')
+    
+    # recueroda los campos que estan en la base de datos por el nombre
+    def __str__(self):
+        return self.nombre
+    
+ 
+# Base de Datos para crearUsuario 
+    
+class NuevoUsuarios(models.Model):
+    nombreUser= models.CharField(max_length=50, verbose_name='Nombre usuario') # maximo de caracteres
+    password= models.CharField(max_length=14, verbose_name='Password usuario')
+    password2= models.CharField(max_length=14, verbose_name='Password usuario')
+    
+    # recueroda los campos que estan en la base de datos por el nombre
+    def __str__(self):
+        return self.nombreUser
+ 

@@ -18,6 +18,10 @@
 
     <!--container general del formulario-->
     <div class="container_agregar">
+        
+        <form action " " method="post">
+            {% csrf_token %}
+
         <span class="titulo"> Formulario </span>
         
             <form action="#">
@@ -30,19 +34,19 @@
                             <!--Nombre Completo-->
                                 <div class="input-field" id="grupo__nombre">
                                     <label for="nombre" class= "formu"> *Nombre Completo: </label>
-                                    <input type="text" id="nombre" placeholder =" Enter your name ">
+                                    <input type="text" id="nombre" name="nombre" placeholder =" Enter your name ">
                                 </div>
                             
                             <!--Cargo del Empleado-->
                                 <div class="input-field" id="grupo__cargo">
                                     <label for="cargo" class= "formu"> *Cargo del Empleado: </label>
-                                    <input type="text" id="cargo" placeholder =" Su cargo es ...... ">
+                                    <input type="text" id="cargo" name="cargo"  placeholder =" Su cargo es ...... ">
                                 </div>
                             
                             <!--Rut del Empleado-->
                                 <div class="input-field" id="grupo__rut">
                                     <label for="rut" class= "formu"> *Rut: </label>
-                                    <input type="number" id="rut" placeholder =" 17.223.276-k ">
+                                    <input type="number" id="rut" name="rut" placeholder =" 17.223.276-k ">
                                 </div>
 
 
@@ -59,27 +63,27 @@
                             <!--Correo del Empleado-->
                                 <div class="input-field" id="grupo__correo">
                                     <label for="correo" class= "formu"> *Correo personal: </label>
-                                    <input type="text" id="correo" placeholder =" juanm@gmail.com ">
+                                    <input type="text" id="correo" name="correo" placeholder =" juanm@gmail.com ">
                                 </div>
                                 
 
                             <!--telefono celular-->
                                 <div class="input-field" id="grupo__celular">
                                     <label for="telefonoCelular" class= "formu"> *Telefono celular: </label>
-                                    <input type="number" id="telefonoCelular" placeholder =" 923547613 ">
+                                    <input type="number" id="telefonoCelular" name="telefonoCelular" placeholder =" 923547613 ">
                                 </div>
 
 
                             <!--telefono fijo-->
                                 <div class="input-field" id="grupo__telefono">
                                     <label for="telefono" class= "formu"> Telefono Fijo: </label>
-                                    <input type="number" id="telefono" placeholder =" 322876576 ">
+                                    <input type="number" id="telefono" name="telefono" placeholder =" 322876576 ">
                                 </div>
 
                             <!--telefono de Contacto de Emergencia-->
                                 <div class="input-field" id="grupo__telefonoEmergencia">
                                     <label for="telefonoContacto" class= "formu"> *Contacto de Emergencia: </label>
-                                    <input type="number" id="telefonoContacto" placeholder =" 923547613 ">
+                                    <input type="number" id="telefonoContacto" name="telefonoContacto" placeholder =" 923547613 ">
                                 </div>
 
                             <!--Fecha de Nacimineto-->
@@ -93,14 +97,42 @@
                                     <label for="contratacion" class= "formu"> *Fecha de Contratación: </label>
                                     <input type="date" id="contratacion" placeholder =" 26/07/2023 ">
                                 </div>
+                                
                         </div>
 
+                        <!-- Grupo: mensaje btn error -->
+                        <div class="formulario__mensaje" id="formulario__mensaje">
+                            <p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
+                        </div>
+            
+                        <!-- Grupo: Boton de Enviar -->
+                        <div class="formulario__grupo formulario__grupo-btn-enviar">
+                            <button type="submit" class="formulario__btn">Enviar</button>
+                            <p class="formulario__mensaje-exito" id="formulario__mensaje-exito">Formulario enviado exitosamente!</p>
+                        </div>
+                        
+                        <br>
+
+                        <!-- boton borrar-->
+            
+                        <div class="formulario__grupo formulario__grupo-btn-enviar">
+                            <button type="reset" class="formulario__btn">borrar</button>
+            
+                        </div>
 
                     </div> 
+                    
                 </div>
 
 
             </form> 
+
+            {% if mensaje %}
+                {{ mensaje }}
+                {% endif %}
+
+            </form>
+
     </div>
 
 
@@ -108,15 +140,5 @@
 
 
 
-
-<footer>
-    <nav id="RedesSociales">
-        
-    <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.instagram.com/"><img src="{% static 'img/icons8-instagram-48.png' %}" alt=""></a></button>
-    <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.facebook.com/"><img src="{% static 'img/icons8-facebook-48.png' %}" alt=""></a></button>
-    <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.twitter.com/"><img src="{% static 'img/icons8-twitter-48.png' %}" alt=""></a></button>
-    <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.google.com/maps/place/Fosa+de+las+Marianas/@11.3493333,142.190811,15z/data=!4m13!1m7!3m6!1s0x67328f3cd57de715:0x1bbe64e7a21aa7fc!2sFosa+de+las+Marianas!3b1!8m2!3d11.3493126!4d142.1995658!3m4!1s0x67328f3cd57de715:0x1bbe64e7a21aa7fc!8m2!3d11.3493126!4d142.1995658"><img src="{% static 'img/icons8-google-maps-48.png' %}" alt=""></a></button>
-    </nav>
-</footer>
 
 </html>
