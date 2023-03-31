@@ -7,6 +7,7 @@ from .models import *
 from django.contrib.auth.forms import *
 from datetime import datetime, timedelta
 
+from AppReservaFacil.models import AdminAgregar, NuevoUsuarios
 
 # Create your views here.
 
@@ -215,17 +216,17 @@ def AppReservaFacil(request):
 ########################## Base de Datos de Nuevo_Usuario ############################
 
 def AppReservaFacil(request):
-    articulos = AdminAgregar.objects.all()
+    articulos = NuevoUsuarios.objects.all()
     if request.method == "POST":
         
         nombreUser = request.POST["nombreUser"]
         password = request.POST["password"]
-        password2 = request.POST["password"]
+        password2 = request.POST["password2"]
         
         obj = NuevoUsuarios(nombreUser = nombreUser, password = password ,password2 = password2)
         obj.save()
         
         mensaje = "Se registro exitosamente exitosamente"
-        return render(request,"nuevoUsuario.html", {"articulos":articulos,"password": password})
+        return render(request,"admin/admin_crearUsuario.html", {"articulos":articulos,"password": password})
     
-    return render(request,"nuevoUsuario.html",{"articulos":articulos})
+    return render(request,"admin/admin_crearUsuario.html",{"articulos":articulos})

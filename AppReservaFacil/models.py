@@ -73,7 +73,7 @@ class AdminAgregar(models.Model):
 class NuevoUsuarios(models.Model):
     nombreUser= models.CharField(max_length=50, verbose_name='Nombre usuario') # maximo de caracteres
     password= models.CharField(max_length=14, verbose_name='Password usuario')
-    password2= models.CharField(max_length=14, verbose_name='Password usuario')
+    password2= models.CharField(max_length=14, verbose_name='Password ')
     
     # recueroda los campos que estan en la base de datos por el nombre
     def __str__(self):

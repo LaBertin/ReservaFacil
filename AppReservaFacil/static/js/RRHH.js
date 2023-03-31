@@ -287,6 +287,9 @@ const initDataTable = async () => {
   dataTableIsInitialized = true;
 };
 
+/* aqui estou llamando una api para probar el codigo, pero en el link debe llamarse 
+la ubicacion de la base de datos que se quiera consumir*/
+
 const listUsers = async () => {
   try {
     const response = await fetch('https://jsonplaceholder.typicode.com/users');

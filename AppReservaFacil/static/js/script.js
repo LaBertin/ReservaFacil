@@ -1,3 +1,6 @@
+/*validacion de clic para "neckt" y "volver" para que no perder 
+la informacion  escrita*/
+
 const form = document.querySelector("form"),
         nextBtn = form.querySelector(".nextBtn"),
         backBtn = form.querySelector(".backBtn"),
@@ -17,6 +20,9 @@ nextBtn.addEventListener("click", ()=> {
 
 backBtn.addEventListener("click", () => form.classList.remove('secActive'));
 
+
+
+/*validacion del formulario*/
 
 const formulario = document.getElementById('formulario');  /*acceso al id=formulario*/
 const inputs = document.querySelectorAll('#formulario input'); /*optiene todos los arreglos de los input*/
