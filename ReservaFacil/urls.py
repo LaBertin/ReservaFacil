@@ -25,6 +25,7 @@ urlpatterns = [
     path('registro/', views.registrousuario),
     path('cerrarSesion/', views.cerrarsesionusuario),
     path('agendar_hora/', views.cliente_Agendar_hora),
+    path('anular_hora/', views.Cliente_anular_hora),
     path('home/', views.home, name="home"),
     path('admin_Finanzas/', views.admin_Finanzas, name="admin_Finanzas"),
     path('admin_RRHH/', views.admin_RRHH, name="admin_RRHH"),

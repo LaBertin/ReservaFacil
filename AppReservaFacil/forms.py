@@ -12,6 +12,10 @@ class FormRegistrarUsuario(UserCreationForm):
 class LoginUsuario(AuthenticationForm):
     pass
 
+class DateForm(forms.Form):
+    date = forms.DateTimeField(label="Fecha",
+    widget=forms.SelectDateWidget
+    )
 
         
 

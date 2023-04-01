@@ -43,6 +43,7 @@ class Especialista(models.Model):
     
 class Cita(models.Model):
     ID_Cita = models.DateTimeField(primary_key=True, unique=True)
+    Confirmacion_Cita = models.BooleanField(default=False)
     ID_Cliente = models.ForeignKey(User,null=True, on_delete=models.RESTRICT)
     ID_Especialista = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
 

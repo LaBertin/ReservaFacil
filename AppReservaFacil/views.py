@@ -8,6 +8,7 @@ from django.contrib.auth.forms import *
 from datetime import datetime, timedelta
 
 
+
 # Create your views here.
 
 # Dirección URL de vistas de Clientes
@@ -54,7 +55,6 @@ def registrousuario(request):
             messages.success(request, "Te has registrado con éxito")
             return render(request, 'clientes/registro.html', formulario1)
         else:
-            #if #Si contraseña da aerroe print cambiar contraseña 
             formulario=FormRegistrarUsuario()
             messages.error(request, "Error al registrarte")
 
@@ -91,59 +91,63 @@ def cerrarsesionusuario(request):
 
 def cliente_Agendar_hora(request):
     if request.method == 'POST':
-        if 'pedir_hora' in request.POST:        
-            #Obtenemos la fecha actual Ej.27-03-2023 10:38:00
-            DateTimeActual = datetime.today()
-            #Obtenemos la fecha actual sin hora Ej.27-03-2023
-            date = DateTimeActual.date()
-            #Obtenemos año actual
-            año = date.strftime("%Y")
-            añocontext = {'año':año}
-            #Obtenemos mes actual
-            mes = date.strftime("%m")
-            mescontext = {'mes':mes}
-            #Obtenemos dia actual
-            dia = date.strftime("%d")
-            diacontext = {'dia':dia}
+        if 'seleccionar_hora' in request.POST:
+            global Fecha
+            Fecha = DateForm(request.POST)
+            print('Fecha:', Fecha)
+            Fecha = Fecha.cleaned_data
+            Fecha = Fecha['date']
+            print('Fecha obtenida')
+            Fecha= datetime.date(Fecha)
+            print(Fecha)
+            print(type(Fecha))
             hora =  list(range(8,21))
             horacontext = {'hora':hora}
-            print(mes)
-            print(año)
-            print(dia)
             print(hora)
             print(type(hora))
-            año = int(año)
-            mes = int(mes)
-            dia = int(dia)
-            print(type(mes))
-            print(diacontext)
             print(horacontext)
-            creardate = datetime(año, mes, dia)
-            #Cita.objects.create(ID_Cita = creardate)
-            #Hola=Cita.objects.filter(ID_Cita = creardate)
-            #print(Hola)
-            #print(Hola)
-            print(creardate)
             print("Pedir Hora Post")
-            values = request.POST.get('pedir_hora')
+            return render(request, 'clientes/cliente_Seleccionar_Hora.html', {'hora':horacontext})
+        if 'pedir_cita' in request.POST:      
+            data = {
+                'formDate': DateForm()
+            }  
+            global Especialistas
+            values = request.POST.get('pedir_cita')
             Especialistas = Especialista.objects.filter(ID_Especialista=values)
-            contexto = {'especialista':Especialistas}
+            print(Especialistas)
+            contexto = {'especialista':Especialistas}  
             ID_Especialista = Especialistas[0].ID_Especialista
             print("ID_Especialistas:\n")
             print(ID_Especialista)
-            Usuario = User.objects.get(username=request.user.username)
-            print("Usuario:\n")
-            print(Usuario)
-            return render(request, 'clientes/cliente_Seleccionar_Hora.html', {'año':añocontext, 'mes':mescontext, 'dia':diacontext, 'hora':horacontext})    
+            return render(request, 'clientes/cliente_Seleccionar_Fecha.html', data)    
         print("Request method = POST")
         #Si pulsa el botón de seleccionar hora
         if 'hora_seleccionada' in request.POST:
             print("Hora Seleccionada")
-            messages.success(request, "Hora creada con éxito")
-            hora_seleccionada=request.POST.get('hora_seleccionada')
-            print(type(hora_seleccionada))
+            Usuario = User.objects.get(username=request.user.username)
+            print("Usuario:\n")
+            print(Usuario)
+            hora_seleccionada = request.POST.get('hora_seleccionada')
+            hora_seleccionada = hora_seleccionada+':00'
+            print(Fecha)
+            hora_seleccionada = str(Fecha)+str(' '+hora_seleccionada)
             print(hora_seleccionada)
-            return render(request, 'clientes/cliente_Hora_creada.html', {'hola':hora_seleccionada})
+            print("ID_Especialistas:\n")
+            print(Especialistas[0])
+            print("AAAAAAAAAAA")
+            print(datetime.date(datetime(hora_seleccionada)))
+            Citas_Usuario = Cita.objects.filter(ID_Cliente=Usuario)
+            print("Deberia entrar al for")
+            print(Citas_Usuario)
+            count_c=0
+            for c in Citas_Usuario:
+                count_c = count_c+1
+                print("C:\n")   
+                print(c)
+            #Cita.objects.create(ID_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
+            messages.success(request, "Hora creada con éxito")
+            return render(request, 'clientes/cliente_Hora_creada.html', {'hora_seleccionada':hora_seleccionada})
         #Cardiología filtro
         if 'cardiologia' in request.POST:
             valuebtn = 'Cardiología'
@@ -182,8 +186,49 @@ def cliente_Agendar_hora(request):
             print("Contexto: ")
             print(contexto)
         return render(request, 'clientes/listar_Especialistas.html', contexto)
-        
-        
-    print('FINAL')
     return render(request, 'clientes/cliente_Agendar_Hora.html')
 
+def Cliente_anular_hora(request):
+    if 'anular_hora' in request.POST:
+        print("Pulsaste Anular Hora")
+        Anular_Hora_Principal = request.POST.get('anular_hora')
+        Anular_Hora = Anular_Hora_Principal.replace('de','')
+        Anular_Hora = Anular_Hora.replace('a las','')
+        Anular_Hora = Anular_Hora.replace('  ',' ')
+        print(Anular_Hora)
+        if 'Enero' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Enero','January')
+        elif 'Febrero' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Febrero','February')
+        elif 'Marzo' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Marzo','March')
+        elif 'Abril' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Abril','April')
+        elif 'Mayo' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Mayo','May')
+        elif 'Junio' in Anular_Hora:    
+            Anular_Hora = Anular_Hora.replace('Junio','June')
+        elif 'Julio' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Julio','July')
+        elif 'Agosto' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Agosto','August')
+        elif 'Septiembre' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Septiembre','September')
+        elif 'Octubre' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Octubre','October')
+        elif 'Noviembre' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Noviembre','November')
+        elif 'Diciembre' in Anular_Hora:
+            Anular_Hora = Anular_Hora.replace('Diciembre','December')
+        Anular_Hora = datetime.strptime(Anular_Hora, '%d %B %Y %H:%M')
+        print(Anular_Hora)
+        Cita.objects.filter(ID_Cita=Anular_Hora).delete()
+        messages.success(request, "Cita anulada con éxito")
+        return render(request, 'clientes/cliente_Hora_anulada.html', {'hora_principal':Anular_Hora_Principal})
+    if request.user.is_authenticated:
+        Usuario = User.objects.get(username=request.user.username)
+        citas_cliente = Cita.objects.filter(ID_Cliente=Usuario)
+        
+        return render(request, 'clientes/cliente_Anular_Hora.html', {'citas_cliente':citas_cliente})
+    else:
+        return render(request, 'clientes/cliente_Anular_Hora.html')

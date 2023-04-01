@@ -25,6 +25,11 @@ header {
         border-radius: 5px;
         margin: auto;
     }
+        .btn-naranja-mediano:hover{
+            text-decoration: none;
+            color: #42444E;
+            background-color: #FAA92F;
+        }
         /*Modifico el text dentro del btn para que no aparezca el underline*/
         .btn-naranja-mediano a{
             text-decoration: none;
@@ -126,6 +131,9 @@ body{
         border: none;
         background: none;
     }
+    form .btn_agendar_hora:hover{
+        background-color:transparent ;
+    }
     /*Div Pequeño de Inicio Sesión*/
     .div-pequeño{
         height: 500px;
@@ -165,7 +173,7 @@ body{
         margin-top: 100px;
     }
 
-/*Footer identaré todo lo que esté en el Footer para diferenciar entre items*/
+/*Footer, identaré todo lo que esté en el Footer para diferenciar entre items*/
 footer {
     height: 80px;
     background-color: #42444E;

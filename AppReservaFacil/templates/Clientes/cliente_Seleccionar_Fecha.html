@@ -1,0 +1,30 @@
+{% extends "./index.html" %}
+{% block footer %}
+<div id="main-content-centro">
+
+    <div class="div-pequeño">
+
+        <h2 id="titulo-inicio-sesion">Seleccione Fecha</h2>
+            <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ formDate }}
+                    <br>
+                    <br>
+                    <button class="btn-naranja-mediano" type="submit"
+                            name="seleccionar_hora">
+                            Seleccionar Hora
+                    </button>
+                </form>
+            </div>      
+        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+        </div>
+  
+</div>
+{% endblock %}
+
+
+
+
+
+
