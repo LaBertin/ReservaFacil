@@ -1,6 +1,6 @@
 {% extends "../Clientes/index.html" %}
-{% load static %}
 {% block footer %}
+<title>Agregar Empleado</title>
 <div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
@@ -10,8 +10,97 @@
             </div>
         {% endfor %}
     {% endif %}
+    
+    <div class="div-mediano">
+        <h2 id="titulo-inicio-sesion">Agregar</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="container">
 
-    <div class="div-pequeño">
-        <span></span>
+                <div class="row">
+                    <div class="col">
+                        <div >
+                            <h6>Nombre Completo</h6>
+                        </div>
+                        <div >
+                            {{formEspecialista.nom_com_especialista}}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Fecha de nacimiento</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.fecha_nac_especialista }}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Direccion</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.direccion_especialista }}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Contacto</h6>
+                        </div>
+                        <div >
+                            {{formEspecialista.contacto_especialista}}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>RUT</h6>
+                        </div>
+                        <div >
+                            {{formEspecialista.rut}}
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div >
+                            <h6>Sexo</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.sexo }}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Especialidad 1</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.especialidad_p }}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Especialidad 2</h6>
+                        </div>
+                        <div >
+                            {{formEspecialista.especialidad_s}}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Especialidad 3</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.especialidad_t }}
+                        </div>
+                        <br>
+                        <div >
+                            <h6>Especialidad 4</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.especialidad_c }}
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
+            
+            <br>
+            <br>
+            <button type="submit" value="Agregar" class="btn-naranja-mediano">Agregar</button>
+        </form>
     </div>
+</div>
 {% endblock %}
+</html>
