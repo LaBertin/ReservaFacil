@@ -8,6 +8,18 @@ from django.core.exceptions import ValidationError
 
 # Create your forms here.
 
+class FormEspecialista(forms.Form):
+    nom_com_especialista = forms.CharField(max_length=256)
+    fecha_nac_especialista = forms.DateField()
+    direccion_especialista = forms.CharField(max_length=256)
+    contacto_especialista = forms.IntegerField()
+    foto_especialista = forms.ImageField()
+    especialidades = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        nom_com_especialista = str(self.nom_com_especialista)
+        return nom_com_especialista
+    
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  

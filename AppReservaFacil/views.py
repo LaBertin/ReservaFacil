@@ -56,20 +56,7 @@ def inicioSesion(request):
 # Dirección URL de vistas de Admin
 # admin es el nombre de la carper donde se almacena los html
 
-def home(request):
-    return render(request, 'admin/home.html')  
 
-def admin_Finanzas(request):
-    return render(request, 'admin/admin_Finanzas.html')
-
-def admin_RRHH(request):
-    return render(request, 'admin/admin_RRHH.html')
-
-def admin_Sesiones(request):
-    return render(request, 'admin/admin_Sesiones.html')
-
-def admin_Agregar(request):
-    return render(request, 'admin/admin_Agregar.html')
 
 def admin_crearUsuario(request):
     return render(request, 'admin/admin_crearUsuario.html')
@@ -397,44 +384,13 @@ def Cliente_consultar_hora(request):
 #####################################################################################
 ########################## Base de Datos de Admin_Agregar ############################
 
-def AppReservaFacil(request):
-    articulo = AdminAgregar.objects.all()
-    if request.method == "POST":
-        
-        nombre = request.POST["nombre"]
-        cargo = request.POST["cargo"]
-        rut = request.POST["rut"]
-        correo = request.POST["correo"]
-        telefonoCelular = request.POST["telefonoCelular"]
-        telefono = request.POST["telefono"]
-        telefonoContacto = request.POST["telefonoContacto"]
-        
-        obj = AdminAgregar( nombre=nombre, cargo=cargo, rut=rut, correo=correo, telefonoCelular=telefonoCelular, telefono=telefono, telefonoContacto=telefonoContacto )
-        obj.save()
-        
-        mensaje = "Se registro exitosamente exitosamente"
-        return render(request,"admin/admin_Agregar.html", {"articulo":articulo,"rut": rut})
+def agregar_empleado(request):
+    nuevo_emp_form = {
+        'formEspecialista': FormEspecialista()
+    }
     
-    return render(request,"admin/admin_Agregar.html",{"articulo":articulo})
-
-
+    return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
 ########################## Base de Datos de Nuevo_Usuario ############################
-
-def AppReservaFacil(request):
-    articulos = NuevoUsuarios.objects.all()
-    if request.method == "POST":
-        
-        nombreUser = request.POST["nombreUser"]
-        password = request.POST["password"]
-        password2 = request.POST["password2"]
-        
-        obj = NuevoUsuarios(nombreUser = nombreUser, password = password ,password2 = password2)
-        obj.save()
-        
-        mensaje = "Se registro exitosamente exitosamente"
-        return render(request,"admin/admin_crearUsuario.html", {"articulos":articulos,"password": password})
-    
-    return render(request,"admin/admin_crearUsuario.html",{"articulos":articulos})
 
 def especialista_Agendar(request):
     
