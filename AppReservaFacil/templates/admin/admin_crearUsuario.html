@@ -16,7 +16,7 @@
 <header>
     <!--Div de Imagen-->
     <div id="div-nav-left">
-        <img src="../../static/img/logo.png" width="28px" height="60px">
+        
     </div>
     <!--Div Opciones-->
     <div id="div-nav-right">
@@ -37,7 +37,7 @@
 
     <div class= "container_CrearUsuarios"> 
 
-        <div id="contenido">
+        <div id="container_agregar">
 
             <div id="section">
                 <h1>perfil</h1>
@@ -45,31 +45,91 @@
             </div>
 
             <div id="crearUsuario"> 
+                
+                <form action="#">
 
-                <!-- Grupo: Nombre -->
-                <div class="formulario__grupo" id="grupo__nombre">
-                    <label for="nombre" class="formulario__label"> Nombre de Usuario </label>
-                    <input type="text" name="nombre" placeholder=" Ej: JuanMJ " >
-                </div>
+                    <form action " " method="post">
+                    <form action="" class="formulario" id="formulario">
+                        {% csrf_token %}
 
-                 <!-- Grupo: Contrasenna -->
-                <div class="formulario__grupo" id="grupo__Contrasenna">
-                     <label for="Contrasenna" class="formulario__label"> Contraseña </label>
-                    <input type="password" name="password" placeholder="clave">
-                </div>
+                        <h1>Crear Sesión</h1>
+                        <br>
+                    <div class="form first"> 
+                        <div class="details personal">
+    
+                        <!-- Formulario para agregar nuevo personal -->
+    
+                            <div class="fields">
 
-                <!-- Grupo: repetir Contrasenna -->
-                <div class="formulario__grupo" id="grupo__Contrasenna2">
-                    <label for="Contrasenna2" class="formulario__label"> Repetir Contraseña </label>
-                    <input type="password" name="password" placeholder="clave">
-                </div>
+                                <!-- Nombre de Usuario -->
 
-                <input type="button" id="btn_Aceptar" value="Aceptar">
+                                <div class="formulario__grupo" id="grupo__usuario">
+                                    <label for="nombreUser" class="formulario__label"> Nombre de Usuario </label>
+                                    <div class="formulario__grupo-input">
+                                        <input type="text" class="formulario__input" name="nombreUser" id="nombreUser" placeholder="">
+                                        <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                                    </div>
+                                    <p class="formulario__input-error">El usuario tiene que ser de 4 a 16 dígitos y solo puede contener numeros, letras y guion bajo.</p>
+                                </div>
+                            
+                                <!-- Contrasenna -->
+
+                                <div class="formulario__grupo" id="grupo__password">
+                                    <label for="password" class="formulario__label">Contraseña</label>
+                                    <div class="formulario__grupo-input">
+                                        <input type="password" class="formulario__input" name="password" id="password">
+                                        <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                                    </div>
+                                    <p class="formulario__input-error">La contraseña tiene que ser de 4 a 12 dígitos.</p>
+                                </div>
+
+                                <!-- Repetir Contrasenna -->
+
+                                <div class="formulario__grupo" id="grupo__password2">
+                                    <label for="password2" class="formulario__label">Repetir Contraseña</label>
+                                    <div class="formulario__grupo-input">
+                                        <input type="password" class="formulario__input" name="password2" id="password2">
+                                        <i class="formulario__validacion-estado fas fa-times-circle"></i>
+                                    </div>
+                                    <p class="formulario__input-error">Ambas contraseñas deben ser iguales.</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- Grupo: Boton de Enviar -->
+                        <div class="formulario__grupo formulario__grupo-btn-enviar">
+                            <input type="submit" name="Aceptar" class="formulario__btn" placeholder="Aceptar">
+                            <p class="formulario__mensaje-exito" id="formulario__mensaje-exito">Formulario enviado exitosamente!</p>
+                        </div>
+
+
+                    </form> 
+
+                    {% if mensaje %}
+                    {{ mensaje }}
+                    {% endif %}
+    
+                
+                </form>
+                </form>  
+                
             </div>
         </div>
     </div>
+
+    <script src="{% static 'js/admin_crearUsuario.js' %}"></script>
     
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+
+<script src="https://kit.fontawesome.com/2c36e9b7b1.js" crossorigin="anonymous"></script>
 
 <footer>
     <nav id="RedesSociales">
@@ -80,5 +140,7 @@
     <button class="btn btn-outline-success my-2 my-sm-0"><a href="https://www.google.com/maps/place/Fosa+de+las+Marianas/@11.3493333,142.190811,15z/data=!4m13!1m7!3m6!1s0x67328f3cd57de715:0x1bbe64e7a21aa7fc!2sFosa+de+las+Marianas!3b1!8m2!3d11.3493126!4d142.1995658!3m4!1s0x67328f3cd57de715:0x1bbe64e7a21aa7fc!8m2!3d11.3493126!4d142.1995658"><img src="{% static 'img/icons8-google-maps-48.png' %}" alt=""></a></button>
     </nav>
 </footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
 </html>

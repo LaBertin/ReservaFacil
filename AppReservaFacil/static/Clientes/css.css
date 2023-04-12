@@ -93,6 +93,9 @@ body{
     background-repeat: no-repeat;   
     height: 100%;
 }
+    .body-margin-top{
+        margin-top: 100px;
+    }
     #container-fila-agendar-hora{
         padding: 50px 0px;
     }
@@ -125,7 +128,11 @@ body{
         padding: 150px 200px;
         font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
-    
+    .img-redonda {
+        border-radius: 50%;
+        margin-top: 20px;
+      }
+      
     .btn_agendar_hora{
         padding: 0;
         border: none;
@@ -136,7 +143,7 @@ body{
     }
     /*Div Pequeño de Inicio Sesión*/
     .div-pequeño{
-        height: 500px;
+        height: 600px;
         width: 500px;
         background-color: #ffffff;
         text-align: center;
@@ -181,16 +188,23 @@ footer {
     bottom: 0;
     width: 100%;
     text-align: center;
-
+    color: #FFFFFF;
     font-family: 'Lobster', cursive;
     margin-top: 80px;
     text-decoration: none;
-
     justify-content: center;
     align-items: center;
     display: flex;
 
 }
+    footer div div a svg{
+        color: #FFFFFF;
+        transition-duration: 0.5s;
+    }
+    footer div div a svg:hover{
+        color: #a7a7a7
+    }
+
 /* ----- -----iconos de las redes sociales ----- ----*/
 
 @media (min-width: 550px) {
@@ -403,6 +417,369 @@ form .buttons button, .backBtn{
 
 @media (max-width: 550px){
     form .fields .input-field{
+        width: 100%;
+    }
+}
+
+
+
+
+/*-------------------------------------------------*/
+/*--------- Estilos de container-Sesiones-------*/
+/*-------------------------------------------------*/
+
+form .fields .input-field2{
+    display: flex;
+    width: calc(100% / 1 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+
+.input-field2 label{
+    font-size: 12px;
+    font-weight: 500;
+    color: #2e2e2e;
+}
+
+.input-field2 input{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+
+.input-field2 input:is(:focus, :valid){
+    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
+}
+
+.container_agregar form .fields2{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.container-Sesiones{
+
+    background: #D9D9D9;
+    border: 1px solid #000000;
+    border-radius: 33px;
+
+    /*Largo y ancho del container principal*/
+    width: 80%;
+    max-width: 100%;
+    height: 500px;
+    width: 1000px;
+    
+    /*centrar div*/
+    display: grid;
+    place-items: center;
+
+    /*centrar container al medio de la pagina*/
+    margin: 15%;
+    
+}
+
+/*------------------ boton de eleccion Sexo ---------------------*/
+
+form .fields .select{  
+    width: calc(100% / 2 - 10px);  
+}
+
+
+select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0!important;
+    background:#fff;
+    background-image: none;
+
+    flex: 1;
+    padding: 0 5em;
+    color: #000000;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: 'Open Sans',sans-serif;
+    padding: 0 15px;
+}
+
+select::-ms-expand{
+    display: none;
+}
+
+.select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    line-height: 3;
+    background-color: #fff;
+    border-radius: 3px;    
+}
+
+.select::after{
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #D9D9D9;
+    pointer-events: none;
+    transition: .25s all ease;
+    border: 1px solid #000000;
+    border-radius: 3px;
+}
+
+.select:hover::after{
+    color: #fff;
+}
+
+
+
+/*-------------------------------------------------*/
+/*------------- admin_crear_Usuario ---------------*/
+/*-------------------------------------------------*/
+
+
+.container_CrearUsuarios{
+
+    background: #D9D9D9;
+    border: 1px solid #000000;
+    border-radius: 33px;
+
+    /*Largo y ancho del container principal*/
+    width: 80%;
+    max-width: 100%;
+    height: 700px;
+    width: 1000px;
+    
+    /*centrar div*/
+    display: grid;
+    place-items: center;
+
+    /*centrar container al medio de la pagina*/
+    margin: 15%;
+    
+}
+
+
+#crearUsuario{
+
+    /*centrar div*/
+    display: grid;
+    place-items: center;
+
+    /*borde*/
+    box-sizing: border-box;
+    border-radius: 27px;
+
+    /*Tamaño*/
+    width: 25%;
+    height: 95%;
+
+    height: 500px;
+    width: 400px;
+
+    /*Color*/
+    background: #FDFCFC;
+    border: 2px solid #000000;
+    
+}
+
+#section{
+
+    /*centrar div*/
+    display: grid;
+    place-items: center;
+
+    /*borde*/
+    box-sizing: border-box;
+    border-radius: 27px;
+
+    /*Tamaño*/
+    width: 65%;
+    height: 95%;
+
+    height: 500px;
+    width: 400px;
+
+    /*Color*/
+    background: #FDFCFC;
+    border: 2px solid #000000;
+    
+    /*Ubicacion*/
+
+    float: left;
+    
+}
+
+.btn_Aceptar{
+    color: #42444E;
+    height: 40px;
+    width: 140px;
+    background-color: #FAA92F;
+    text-decoration: none;
+    border-style: none;
+    border-radius: 5px;
+}
+
+
+/*-------------------------------------------------*/
+/*---------------- Validacion JS ------------------*/
+/*-------------------------------------------------*/
+
+
+.formulario__grupo-input {
+    position: relative;
+}
+
+.formulario__input {
+    width: 20em;
+    background-color: #f5ecec;
+    border: 3px solid transparent;
+    border-radius: 3px;
+    height: 3em;
+    line-height: 3em;
+    padding: 0 3em 0 1em;
+    transition: .3s ease all;
+}
+
+.formulario__input:focus {
+    border: 3px solid #0075FF;
+    outline: none;
+    box-shadow: 3px 0px 30px rgba(163, 163, 163, 0.4);
+}
+
+.formulario__input-error {
+    /*es el mensaje de error que esta abajo de las casillas*/
+    font-size: 12px;
+    margin-bottom: 0;
+    display: none;
+}
+
+.formulario__input-error-activo {
+    display: block;
+}
+
+.formulario__validacion-estado {
+    /*la x aparesca en medio de la casilla*/
+    position: absolute;
+    right: 10px;
+    bottom: 15px;
+    z-index: 100;
+    font-size: 16px;
+    opacity: 0;
+    /*es para que la x aparesca cuando tengamos un error*/
+}
+
+.formulario__checkbox {
+    margin-right: 10px;
+}
+
+.formulario__mensaje,
+.formulario__grupo-btn-enviar {
+    grid-column: span 2;
+}
+
+.formulario__mensaje {
+    /*dimensiones del mensaje de error*/
+    height: 45px;
+    line-height: 45px;
+    background: #F66060;
+    padding: 0 15px;
+    border-radius: 3px;
+    display: none;
+}
+
+.formulario__mensaje-activo {
+    /*el mensaje solo aparecera si hay un error*/
+    display: block;
+}
+
+.formulario__mensaje p {
+    /*el mensaje este centrado*/
+    margin: 0;
+}
+
+.formulario__grupo-btn-enviar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formulario__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    margin: 25px;
+    background-color: #FAA92F;
+    transition: all 0.3s linear;
+    cursor: pointer;
+}
+
+.formulario__btn:hover {
+    background-color: #ec920d;
+}
+
+.formulario__mensaje-exito {
+    font-size: 14px;
+    color: #119200;
+    display: none;
+}
+
+.formulario__mensaje-exito-activo {
+    display: block;
+}
+
+
+/* ----- -----  Estilos para Validacion ----- ----- */
+
+.formulario__grupo-correcto .formulario__validacion-estado {
+    color: #1ed12d;
+    opacity: 1;
+}
+
+.formulario__grupo-incorrecto .formulario__label {
+    color: #bb2929;
+}
+
+.formulario__grupo-incorrecto .formulario__validacion-estado {
+    color: #bb2929;
+    opacity: 1;
+}
+
+.formulario__grupo-incorrecto .formulario__input {
+    border: 3px solid #bb2929;
+}
+
+
+/* ----- -----  Mediaqueries ----- ----- */
+
+@media screen and (max-width: 800px) {
+    .formulario {
+        grid-template-columns: 1fr;
+    }
+    .formulario__mensaje,
+    .formulario__grupo-btn-enviar {
+        grid-column: 1;
+    }
+    .formulario__btn {
         width: 100%;
     }
 }

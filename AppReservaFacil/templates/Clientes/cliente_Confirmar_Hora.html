@@ -1,0 +1,59 @@
+{% extends "./index.html" %}
+{% block footer %}
+<title>Confirmar Cita</title>
+    <div id="main-content-centro">
+        {% if user.is_authenticated %}
+        <div class="div-mediano">
+            <h2 id="titulo-seleccionar-area">Consultar Hora</h2>
+            {% for x in cita_seleccionada %}
+            <div class="body-margin-top">
+                <div class="row">
+                    <div class="col">Especialista: {{x.ID_Especialista}}</div>
+                    <div class="col">Fecha de Cita: {{x.Fecha_Cita}}</div>
+                    <div class="col">Hora de Cita: {{x.Hora_Cita}}</div>
+                </div>    
+                <br>
+                <br>
+                {% if x.Confirmacion_Cita == False %}
+                    <div class="row">
+                        <div class="col">Confirmación de la cita: <a class="text-warning">Sin Confirmar</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <br>
+                            <br>
+                            <form method="post">
+                                {% csrf_token %}
+                                <button value="{{x.ID_Cita}}" class="btn-naranja-mediano" type="submit"
+                                        name="confirmar_cita">
+                                        Confirmar Cita
+                                </button>
+                                <button class="btn-naranja-mediano">
+                                    <a href="/consultar_hora">Atras</a>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col text">Confirmación de la cita: <a class="text-success">Confirmado</a></div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn-naranja-mediano">
+                                <a href="/consultar_hora">Atras</a>
+                            </button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div> 
+            {% endfor %}       
+        {% else %}
+        <div class="div-mediano" >
+            <h1 id="titulo-seleccionar-area">Ingrese sesión para anular horas</h1>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

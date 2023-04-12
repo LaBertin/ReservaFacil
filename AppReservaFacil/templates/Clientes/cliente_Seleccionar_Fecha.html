@@ -1,13 +1,23 @@
 {% extends "./index.html" %}
 {% block footer %}
+<title>Agendar Cita</title>
 <div id="main-content-centro">
 
     <div class="div-pequeño">
-
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
         <h2 id="titulo-inicio-sesion">Seleccione Fecha</h2>
             <div class="row">
                 <form method="post">
                     {% csrf_token %}
+                    <br>
+                    <br>
                     {{ formDate }}
                     <br>
                     <br>
@@ -15,9 +25,9 @@
                             name="seleccionar_hora">
                             Seleccionar Hora
                     </button>
+                    <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
                 </form>
             </div>      
-        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
         </div>
   
 </div>

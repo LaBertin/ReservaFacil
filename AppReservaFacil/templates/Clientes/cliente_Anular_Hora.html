@@ -1,5 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
+<title>Anular Cita</title>
     <div id="main-content-centro">
         {% if user.is_authenticated %}
         <div class="div-mediano">
@@ -21,6 +22,8 @@
                                         </form>
                                     </td>
                                 </tr>
+                                <br>
+                                <br>
                             {% endfor %}
 
                         </table>

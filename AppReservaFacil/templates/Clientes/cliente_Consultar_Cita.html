@@ -1,0 +1,66 @@
+{% extends "./index.html" %}
+{% block footer %}
+<title>Consultar Cita</title>
+    <div id="main-content-centro">
+        {% if user.is_authenticated %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="div-mediano">
+            <h2 id="titulo-seleccionar-area">Elija la cita que desea consultar</h2>
+                <div class="row">
+                    {% if citas_cliente %}
+                        <table>
+                            {% for x in citas_cliente %}
+                                {% if x.Confirmacion_Cita == False %}
+                                    <tr>
+                                        <td>Fecha de cita: {{x.ID_Cita}}</td>
+                                        <td>Especialista: {{x.ID_Especialista}} </td>
+                                        <td>Confirmación de la cita: <a class="text-warning">Sin Confirmar</a></td>
+                                        <td>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <button value="{{x.ID_Cita}}" class="btn-naranja-mediano" type="submit"
+                                                        name="consultar_hora">
+                                                        Consultar Cita
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td>Fecha de cita: {{x.ID_Cita}}</td>
+                                        <td>Especialista: {{x.ID_Especialista}} </td>
+                                        <td>Confirmación de la cita: <a class="text-success">Confirmado</a></td>
+                                        <td>
+                                            <form method="post">
+                                                {% csrf_token %}
+                                                <button value="{{x.ID_Cita}}" class="btn-naranja-mediano" type="submit"
+                                                        name="consultar_hora">
+                                                        Consultar Cita
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                <br>
+                                <br>
+                            {% endfor %}
+
+                        </table>
+                    {% else %}
+                    <h4 id="titulo-seleccionar-area">Actualmente no hay citas asignadas a su usuario</h4>
+                    {% endif %}
+                </div>                
+        {% else %}
+        <div class="div-mediano" >
+            <h1 id="titulo-seleccionar-area">Ingrese sesión para consultar citas.</h1>
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

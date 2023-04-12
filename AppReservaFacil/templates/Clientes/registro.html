@@ -1,5 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
+<title>Registro</title>
 <div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
@@ -41,6 +42,16 @@
             <br>
             <div id=div-nav-left>
                 {{ formRegistarUsuario.password2 }}
+            </div>
+            <br>
+            <br>
+            <div id="div-nav-left">
+                <h6>Correo electrónico</h6>
+            </div>
+            <br>
+            <br>
+            <div id=div-nav-left>
+                {{ formRegistarUsuario.email }}
             </div>
             <br>
             <br>
