@@ -202,6 +202,7 @@ def cliente_Agendar_hora(request):
         if 'radiologia' in request.POST:
             valuebtn = 'Radiología'
         values = request.POST.get('pedir_hora')
+        filtro = request.POST.get('filter_esp')
         print("Areas Medicas")
         Areas_Medicas = Area_Medica.objects.filter(Nombre_Area_Medica = valuebtn)
         print(Areas_Medicas)
@@ -217,13 +218,22 @@ def cliente_Agendar_hora(request):
             print("x")
             print(x)
             Especialistas = Especialista.objects.filter(Especialidad_P=x)
+
+            print("Especialistas filtrados por x")
+            print(Especialistas)
+
             EspecialistasF = EspecialistasF.union(Especialistas)
+
             print("Especialistas: ")
             print(Especialistas)
+
+            print("Especialistas F:")
             print(EspecialistasF)
-            contexto = {'especialista':EspecialistasF}
+
+            contexto = {'especialista':EspecialistasF, 'filtro':Especialidades}
             print("Contexto: ")
             print(contexto)
+        
         return render(request, 'clientes/listar_Especialistas.html', contexto)
     return render(request, 'clientes/cliente_Agendar_Hora.html')
 

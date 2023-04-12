@@ -9,6 +9,11 @@
         {% if especialista %}
         <div id="container-fila-agendar-hora" class="container">
             <div class="row">
+            <select name="filter_esp">
+                {% for y in filtro %}
+                <option>{{y}}</option>
+                {% endfor %}
+            </select>
             <table>
             {% for x in especialista %}
                 <tr>

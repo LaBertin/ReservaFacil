@@ -58,13 +58,15 @@ class FormRegistrarUsuario(forms.Form):
         return user  
 
     
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class LoginUsuario(AuthenticationForm):
     pass
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(label="Fecha",
-    widget=forms.SelectDateWidget
+    widget=DateInput
     )
 
         
