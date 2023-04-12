@@ -4,22 +4,23 @@ from django.contrib.auth.models import *
 from django.contrib import messages
 from .models import *
 from django.core.exceptions import ValidationError
+from django.forms.widgets import *
 
 
 # Create your forms here.
 
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
-    fecha_nac_especialista = forms.DateField()
+    rut = forms.CharField(max_length=9)
+    sexo = forms.ChoiceField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]), required=True,initial=0)
+    fecha_nac_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     direccion_especialista = forms.CharField(max_length=256)
-    contacto_especialista = forms.IntegerField()
-    foto_especialista = forms.ImageField()
-    especialidades = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+    contacto_especialista = forms.CharField(max_length=9 ,widget=NumberInput)
+    especialidad_p = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0)
+    especialidad_s = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    especialidad_t = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    especialidad_c = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
 
-    def __str__(self):
-        nom_com_especialista = str(self.nom_com_especialista)
-        return nom_com_especialista
-    
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
