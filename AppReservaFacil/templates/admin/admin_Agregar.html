@@ -1,144 +1,17 @@
+{% extends "../Clientes/index.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css.css'%}">
+{% block footer %}
+<div id="main-content-centro">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
 
-    <title>ReservaFácil - Inicio</title>
-
-    
-</head>
-
-
-
-<body class= "formulario_Agregar">
-
-    <!--container general del formulario-->
-    <div class="container_agregar">
-        
-        <form action " " method="post">
-            {% csrf_token %}
-
-        <span class="titulo"> Formulario </span>
-        
-            <form action="#">
-                <div class="form first"> 
-                    <div class="details personal">
-
-                    <!-- Formulario para agregar nuevo personal -->
-
-                        <div class="fields">
-                            <!--Nombre Completo-->
-                                <div class="input-field" id="grupo__nombre">
-                                    <label for="nombre" class= "formu"> *Nombre Completo: </label>
-                                    <input type="text" id="nombre" name="nombre" placeholder =" Enter your name ">
-                                </div>
-                            
-                            <!--Cargo del Empleado-->
-                                <div class="input-field" id="grupo__cargo">
-                                    <label for="cargo" class= "formu"> *Cargo del Empleado: </label>
-                                    <input type="text" id="cargo" name="cargo"  placeholder =" Su cargo es ...... ">
-                                </div>
-                            
-                            <!--Rut del Empleado-->
-                                <div class="input-field" id="grupo__rut">
-                                    <label for="rut" class= "formu"> *Rut: </label>
-                                    <input type="number" id="rut" name="rut" placeholder =" 17.223.276-k ">
-                                </div>
-
-
-                            <!--sexo del Empleado-->
-                                <div class= "select">
-                                    <select name="format" id="format">
-                                        <option selected> tipo de sexo <option>
-                                        <option value="hombre"> Hombre <option>
-                                        <option value="mujer"> Mujer <option>
-                                        <option value="otro"> Otro <option>
-                                    </select> 
-                                </div>
-
-                            <!--Correo del Empleado-->
-                                <div class="input-field" id="grupo__correo">
-                                    <label for="correo" class= "formu"> *Correo personal: </label>
-                                    <input type="text" id="correo" name="correo" placeholder =" juanm@gmail.com ">
-                                </div>
-                                
-
-                            <!--telefono celular-->
-                                <div class="input-field" id="grupo__celular">
-                                    <label for="telefonoCelular" class= "formu"> *Telefono celular: </label>
-                                    <input type="number" id="telefonoCelular" name="telefonoCelular" placeholder =" 923547613 ">
-                                </div>
-
-
-                            <!--telefono fijo-->
-                                <div class="input-field" id="grupo__telefono">
-                                    <label for="telefono" class= "formu"> Telefono Fijo: </label>
-                                    <input type="number" id="telefono" name="telefono" placeholder =" 322876576 ">
-                                </div>
-
-                            <!--telefono de Contacto de Emergencia-->
-                                <div class="input-field" id="grupo__telefonoEmergencia">
-                                    <label for="telefonoContacto" class= "formu"> *Contacto de Emergencia: </label>
-                                    <input type="number" id="telefonoContacto" name="telefonoContacto" placeholder =" 923547613 ">
-                                </div>
-
-                            <!--Fecha de Nacimineto-->
-                                <div class="input-field" id="grupo__nacimiento">
-                                    <label for="nacimiento" class= "formu"> *Fecha de Nacimiento: </label>
-                                    <input type="date" id="nacimiento" placeholder =" 26/07/1978 ">
-                                </div>
-
-                            <!--Fecha de Contratacion-->
-                                <div class="input-field" id="grupo__contratacion">
-                                    <label for="contratacion" class= "formu"> *Fecha de Contratación: </label>
-                                    <input type="date" id="contratacion" placeholder =" 26/07/2023 ">
-                                </div>
-                                
-                        </div>
-
-                        <!-- Grupo: mensaje btn error -->
-                        <div class="formulario__mensaje" id="formulario__mensaje">
-                            <p><i class="fas fa-exclamation-triangle"></i> <b>Error:</b> Por favor rellena el formulario correctamente. </p>
-                        </div>
-            
-                        <!-- Grupo: Boton de Enviar -->
-                        <div class="formulario__grupo formulario__grupo-btn-enviar">
-                            <button type="submit" class="formulario__btn">Enviar</button>
-                            <p class="formulario__mensaje-exito" id="formulario__mensaje-exito">Formulario enviado exitosamente!</p>
-                        </div>
-                        
-                        <br>
-
-                        <!-- boton borrar-->
-            
-                        <div class="formulario__grupo formulario__grupo-btn-enviar">
-                            <button type="reset" class="formulario__btn">borrar</button>
-            
-                        </div>
-
-                    </div> 
-                    
-                </div>
-
-
-            </form> 
-
-            {% if mensaje %}
-                {{ mensaje }}
-                {% endif %}
-
-            </form>
-
+    <div class="div-pequeño">
+        <span></span>
     </div>
-
-
-</body>
-
-
-
-
-</html>
+{% endblock %}
