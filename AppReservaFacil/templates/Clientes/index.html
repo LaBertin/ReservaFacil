@@ -23,7 +23,7 @@
         <nav>
             <ul>
                 {% if request.user|has_group:"Especialistas" %} 
-                    <li><a href="/agendar_hora">Agenda</a></li>
+                    <li><a href="/Agendar">Agenda</a></li>
                     <li><a href="/modificar_hora">Ficha Médica</a></li>
                     <li><a href="/consultar_hora">Emitir Receta</a></li>
                     {% if user.is_authenticated %}
@@ -33,7 +33,6 @@
                     {% endif %}
                 {% else %}
                     <li><a href="/agendar_hora">Agendar Cita</a></li>
-                    <li><a href="/modificar_hora">Modificar Cita</a></li>
                     <li><a href="/consultar_hora">Consultar Cita</a></li>
                     <li><a href="/anular_hora">Anular Cita</a></li>
                     {% if user.is_authenticated %}

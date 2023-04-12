@@ -28,21 +28,24 @@ def has_group(user, group_name):
 
 # Dirección URL de vistas de Clientes
 def index(request):
-    nombre_Usuario = User.objects.get(username=request.user.username)
-    Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Especialistas']).exists()
-    if Bool_Grupo == True:
-        print(nombre_Usuario)
-        nombre_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Nombre_completo_E
-        img_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Foto_E
-        nombre_Especialista = nombre_Especialista.split(' ')
-        nombre_Especialista = nombre_Especialista[0]+' '+nombre_Especialista[3]
-        print(nombre_Especialista)
-        print(img_Especialista)
-        return render(request, "Clientes/index.html", {'Nombre_E':nombre_Especialista,'Foto_E':img_Especialista})
+    if request.user.is_authenticated==True:
+        nombre_Usuario = User.objects.get(username=request.user.username)
+        Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Especialistas']).exists()
+        if Bool_Grupo == True:
+            print(nombre_Usuario)
+            nombre_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Nombre_completo_E
+            img_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Foto_E
+            nombre_Especialista = nombre_Especialista.split(' ')
+            nombre_Especialista = nombre_Especialista[0]+' '+nombre_Especialista[3]
+            print(nombre_Especialista)
+            print(img_Especialista)
+            return render(request, "Clientes/index.html", {'Nombre_E':nombre_Especialista,'Foto_E':img_Especialista})
 
+        else:
+            print("Otro")
+        return render(request, "Clientes/index.html")
     else:
-        print("Otro")
-    return render(request, "Clientes/index.html")
+        return render(request, "Clientes/index.html")
 
 def inicio(request):
     return render(request, "Especialistas/inicio.html")
@@ -329,7 +332,7 @@ def Cliente_consultar_hora(request):
             Confirmar_Cita = Confirmar_Cita.replace('Diciembre','December')
         Confirmar_Cita = datetime.strptime(Confirmar_Cita, '%d %B %Y %H:%M')
         print(Confirmar_Cita)
-        #Cita.objects.filter(ID_Cita=Confirmar_Cita).update(Confirmacion_Cita=True)
+        Cita.objects.filter(ID_Cita=Confirmar_Cita).update(Confirmacion_Cita=True)
         Datos=Cita.objects.filter(ID_Cita=Confirmar_Cita).get()
         Fecha=str(datetime.date(Confirmar_Cita))
         Hora=str(Confirmar_Cita.hour)+':'+str(Confirmar_Cita.minute)+str(Confirmar_Cita.minute)+':'+str(Confirmar_Cita.second)+str(Confirmar_Cita.second)
@@ -433,7 +436,6 @@ def AppReservaFacil(request):
     
     return render(request,"admin/admin_crearUsuario.html",{"articulos":articulos})
 
-#Definiciones de Especialista.
-def homeEspecialista(request):
+def especialista_Agendar(request):
     
-    return render(request,"Especialistas/inicio.html")
+    return render(request, "Especialistas/especialista_Agenda.html")
