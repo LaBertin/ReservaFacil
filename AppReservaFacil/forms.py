@@ -4,9 +4,33 @@ from django.contrib.auth.models import *
 from django.contrib import messages
 from .models import *
 from django.core.exceptions import ValidationError
+from django.forms.widgets import *
 
 
 # Create your forms here.
+
+DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
+
+
+class FormEspecialista(forms.Form):
+    nom_com_especialista = forms.CharField(max_length=256)
+    rut = forms.CharField(max_length=9)
+    sexo = forms.ChoiceField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]), required=True,initial=0)
+    fecha_nac_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    direccion_especialista = forms.CharField(max_length=256)
+    contacto_especialista = forms.CharField(max_length=9 ,widget=NumberInput)
+    especialidad_p = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0)
+    especialidad_s = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    especialidad_t = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    especialidad_c = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    dia_p = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_s = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_t = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_c = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    minutes_p = forms.IntegerField()
+    minutes_s = forms.IntegerField()
+    minutes_t = forms.IntegerField()
+    minutes_c = forms.IntegerField()
 
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
@@ -46,13 +70,15 @@ class FormRegistrarUsuario(forms.Form):
         return user  
 
     
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class LoginUsuario(AuthenticationForm):
     pass
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(label="Fecha",
-    widget=forms.SelectDateWidget
+    widget=DateInput
     )
 
         

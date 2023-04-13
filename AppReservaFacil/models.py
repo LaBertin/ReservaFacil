@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import *
+from django.forms.widgets import *
+from multiselectfield import MultiSelectField
 
 # Create your models here.
 
@@ -28,14 +30,29 @@ class Especialidad(models.Model):
         verbose_name='Especialidad'
         verbose_name_plural='Especialidades'
 
+DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
+
 class Especialista(models.Model):
     ID_Especialista = models.IntegerField(primary_key=True, unique=True)
     Nombre_completo_E = models.CharField(max_length=256)
-    Fecha_de_nacimiento_E = models.DateField()
-    Direccion_E = models.CharField(max_length=256)
-    Telefono_E = models.IntegerField()
-    Foto_E = models.ImageField()
-    Especialidad_P = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+    Rut = models.CharField(max_length=9, null=True)
+    Sexo = models.CharField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]),max_length=9, null=True)
+    Fecha_de_nacimiento_E = models.DateField(null=True)
+    Direccion_E = models.CharField(max_length=256, null=True)
+    Telefono_E = models.CharField(max_length=9, null=True)
+    Foto_E = models.ImageField(null=True)
+    Especialidad_P = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_P")
+    Especialidad_S = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_S")
+    Especialidad_T = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_T")
+    Especialidad_C = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_C")
+    Dia_Esp_P = MultiSelectField(null=True, choices=DIAS_CHOICES)
+    Dia_Esp_S = MultiSelectField(null=True, choices=DIAS_CHOICES)
+    Dia_Esp_T = MultiSelectField(null=True, choices=DIAS_CHOICES)
+    Dia_Esp_C = MultiSelectField(null=True, choices=DIAS_CHOICES)
+    Minutes_Esp_P = models.IntegerField(null = True)
+    Minutes_Esp_S = models.IntegerField(null = True)
+    Minutes_Esp_T = models.IntegerField(null = True)
+    Minutes_Esp_C = models.IntegerField(null = True)
     Usuario_E = models.ForeignKey(User, null=True, on_delete=models.RESTRICT )
 
     def __str__(self):
@@ -55,31 +72,3 @@ class Cita(models.Model):
     
     
     
- # Base de Datos para Admin_Agregar
- 
-class AdminAgregar(models.Model):
-    
-    nombre= models.CharField(max_length=50, verbose_name='Nombre del Empleado') # maximo de caracteres
-    cargo = models.CharField(max_length=40, verbose_name='Cargo del Empleado')
-    rut= models.CharField(max_length=10, verbose_name='Rut del Empleado')
-    correo = models.CharField(max_length=40, verbose_name='sexo del Empleado')
-    telefonoCelular= models.CharField(max_length=10, verbose_name='telefono celular')
-    telefono= models.CharField(max_length=10, verbose_name='telefono fijo')
-    telefonoContacto= models.CharField(max_length=10, verbose_name='telefono de Contacto de Emergencia')
-    
-    # recueroda los campos que estan en la base de datos por el nombre
-    def __str__(self):
-        return self.nombre
-    
- 
-# Base de Datos para crearUsuario 
-    
-class NuevoUsuarios(models.Model):
-    nombreUser= models.CharField(max_length=50, verbose_name='Nombre usuario') # maximo de caracteres
-    password= models.CharField(max_length=14, verbose_name='Password usuario')
-    password2= models.CharField(max_length=14, verbose_name='Password ')
-    
-    # recueroda los campos que estan en la base de datos por el nombre
-    def __str__(self):
-        return self.nombreUser
- 
