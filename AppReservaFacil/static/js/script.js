@@ -111,6 +111,13 @@ inputs.forEach((input) => {
 	input.addEventListener('blur', validarFormulario);
 });
 
+
+var message_tag = document.getElementById("message_box");
+
+setTimeout(function(){ 
+   message_tag.style.display = "none"; 
+}, 3000);
+
 formulario.addEventListener('submit', (e) => {
 	e.preventDefault();
 
@@ -131,3 +138,5 @@ formulario.addEventListener('submit', (e) => {
 		document.getElementById('formulario__mensaje').classList.add('formulario__mensaje-activo');
 	}
 });
+
+//OCULTAR CAMPO

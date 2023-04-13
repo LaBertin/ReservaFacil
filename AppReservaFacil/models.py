@@ -1,10 +1,11 @@
 from django.db import models
+from django import forms
 from django.contrib.auth.models import *
-from django.forms.widgets import *
 from multiselectfield import MultiSelectField
-
 # Create your models here.
 
+DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
+MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
 class Area_Medica(models.Model):
     ID_Area_Medica = models.IntegerField(primary_key=True, unique=True)
     Nombre_Area_Medica = models.CharField(max_length=256)
@@ -45,14 +46,14 @@ class Especialista(models.Model):
     Especialidad_S = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_S")
     Especialidad_T = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_T")
     Especialidad_C = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_C")
-    Dia_Esp_P = MultiSelectField(null=True, choices=DIAS_CHOICES)
-    Dia_Esp_S = MultiSelectField(null=True, choices=DIAS_CHOICES)
-    Dia_Esp_T = MultiSelectField(null=True, choices=DIAS_CHOICES)
-    Dia_Esp_C = MultiSelectField(null=True, choices=DIAS_CHOICES)
-    Minutes_Esp_P = models.IntegerField(null = True)
-    Minutes_Esp_S = models.IntegerField(null = True)
-    Minutes_Esp_T = models.IntegerField(null = True)
-    Minutes_Esp_C = models.IntegerField(null = True)
+    Dia_Esp_P = MultiSelectField(choices=DIAS_CHOICES)
+    Dia_Esp_S = MultiSelectField(choices=DIAS_CHOICES)
+    Dia_Esp_T = MultiSelectField(choices=DIAS_CHOICES)
+    Dia_Esp_C = MultiSelectField(choices=DIAS_CHOICES)
+    Minutes_Esp_P = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_T = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_C = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
     Usuario_E = models.ForeignKey(User, null=True, on_delete=models.RESTRICT )
 
     def __str__(self):

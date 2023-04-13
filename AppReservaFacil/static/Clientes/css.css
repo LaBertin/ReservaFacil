@@ -114,6 +114,7 @@ body{
     .col-sm:hover{
         color:#212529;
     }
+    
     /*Content usado para centrar div en el agendar hora*/
     #main-content-centro{
         height: 100%;
