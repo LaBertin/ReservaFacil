@@ -396,8 +396,6 @@ def agregar_empleado(request):
     nuevo_emp_form = {
         'formEspecialista': FormEspecialista()
     }
-<<<<<<< HEAD
-=======
     if request.method=='POST':
         csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
         formulario=FormEspecialista(data=request.POST)
@@ -483,7 +481,6 @@ def agregar_empleado(request):
             formulario=FormEspecialista()
             messages.error(request, "Error al Agregar")
 
->>>>>>> 36aa73bf7fb334cdbf6df424b248a5d7d836be69
     
     return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
 ########################## Base de Datos de Nuevo_Usuario ############################

@@ -1,5 +1,6 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
+<link href="../../static/Admin/agregar.css" rel="stylesheet">
 <title>Agregar Empleado</title>
 <div id="main-content-centro">
     {% if messages %}
@@ -87,11 +88,27 @@
                         <div >
                             <h6>Especialidad 4</h6>
                         </div>
-                        <div >
+                        <div>
                             {{ formEspecialista.especialidad_c }}
                         </div>
+                        
                     </div>
-                    
+
+                    <div class="col">
+                        <div class="wrapper">
+                            {{formEspecialista.dia_p}}
+                        </div>
+                        <br>
+                        <div class="wrapper">
+                            {{formEspecialista.dia_s}}
+                        </div>
+                        <div class="wrapper">
+                            {{formEspecialista.dia_t}}
+                        </div>
+                        <div class="wrapper">
+                            {{formEspecialista.dia_c}}
+                        </div>
+                    </div>
                 </div>
 
             </div>

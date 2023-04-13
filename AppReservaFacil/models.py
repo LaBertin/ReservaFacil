@@ -41,6 +41,14 @@ class Especialista(models.Model):
     Especialidad_S = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_S")
     Especialidad_T = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_T")
     Especialidad_C = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_C")
+    Dia_Esp_P = models.BooleanField(null=True)
+    Dia_Esp_S = models.BooleanField(null=True)
+    Dia_Esp_T = models.BooleanField(null=True)
+    Dia_Esp_C = models.BooleanField(null=True)
+    Minutes_Esp_P = models.IntegerField(null = True)
+    Minutes_Esp_S = models.IntegerField(null = True)
+    Minutes_Esp_T = models.IntegerField(null = True)
+    Minutes_Esp_C = models.IntegerField(null = True)
     Usuario_E = models.ForeignKey(User, null=True, on_delete=models.RESTRICT )
 
     def __str__(self):
