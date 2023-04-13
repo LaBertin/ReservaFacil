@@ -447,6 +447,18 @@ def agregar_empleado(request):
             else:
                 especialidad_c = None
 
+            minutos_p = request.POST.get('minutes_p')
+            print(f'Minutos primaria {minutos_p}')
+            print(type(minutos_p))
+
+            minutos_s = request.POST.get('minutes_s')
+            print(f'Minutos secundaria {minutos_s}')
+
+            minutos_t = request.POST.get('minutes_t')
+            print(f'Minutos terciaria {minutos_t}')
+
+            minutos_c = request.POST.get('minutes_c')
+            print(f'Minutos cuartaria {minutos_c}')
             us = nom_com_especialista[:2].lower()
             uar = " ".join(nom_com_especialista.split()[2:-1]).lower()
             io = fecha_nac_especialista[:-6]
@@ -469,7 +481,9 @@ def agregar_empleado(request):
                 Usuario_E = User.objects.filter(username=usuario)[0]
                 print(Usuario_E)
                 print("Usuario Creado")
-                Especialista.objects.create(ID_Especialista=1, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Telefono_E=contacto_especialista, Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, Especialidad_S=especialidad_s, Especialidad_T=especialidad_t, Especialidad_C=especialidad_c,Usuario_E=Usuario_E)
+                Especialista.objects.create(ID_Especialista=1, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Telefono_E=contacto_especialista, 
+                                            Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, Especialidad_S=especialidad_s, Especialidad_T=especialidad_t, Especialidad_C=especialidad_c,Usuario_E=Usuario_E, 
+                                            Minutes_Esp_P = minutos_p, Minutes_Esp_S = minutos_s, Minutes_Esp_T = minutos_t, Minutes_Esp_C = minutos_c)
                 messages.success(request, "Te has registrado con éxito")
                 return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
             else:

@@ -10,7 +10,7 @@ from django.forms.widgets import *
 # Create your forms here.
 
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
-
+MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
 
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
@@ -27,10 +27,10 @@ class FormEspecialista(forms.Form):
     dia_s = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
     dia_t = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
     dia_c = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
-    minutes_p = forms.IntegerField()
-    minutes_s = forms.IntegerField()
-    minutes_t = forms.IntegerField()
-    minutes_c = forms.IntegerField()
+    minutes_p = forms.ChoiceField(choices=MINUTOS_CHOICES)
+    minutes_s = forms.ChoiceField(choices=MINUTOS_CHOICES)
+    minutes_t = forms.ChoiceField(choices=MINUTOS_CHOICES)
+    minutes_c = forms.ChoiceField(choices=MINUTOS_CHOICES)
 
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
