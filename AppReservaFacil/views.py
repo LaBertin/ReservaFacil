@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from .forms import *
@@ -9,10 +9,6 @@ from datetime import datetime, timedelta
 from django.core.mail import send_mail
 from django.conf import settings
 from django import template
-
-from AppReservaFacil.models import AdminAgregar, NuevoUsuarios
-
-from AppReservaFacil.models import AdminAgregar, NuevoUsuarios
 
 # Create your views here.
 
@@ -69,7 +65,9 @@ def registrousuario(request):
     }
 
     if request.method=='POST':
+        print(request.POST)
         formulario=FormRegistrarUsuario(data=request.POST)
+        print(formulario)
         print(formulario.errors)
         if formulario.is_valid():
             usuario = request.POST.get('username')
@@ -202,6 +200,7 @@ def cliente_Agendar_hora(request):
         if 'radiologia' in request.POST:
             valuebtn = 'Radiología'
         values = request.POST.get('pedir_hora')
+        filtro = request.POST.get('filter_esp')
         print("Areas Medicas")
         Areas_Medicas = Area_Medica.objects.filter(Nombre_Area_Medica = valuebtn)
         print(Areas_Medicas)
@@ -217,13 +216,22 @@ def cliente_Agendar_hora(request):
             print("x")
             print(x)
             Especialistas = Especialista.objects.filter(Especialidad_P=x)
+
+            print("Especialistas filtrados por x")
+            print(Especialistas)
+
             EspecialistasF = EspecialistasF.union(Especialistas)
+
             print("Especialistas: ")
             print(Especialistas)
+
+            print("Especialistas F:")
             print(EspecialistasF)
-            contexto = {'especialista':EspecialistasF}
+
+            contexto = {'especialista':EspecialistasF, 'filtro':Especialidades}
             print("Contexto: ")
             print(contexto)
+        
         return render(request, 'clientes/listar_Especialistas.html', contexto)
     return render(request, 'clientes/cliente_Agendar_Hora.html')
 
@@ -388,6 +396,105 @@ def agregar_empleado(request):
     nuevo_emp_form = {
         'formEspecialista': FormEspecialista()
     }
+    if request.method=='POST':
+        csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
+        formulario=FormEspecialista(data=request.POST)
+        if formulario.is_valid():
+            nom_com_especialista = request.POST.get('nom_com_especialista')
+            print(nom_com_especialista)
+
+            fecha_nac_especialista = request.POST.get('fecha_nac_especialista')
+            print(fecha_nac_especialista)
+
+            direccion_especialista = request.POST.get('direccion_especialista')
+            print(direccion_especialista)
+
+            contacto_especialista = request.POST.get('contacto_especialista')
+            print(contacto_especialista)
+            
+            rut = request.POST.get('rut')
+            print(rut)
+
+            sexo = request.POST.get('sexo')
+            print(sexo)
+
+            especialidad_p = request.POST.get('especialidad_p')
+            print(especialidad_p)
+            especialidad_p=Especialidad.objects.filter(Codigo_especialidad=especialidad_p).get()
+            print(especialidad_p)
+
+            especialidad_s = request.POST.get('especialidad_s')
+            print(especialidad_s)
+            if especialidad_s != "":
+                especialidad_s=Especialidad.objects.filter(Codigo_especialidad=especialidad_s).get()
+                print(especialidad_s)
+            else:
+                especialidad_s = None
+
+            especialidad_t = request.POST.get('especialidad_t')
+            print(especialidad_t)
+            if especialidad_t != "":
+                especialidad_t=Especialidad.objects.filter(Codigo_especialidad=especialidad_t).get()
+                print(especialidad_t)
+            else:
+                especialidad_t = None
+
+            especialidad_c = request.POST.get('especialidad_c')
+            print(especialidad_c)
+            if especialidad_c != "":
+                especialidad_c=Especialidad.objects.filter(Codigo_especialidad=especialidad_c).get()
+                print(especialidad_c)
+            else:
+                especialidad_c = None
+
+            minutos_p = request.POST.get('minutes_p')
+            print(f'Minutos primaria {minutos_p}')
+            print(type(minutos_p))
+
+            minutos_s = request.POST.get('minutes_s')
+            print(f'Minutos secundaria {minutos_s}')
+
+            minutos_t = request.POST.get('minutes_t')
+            print(f'Minutos terciaria {minutos_t}')
+
+            minutos_c = request.POST.get('minutes_c')
+            print(f'Minutos cuartaria {minutos_c}')
+            us = nom_com_especialista[:2].lower()
+            uar = " ".join(nom_com_especialista.split()[2:-1]).lower()
+            io = fecha_nac_especialista[:-6]
+            print(io)
+            usuario=us+'.'+uar+io
+
+            contra=rut
+            print(contra)
+            sena= nom_com_especialista.split()[-1].lower()
+            print(sena)
+            contrasena=contra+sena
+            Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':'lazarino18@gmail.com'}
+            print(Reg)
+            q_dict = QueryDict('', mutable=True)
+            q_dict.update(Reg)
+            formulario = FormRegistrarUsuario(data=q_dict)
+            print(formulario)
+            if formulario.is_valid():
+                formulario.save()
+                Usuario_E = User.objects.filter(username=usuario)[0]
+                print(Usuario_E)
+                print("Usuario Creado")
+                Especialista.objects.create(ID_Especialista=1, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Telefono_E=contacto_especialista, 
+                                            Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, Especialidad_S=especialidad_s, Especialidad_T=especialidad_t, Especialidad_C=especialidad_c,Usuario_E=Usuario_E, 
+                                            Minutes_Esp_P = minutos_p, Minutes_Esp_S = minutos_s, Minutes_Esp_T = minutos_t, Minutes_Esp_C = minutos_c)
+                messages.success(request, "Te has registrado con éxito")
+                return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
+            else:
+                print(formulario)
+                formulario=FormEspecialista()
+                messages.error(request, "Error al Agregar")
+                return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
+        else:
+            formulario=FormEspecialista()
+            messages.error(request, "Error al Agregar")
+
     
     return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
 ########################## Base de Datos de Nuevo_Usuario ############################

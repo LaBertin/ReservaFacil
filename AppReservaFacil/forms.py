@@ -4,22 +4,34 @@ from django.contrib.auth.models import *
 from django.contrib import messages
 from .models import *
 from django.core.exceptions import ValidationError
+from django.forms.widgets import *
 
 
 # Create your forms here.
 
+DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
+MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
+
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
-    fecha_nac_especialista = forms.DateField()
+    rut = forms.CharField(max_length=9)
+    sexo = forms.ChoiceField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]), required=True,initial=0)
+    fecha_nac_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     direccion_especialista = forms.CharField(max_length=256)
-    contacto_especialista = forms.IntegerField()
-    foto_especialista = forms.ImageField()
-    especialidades = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+    contacto_especialista = forms.CharField(max_length=9 ,widget=NumberInput)
+    especialidad_p = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0)
+    especialidad_s = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    especialidad_t = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    especialidad_c = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    dia_p = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_s = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_t = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_c = forms.CharField(widget=forms.RadioSelect(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    minutes_p = forms.ChoiceField(choices=MINUTOS_CHOICES)
+    minutes_s = forms.ChoiceField(choices=MINUTOS_CHOICES)
+    minutes_t = forms.ChoiceField(choices=MINUTOS_CHOICES)
+    minutes_c = forms.ChoiceField(choices=MINUTOS_CHOICES)
 
-    def __str__(self):
-        nom_com_especialista = str(self.nom_com_especialista)
-        return nom_com_especialista
-    
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
@@ -58,13 +70,15 @@ class FormRegistrarUsuario(forms.Form):
         return user  
 
     
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class LoginUsuario(AuthenticationForm):
     pass
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(label="Fecha",
-    widget=forms.SelectDateWidget
+    widget=DateInput
     )
 
         
