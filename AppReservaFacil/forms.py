@@ -5,8 +5,11 @@ from django.contrib import messages
 from .models import *
 from django.core.exceptions import ValidationError
 from django.forms.widgets import *
+from datetime import date
 
 
+today = date.today()
+max = today.replace(today.year+ 1)
 # Create your forms here.
 
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
@@ -89,9 +92,10 @@ class LoginUsuario(AuthenticationForm):
     pass
 
 class DateForm(forms.Form):
-    date = forms.DateTimeField(label="Fecha",
-    widget=DateInput
+    date = forms.DateTimeField(
+    widget=DateInput(attrs={"name":"somdate", "value":today, "min":today ,"max":max} )
     )
 
-        
-
+class AgendarForm(forms.Form):
+    area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
+    especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())

@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse, QueryDict
+from django.http import HttpResponse, QueryDict, JsonResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from .forms import *
@@ -110,12 +110,13 @@ def cerrarsesionusuario(request):
     return render(request,  'Clientes/cerrarSesion.html')
 
 def cliente_Agendar_hora(request):
+    formulario_area_medica = {'formAreaMedica':AgendarForm}
     if request.method == 'POST':
         if 'pedir_cita' in request.POST:     
             global dataformDate 
             dataformDate = {
                 'formDate': DateForm()
-            }  
+            }
             global Especialistas
             values = request.POST.get('pedir_cita')
             Especialistas = Especialista.objects.filter(ID_Especialista=values)
@@ -124,6 +125,8 @@ def cliente_Agendar_hora(request):
             ID_Especialista = Especialistas[0].ID_Especialista
             print("ID_Especialistas:\n")
             print(ID_Especialista)
+            
+
             return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)    
         print("Request method = POST")
         if 'seleccionar_hora' in request.POST:
@@ -186,19 +189,7 @@ def cliente_Agendar_hora(request):
                 messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
         #Cardiología filtro
-        if 'cardiologia' in request.POST:
-            valuebtn = 'Cardiología'
-        #Nutricionista filtro
-        if 'nutricionista' in request.POST:
-            valuebtn = 'Nutricionista'
-        if 'analisis' in request.POST:
-            valuebtn = 'Análisis'
-        if 'movimiento_humano' in request.POST:
-            valuebtn = 'Movimiento Humano'
-        if 'otorrinologo' in request.POST:
-            valuebtn = 'Otorrinología'
-        if 'radiologia' in request.POST:
-            valuebtn = 'Radiología'
+        
         values = request.POST.get('pedir_hora')
         filtro = request.POST.get('filter_esp')
         print("Areas Medicas")
@@ -233,7 +224,7 @@ def cliente_Agendar_hora(request):
             print(contexto)
         
         return render(request, 'clientes/listar_Especialistas.html', contexto)
-    return render(request, 'clientes/cliente_Agendar_Hora.html')
+    return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
 
 def Cliente_anular_hora(request):
     if 'anular_hora' in request.POST:
@@ -515,6 +506,23 @@ def agregar_empleado(request):
                 print(minutos_c)
                 print(type(minutos_c))
 
+            if especialidad_s == None:
+                dia_s = None
+                minutos_s = None
+                dia_t = None
+                minutos_t = None
+                dia_c = None
+                minutos_c = None
+            
+            if especialidad_t == None:
+                dia_t = None
+                minutos_t = None
+                dia_c = None
+                minutos_c = None
+
+            if especialidad_c == None:
+                dia_c = None
+                minutos_c = None
 
             id_especialista = User.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
@@ -621,6 +629,11 @@ def agregar_operador(request):
     
     return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
 
+def obtener_especialidades(request, area_medica_id):
+    especialidades = Especialidad.objects.filter(Area_Medica_F=area_medica_id)
+    options = [(especialidad.pk, str(especialidad)) for especialidad in especialidades]
+    return JsonResponse(options, safe=False)
+    
 def especialista_Agenda(request):
     
     return render(request, "Especialistas/especialista_Agenda.html")
