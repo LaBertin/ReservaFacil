@@ -37,6 +37,9 @@
   border: 2px solid lightgrey;
   transition: all 0.3s ease;
 }
-.prueba2 {
+.notDisplay {
   display: none;
+}
+.display{
+  display: inline-flex;
 }

@@ -1,5 +1,7 @@
 {% extends "./index.html" %}
 {% block footer %}
+
+<script src="../../static/js/calendario.js"></script>
 <title>Agendar Cita</title>
 <div id="main-content-centro">
 
@@ -18,7 +20,9 @@
                     {% csrf_token %}
                     <br>
                     <br>
-                    {{ formDate }}
+                    <div>
+                        {{ formDate }}
+                    </div>
                     <br>
                     <br>
                     <button class="btn-naranja-mediano" type="submit"
@@ -31,6 +35,7 @@
         </div>
   
 </div>
+
 {% endblock %}
 
 

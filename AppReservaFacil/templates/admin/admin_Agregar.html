@@ -20,6 +20,7 @@
             <div class="container">
 
                 <div class="row">
+                    <!--Datos Personales Especialista-->
                     <div class="col">
                         <div >
                             <h6>Nombre Completo</h6>
@@ -64,6 +65,7 @@
                         </div>
                     </div>
                 
+                    <!--Especialidades-->
                     <div class="col">
                         <br>
                         <div>
@@ -85,23 +87,24 @@
                         </div>
                         <br>
                         <br>
-                        <div >
+                        <div class="notDisplay" id="esp_display_t">
                             <h6>Especialidad 3</h6>
                         </div>
-                        <div onchange="ocultarDiasT()">
+                        <div class="notDisplay" id="esp_display2_t" onchange="ocultarDiasT()">
                             {{ formEspecialista.especialidad_t }}
                         </div>
                         <br>
                         <br>
-                        <div >
+                        <div class="notDisplay" id="esp_display_c">
                             <h6>Especialidad 4</h6>
                         </div>
-                        <div onchange="ocultarDiasC()">
+                        <div class="notDisplay" id="esp_display2_c" onchange="ocultarDiasC()">
                             {{ formEspecialista.especialidad_c }}
                         </div>
                         
                     </div>
 
+                    <!--Dias especialidades-->
                     <div class="col">
                         <div class="wrapper">
                             {{formEspecialista.dia_p}}
@@ -118,17 +121,18 @@
                         </div>
                     </div>
 
+                    <!--Minutos de atención-->
                     <div class="col">
-                        <div>
+                        <div class ="display">
                             {{formEspecialista.minutes_p}}
                         </div>
-                        <div>
+                        <div class="notDisplay" id="divmins">
                             {{formEspecialista.minutes_s}}
                         </div>
-                        <div>
+                        <div class="notDisplay" id="divmint">
                             {{formEspecialista.minutes_t}}
                         </div>
-                        <div>
+                        <div class="notDisplay" id="divminc">
                             {{formEspecialista.minutes_c}}
                         </div>
                         
