@@ -200,6 +200,7 @@ def cliente_Agendar_hora(request):
         if 'radiologia' in request.POST:
             valuebtn = 'Radiología'
         values = request.POST.get('pedir_hora')
+        filtro = request.POST.get('filter_esp')
         print("Areas Medicas")
         Areas_Medicas = Area_Medica.objects.filter(Nombre_Area_Medica = valuebtn)
         print(Areas_Medicas)
@@ -215,13 +216,22 @@ def cliente_Agendar_hora(request):
             print("x")
             print(x)
             Especialistas = Especialista.objects.filter(Especialidad_P=x)
+
+            print("Especialistas filtrados por x")
+            print(Especialistas)
+
             EspecialistasF = EspecialistasF.union(Especialistas)
+
             print("Especialistas: ")
             print(Especialistas)
+
+            print("Especialistas F:")
             print(EspecialistasF)
-            contexto = {'especialista':EspecialistasF}
+
+            contexto = {'especialista':EspecialistasF, 'filtro':Especialidades}
             print("Contexto: ")
             print(contexto)
+        
         return render(request, 'clientes/listar_Especialistas.html', contexto)
     return render(request, 'clientes/cliente_Agendar_Hora.html')
 
@@ -437,6 +447,76 @@ def agregar_empleado(request):
             else:
                 especialidad_c = None
 
+            
+            dia_p = formulario.cleaned_data['dia_p'].replace("'","").strip('][').split(', ')
+            print(dia_p)
+            print(type(dia_p))
+            
+            if formulario.cleaned_data['dia_s']!="":
+                dia_s = formulario.cleaned_data['dia_s'].replace("'","").strip('][').split(', ')
+                print(dia_s)
+            else:
+                print("dia_s sin nada")
+                dia_s = None
+
+            if formulario.cleaned_data['dia_t']!="":
+                dia_t = formulario.cleaned_data['dia_t'].replace("'","").strip('][').split(', ')
+                print(dia_t)
+            else:
+                print("dia_t sin nada")
+                dia_t = None
+
+            if formulario.cleaned_data['dia_c']!="":
+                dia_c = formulario.cleaned_data['dia_c'].replace("'","").strip('][').split(', ')
+                print(dia_c)
+            else:
+                print("dia_c sin nada")
+                dia_c = None
+
+
+
+            if formulario.cleaned_data['minutes_p']!="":
+                minutos_p = formulario.cleaned_data['minutes_p']
+                print(f'Minutos primaria {minutos_p}')
+                print(type(minutos_p))
+            else:
+                print("Minutos P nada")
+                minutos_p=None
+                print(minutos_p)
+                print(type(minutos_p))
+
+            if formulario.cleaned_data['minutes_s']!="":
+                minutos_s = formulario.cleaned_data['minutes_s']
+                print(f'Minutos primaria {minutos_s}')
+                print(type(minutos_s))
+            else:
+                print("Minutos S nada")
+                minutos_s=None
+                print(minutos_s)
+                print(type(minutos_s))
+
+            if formulario.cleaned_data['minutes_t']!="":
+                minutos_t = formulario.cleaned_data['minutes_t']
+                print(f'Minutos primaria {minutos_t}')
+                print(type(minutos_t))
+            else:
+                print("Minutos T nada")
+                minutos_t=None
+                print(minutos_t)
+                print(type(minutos_t))
+
+            if formulario.cleaned_data['minutes_c']!="":
+                minutos_c = formulario.cleaned_data['minutes_c']
+                print(f'Minutos primaria {minutos_c}')
+                print(type(minutos_c))
+            else:
+                print("Minutos T nada")
+                minutos_c=None
+                print(minutos_c)
+                print(type(minutos_c))
+
+
+            id_especialista = User.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
             uar = " ".join(nom_com_especialista.split()[2:-1]).lower()
             io = fecha_nac_especialista[:-6]
@@ -449,17 +529,20 @@ def agregar_empleado(request):
             print(sena)
             contrasena=contra+sena
             Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':'lazarino18@gmail.com'}
-            print(Reg)
             q_dict = QueryDict('', mutable=True)
             q_dict.update(Reg)
             formulario = FormRegistrarUsuario(data=q_dict)
-            print(formulario)
             if formulario.is_valid():
                 formulario.save()
+                user = User.objects.get(username = usuario)
+                grupo_Pacientes = Group.objects.get(name='Especialistas') 
+                user.groups.add(grupo_Pacientes)
                 Usuario_E = User.objects.filter(username=usuario)[0]
                 print(Usuario_E)
                 print("Usuario Creado")
-                Especialista.objects.create(ID_Especialista=1, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Telefono_E=contacto_especialista, Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, Especialidad_S=especialidad_s, Especialidad_T=especialidad_t, Especialidad_C=especialidad_c,Usuario_E=Usuario_E)
+                Especialista.objects.create(ID_Especialista=id_especialista, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Telefono_E=contacto_especialista, 
+                                            Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, Especialidad_S=especialidad_s, Especialidad_T=especialidad_t, Especialidad_C=especialidad_c,Usuario_E=Usuario_E, 
+                                            Minutes_Esp_P = minutos_p, Minutes_Esp_S = minutos_s, Minutes_Esp_T = minutos_t, Minutes_Esp_C = minutos_c, Dia_Esp_P=dia_p, Dia_Esp_S = dia_s, Dia_Esp_T=dia_t, Dia_Esp_C=dia_c)
                 messages.success(request, "Te has registrado con éxito")
                 return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
             else:
@@ -473,8 +556,7 @@ def agregar_empleado(request):
 
     
     return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
-########################## Base de Datos de Nuevo_Usuario ############################
 
-def especialista_Agendar(request):
+def especialista_Agenda(request):
     
     return render(request, "Especialistas/especialista_Agenda.html")

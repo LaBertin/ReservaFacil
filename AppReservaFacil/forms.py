@@ -9,17 +9,28 @@ from django.forms.widgets import *
 
 # Create your forms here.
 
+DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
+MINUTOS_CHOICES=[(None,'--------'),(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
+
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
     rut = forms.CharField(max_length=9)
     sexo = forms.ChoiceField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]), required=True,initial=0)
     fecha_nac_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     direccion_especialista = forms.CharField(max_length=256)
-    contacto_especialista = forms.CharField(max_length=9 ,widget=NumberInput)
+    contacto_especialista = forms.CharField(max_length=9)
     especialidad_p = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0)
     especialidad_s = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
     especialidad_t = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
     especialidad_c = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
+    dia_p = forms.CharField(widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_s = forms.CharField(required=False, widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_t = forms.CharField(required=False, widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    dia_c = forms.CharField(required=False, widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
+    minutes_p = forms.ChoiceField(choices=MINUTOS_CHOICES, initial=0)
+    minutes_s = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    minutes_t = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    minutes_c = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
 
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
@@ -59,13 +70,15 @@ class FormRegistrarUsuario(forms.Form):
         return user  
 
     
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class LoginUsuario(AuthenticationForm):
     pass
 
 class DateForm(forms.Form):
     date = forms.DateTimeField(label="Fecha",
-    widget=forms.SelectDateWidget
+    widget=DateInput
     )
 
         

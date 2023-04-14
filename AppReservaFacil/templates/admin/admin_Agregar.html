@@ -1,10 +1,12 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
+<link href="../../static/Admin/agregar.css" rel="stylesheet">
+<script src="../../static/js/ocultar.js"></script>
 <title>Agregar Empleado</title>
 <div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
-            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert"  id="message_box">
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -34,6 +36,13 @@
                         </div>
                         <br>
                         <div >
+                            <h6>Sexo</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.sexo }}
+                        </div>
+                        <br>    
+                        <div >
                             <h6>Direccion</h6>
                         </div>
                         <div >
@@ -54,44 +63,76 @@
                             {{formEspecialista.rut}}
                         </div>
                     </div>
-
+                
                     <div class="col">
-                        <div >
-                            <h6>Sexo</h6>
-                        </div>
-                        <div >
-                            {{ formEspecialista.sexo }}
-                        </div>
                         <br>
-                        <div >
+                        <div>
                             <h6>Especialidad 1</h6>
                         </div>
+
                         <div >
-                            {{ formEspecialista.especialidad_p }}
+                            <div >
+                                {{ formEspecialista.especialidad_p }}
+                            </div>
                         </div>
+                        <br>
                         <br>
                         <div >
                             <h6>Especialidad 2</h6>
                         </div>
-                        <div >
+                        <div onchange="ocultarDiasS()">
                             {{formEspecialista.especialidad_s}}
                         </div>
+                        <br>
                         <br>
                         <div >
                             <h6>Especialidad 3</h6>
                         </div>
-                        <div >
+                        <div onchange="ocultarDiasT()">
                             {{ formEspecialista.especialidad_t }}
                         </div>
+                        <br>
                         <br>
                         <div >
                             <h6>Especialidad 4</h6>
                         </div>
-                        <div >
+                        <div onchange="ocultarDiasC()">
                             {{ formEspecialista.especialidad_c }}
                         </div>
+                        
                     </div>
-                    
+
+                    <div class="col">
+                        <div class="wrapper">
+                            {{formEspecialista.dia_p}}
+                        </div>
+                        <br>
+                        <div class="wrappernone" id="divespecialidads">
+                            {{formEspecialista.dia_s }}
+                        </div>
+                        <div class="wrappernone" id="divespecialidadt">
+                            {{formEspecialista.dia_t }}
+                        </div>
+                        <div class="wrappernone" id="divespecialidadc">
+                            {{formEspecialista.dia_c }}
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div>
+                            {{formEspecialista.minutes_p}}
+                        </div>
+                        <div>
+                            {{formEspecialista.minutes_s}}
+                        </div>
+                        <div>
+                            {{formEspecialista.minutes_t}}
+                        </div>
+                        <div>
+                            {{formEspecialista.minutes_c}}
+                        </div>
+                        
+                    </div>
                 </div>
 
             </div>
