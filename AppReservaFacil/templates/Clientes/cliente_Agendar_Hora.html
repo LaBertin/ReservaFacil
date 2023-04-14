@@ -8,6 +8,21 @@
             <!--Primera Fila-->
             <form method="post">
                 {% csrf_token %}
+                <div class="col">
+                    <div>
+                        Area medica
+                    </div>
+                    <div>
+                        {{formAreaMedica.area_medica_a}}
+                    </div>
+                    <br>
+                    <div>
+                        Especialidad
+                    </div>
+                    <div>
+                        {{formAreaMedica.especialidad_a}}
+                    </div>
+                </div>
                 <button class="btn-naranja-mediano" type="submit" name="ver_especialista">Ver Especialistas</button>
             </form>
         {% else %}
