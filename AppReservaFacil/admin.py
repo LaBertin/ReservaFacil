@@ -10,3 +10,5 @@ admin.site.register(Especialidad)
 admin.site.register(Area_Medica)
 
 admin.site.register(Cita)
+
+admin.site.register(Operador)

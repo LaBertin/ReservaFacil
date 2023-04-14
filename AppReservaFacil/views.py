@@ -518,7 +518,7 @@ def agregar_empleado(request):
 
             id_especialista = User.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
-            uar = " ".join(nom_com_especialista.split()[2:-1]).lower()
+            uar = " ".join(nom_com_especialista.split()[-2:-1]).lower()
             io = fecha_nac_especialista[:-6]
             print(io)
             usuario=us+'.'+uar+io
@@ -535,8 +535,8 @@ def agregar_empleado(request):
             if formulario.is_valid():
                 formulario.save()
                 user = User.objects.get(username = usuario)
-                grupo_Pacientes = Group.objects.get(name='Especialistas') 
-                user.groups.add(grupo_Pacientes)
+                grupo_Especialistas = Group.objects.get(name='Especialistas') 
+                user.groups.add(grupo_Especialistas)
                 Usuario_E = User.objects.filter(username=usuario)[0]
                 print(Usuario_E)
                 print("Usuario Creado")
@@ -556,6 +556,70 @@ def agregar_empleado(request):
 
     
     return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
+
+def agregar_operador(request):
+    nuevo_o_form={'formOperador':FormOperador()}
+    if request.method=='POST':
+        csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
+        formulario=FormOperador(data=request.POST)
+        if formulario.is_valid():
+            nombre_O = formulario.cleaned_data['nom_com_operador']
+            print(nombre_O)
+            rut_o = formulario.cleaned_data['rut']
+            print(rut_o)
+            sexo_o = formulario.cleaned_data['sexo']
+            print(sexo_o)
+            email_o = formulario.cleaned_data['email_o']
+            print(email_o)
+            fecha_nac_operador_o = formulario.cleaned_data['fecha_nac_operador']
+            print(fecha_nac_operador_o)
+            direccion_operador_o = formulario.cleaned_data['direccion_operador']
+            print(direccion_operador_o)
+            contacto_operador_o = formulario.cleaned_data['contacto_operador']
+            print(contacto_operador_o)
+            fecha_ini_con_operador_o = formulario.cleaned_data['fecha_ini_con_operador']
+            print(fecha_ini_con_operador_o)
+            fecha_fin_con_operador_o = formulario.cleaned_data['fecha_fin_con_operador']
+            print(fecha_fin_con_operador_o)
+            id_operador = User.objects.all().count()+1
+            us = nombre_O[:2].lower()
+            uar = " ".join(nombre_O.split()[-2:-1]).lower()
+            io = str(fecha_nac_operador_o)[:-6]
+            print(io)
+            usuario=us+'.'+uar+io
+
+            contra=rut_o
+            print(contra)
+            sena= nombre_O.split()[-1].lower()
+            print(sena)
+            contrasena=contra+sena
+            Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':email_o}
+            q_dict = QueryDict('', mutable=True)
+            q_dict.update(Reg)
+            formulario = FormRegistrarUsuario(data=q_dict)
+            if formulario.is_valid():
+                formulario.save()
+                usuario_nom = User.objects.get(username=usuario)
+                print(usuario_nom)
+                grupo_o = Group.objects.get(name='Operadores')
+                usuario_nom.groups.add(grupo_o)
+                Usuario_O = User.objects.filter(username=usuario)[0]
+                Operador.objects.create(ID_Operador=id_operador, Nombre_completo_O=nombre_O, Rut=rut_o, Sexo=sexo_o,
+                                        Fecha_de_nacimiento_O=fecha_nac_operador_o, Direccion_O=direccion_operador_o,
+                                        Telefono_O=contacto_operador_o, Fecha_de_contrato_O = fecha_ini_con_operador_o,
+                                        Fecha_fin_de_contrato_O = fecha_fin_con_operador_o, Usuario_O=Usuario_O)
+                return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
+            else:
+                formulario=FormOperador()
+                print("Error formulario isnt valid 2")
+            
+            
+        else:
+            formulario=FormOperador()
+            print("Error formulario isnt valid")
+            
+    
+    return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
 
 def especialista_Agenda(request):
     

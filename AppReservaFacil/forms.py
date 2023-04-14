@@ -32,6 +32,18 @@ class FormEspecialista(forms.Form):
     minutes_t = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
     minutes_c = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
 
+class FormOperador(forms.Form):
+    nom_com_operador = forms.CharField(max_length=256)
+    rut = forms.CharField(max_length=9)
+    sexo = forms.ChoiceField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]), required=True,initial=0)
+    email_o = forms.EmailField()
+    fecha_nac_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    direccion_operador = forms.CharField(max_length=256)
+    contacto_operador = forms.CharField(max_length=9)
+    fecha_ini_con_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    fecha_fin_con_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    
+
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  

@@ -28,5 +28,6 @@ urlpatterns = [
     path('anular_hora/', views.Cliente_anular_hora),
     path('consultar_hora/', views.Cliente_consultar_hora),
 
-    path('admin_Agregar/', views.agregar_empleado),    
+    path('admin_Agregar_Especialista/', views.agregar_empleado),    
+    path('admin_Agregar_Operador/', views.agregar_operador),
 ]

@@ -1,0 +1,97 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Agregar Operador</title>
+<div id="main-content-centro">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert"  id="message_box">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="div-mediano">
+        <h2 id="titulo-inicio-sesion">Agregar Operador</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="container">
+
+                <div class="row">
+                    <div class="col">
+                        <div>
+                            Nombre completo
+                        </div>
+                        <div>
+                            {{formOperador.nom_com_operador}}
+                        </div>
+                        <br>
+                        <div>
+                            RUT
+                        </div>
+                        <div>
+                            {{formOperador.rut}}
+                        </div>
+                        <br>
+                        <div>
+                            Sexo
+                        </div>
+                        <div class="div-choicefield">
+                            {{formOperador.sexo}}
+                        </div>
+                        <br>
+                        <div>
+                            Email
+                        </div>
+                        <div>
+                            {{formOperador.email_o}}
+                        </div>
+                        <br>
+                        <div>
+                            Fecha de nacimiento
+                        </div>
+                        <div>
+                            {{formOperador.fecha_nac_operador}}
+                        </div>
+                    </div>    
+                    <div class="col">
+                        <div>
+                            Direccion
+                        </div>
+                        <div>
+                            {{formOperador.direccion_operador}}
+                        </div>
+                        <br>
+                        <div>
+                            Contacto
+                        </div>
+                        <div>
+                            {{formOperador.contacto_operador}}
+                        </div>
+                        <br>
+                        <div>
+                            Fecha inicio de contrato
+                        </div>
+                        <div>
+                            {{formOperador.fecha_ini_con_operador}}
+                        </div>
+                        <br>
+                        <div>
+                            Fecha final de contrato
+                        </div>
+                        <div>
+                            {{formOperador.fecha_fin_con_operador}}
+                        </div>
+                    </div>    
+                </div>
+
+            </div>
+            
+            <br>
+            <br>
+            <button type="submit" value="Agregar" class="btn-naranja-mediano">Agregar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+</html>
