@@ -6,37 +6,12 @@
         <div class="div-mediano">
             <h2 id="titulo-seleccionar-area">Seleccionar Área Médica</h2>
 
-                <form method="POST">
+                <form  method="POST">
                     {% csrf_token %}
                     {{ formAreaMedica.as_p }}
                     <button class="btn-naranja-mediano" type="submit" name="ver_especialista">Ver Especialistas</button>
                 </form>
-            
-            <script>
-                const areaMedicaField = document.getElementById('id_area_medica_a');
-                const especialidadField = document.getElementById('id_especialidad_a');
-            
-                areaMedicaField.addEventListener('change', () => {
-                    const areaMedicaId = areaMedicaField.value;
-                    if (areaMedicaId) {
-                        fetch(`/obtener_especialidades/${areaMedicaId}/`)
-                            .then(response => response.json())
-                            .then(data => {
-                                // Limpiar las opciones existentes y agregar las nuevas
-                                especialidadField.innerHTML = '';
-                                data.forEach(option => {
-                                    const optionEl = document.createElement('option');
-                                    optionEl.value = option[0];
-                                    optionEl.innerText = option[1];
-                                    especialidadField.appendChild(optionEl);
-                                });
-                            });
-                    } else {
-                        // Si no se seleccionó ninguna opción, borrar las opciones existentes
-                        especialidadField.innerHTML = '';
-                    }
-                });
-            </script>
+                <script src="../../static/js/agendar_filtro.js"></script>
         {% else %}
         <div class="div-mediano" >
             <h1 id="titulo-seleccionar-area">Ingrese sesión para agendar hora</h1>

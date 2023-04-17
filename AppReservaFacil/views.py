@@ -188,42 +188,43 @@ def cliente_Agendar_hora(request):
             else:
                 messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
-        #Cardiología filtro
         
         values = request.POST.get('pedir_hora')
         filtro = request.POST.get('filter_esp')
-        print("Areas Medicas")
-        Areas_Medicas = Area_Medica.objects.filter(Nombre_Area_Medica = valuebtn)
-        print(Areas_Medicas)
-        print("Especialidades")
-        Especialidades = Especialidad.objects.filter(Area_Medica_F = Areas_Medicas[0])
-        print(Especialidades)
-        print("Especialistas")
-        EspecialistasF = Especialista.objects.none()
-        for x in Especialidades:
-            print("EF Antes")
-            print(EspecialistasF)
-            print("Entrando a for")
-            print("x")
-            print(x)
-            Especialistas = Especialista.objects.filter(Especialidad_P=x)
-
-            print("Especialistas filtrados por x")
-            print(Especialistas)
-
-            EspecialistasF = EspecialistasF.union(Especialistas)
-
-            print("Especialistas: ")
-            print(Especialistas)
-
-            print("Especialistas F:")
-            print(EspecialistasF)
-
-            contexto = {'especialista':EspecialistasF, 'filtro':Especialidades}
-            print("Contexto: ")
-            print(contexto)
+        especialidad_select = request.POST.get('especialidad_a')
         
-        return render(request, 'clientes/listar_Especialistas.html', contexto)
+        #Obtenemos todos los medicos con la especialidad registrada.
+        qspecialista = Especialista.objects.filter(Especialidad_P = especialidad_select)
+        qspecialistas = Especialista.objects.filter(Especialidad_S = especialidad_select)
+        qspecialistat = Especialista.objects.filter(Especialidad_T = especialidad_select)
+        qspecialistac = Especialista.objects.filter(Especialidad_C = especialidad_select)
+        
+
+        qsListaEspecialidad=[]
+        for x in qspecialista:
+            qsListaEspecialidad.append("Dia_Esp_P")
+
+        for x in qspecialistas:
+            qsListaEspecialidad.append("Dia_Esp_S")
+
+        for x in qspecialistat:
+            qsListaEspecialidad.append("Dia_Esp_T")
+
+        for x in qspecialistac:
+            qsListaEspecialidad.append("Dia_Esp_C")
+
+        print(qsListaEspecialidad)
+
+        #Juntamos todos los resultados en un mismo Queryset
+        qspecialista = qspecialista | qspecialistas | qspecialistat | qspecialistac
+
+
+        
+        qspecialista = {'qspecialista':qspecialista, 'qsListaEspecialidad':qsListaEspecialidad}
+        
+       
+
+        return render(request, 'clientes/listar_Especialistas.html', qspecialista)
     return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
 
 def Cliente_anular_hora(request):

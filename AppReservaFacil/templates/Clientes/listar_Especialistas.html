@@ -5,22 +5,23 @@
     <div class="div-grande">
         <h2 id="titulo-seleccionar-area">Seleccionar Especialista</h2>
         <!--Primera Fila-->
-        
-        {% if especialista %}
+        {% if qspecialista %}
         <div id="container-fila-agendar-hora" class="container">
             <div class="row">
-            <select name="filter_esp">
-                {% for y in filtro %}
-                <option>{{y}}</option>
-                {% endfor %}
-            </select>
+
             <table>
-            {% for x in especialista %}
+                
+            {% for x in qspecialista %}
                 <tr>
                     <td>Nombre: {{x.Nombre_completo_E}}</td>
                     <td>Telefono: {{x.Telefono_E}}</td>
                     <td>Fecha de nacimiento: {{x.Fecha_de_nacimiento_E}}</td>
-                    <td>Especialidad: {{x.Especialidad_P}}</td>
+                    {% for esp in qsListaEspecialidad %}
+                    {% if forloop.parentloop.counter == forloop.counter%}
+                        <td>Dias de atencion: {{esp}}</td>
+                    {% endif %}
+                    {% endfor %}  
+
                     <td>
                     <form method="post">
                         {% csrf_token %}
