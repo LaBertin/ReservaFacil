@@ -202,16 +202,16 @@ def cliente_Agendar_hora(request):
 
         qsListaEspecialidad=[]
         for x in qspecialista:
-            qsListaEspecialidad.append("Dia_Esp_P")
+            qsListaEspecialidad.append(x.Dia_Esp_P)
 
         for x in qspecialistas:
-            qsListaEspecialidad.append("Dia_Esp_S")
+            qsListaEspecialidad.append(x.Dia_Esp_S)
 
         for x in qspecialistat:
-            qsListaEspecialidad.append("Dia_Esp_T")
+            qsListaEspecialidad.append(x.Dia_Esp_T)
 
         for x in qspecialistac:
-            qsListaEspecialidad.append("Dia_Esp_C")
+            qsListaEspecialidad.append(x.Dia_Esp_C)
 
         print(qsListaEspecialidad)
 
