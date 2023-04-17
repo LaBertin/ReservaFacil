@@ -60,6 +60,26 @@ class Especialista(models.Model):
         ID_Especialista = str(self.ID_Especialista)
         return f'{self.Nombre_completo_E} {ID_Especialista}'
     
+class Operador(models.Model):
+    ID_Operador = models.IntegerField(primary_key=True, unique=True)
+    Nombre_completo_O = models.CharField(max_length=256)
+    Rut = models.CharField(max_length=9, null=True)
+    Sexo = models.CharField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]),max_length=9, null=True)
+    Fecha_de_nacimiento_O = models.DateField(null=True)
+    Direccion_O = models.CharField(max_length=256, null=True)
+    Telefono_O = models.CharField(max_length=9, null=True)
+    Foto_O = models.ImageField(null=True)
+    Fecha_de_contrato_O = models.DateField(null=True)
+    Fecha_fin_de_contrato_O = models.DateField(null=True)
+    Usuario_O = models.ForeignKey(User, null=True, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        ID_Operador = str(self.ID_Operador)
+        return f'{self.Nombre_completo_O} {ID_Operador}'
+    class Meta:
+        verbose_name='Operador'
+        verbose_name_plural='Operadores'
+
 class Cita(models.Model):
     ID_Cita = models.DateTimeField(primary_key=True, unique=True)
     Fecha_Cita = models.CharField(max_length=20, null=True)

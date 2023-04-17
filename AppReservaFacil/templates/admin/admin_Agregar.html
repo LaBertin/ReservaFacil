@@ -2,7 +2,7 @@
 {% block footer %}
 <link href="../../static/Admin/agregar.css" rel="stylesheet">
 <script src="../../static/js/ocultar.js"></script>
-<title>Agregar Empleado</title>
+<title>Agregar Especialista</title>
 <div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
@@ -14,7 +14,7 @@
     {% endif %}
     
     <div class="div-mediano">
-        <h2 id="titulo-inicio-sesion">Agregar</h2>
+        <h2 id="titulo-inicio-sesion">Agregar Especialista</h2>
         <form method="post">
             {% csrf_token %}
             <div class="container">
@@ -39,7 +39,7 @@
                         <div >
                             <h6>Sexo</h6>
                         </div>
-                        <div >
+                        <div class="div-choicefield">
                             {{ formEspecialista.sexo }}
                         </div>
                         <br>    
@@ -73,7 +73,7 @@
                         </div>
 
                         <div >
-                            <div >
+                            <div class="div-choicefield">
                                 {{ formEspecialista.especialidad_p }}
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                         <div >
                             <h6>Especialidad 2</h6>
                         </div>
-                        <div onchange="ocultarDiasS()">
+                        <div onchange="ocultarDiasS()" class="div-choicefield">
                             {{formEspecialista.especialidad_s}}
                         </div>
                         <br>

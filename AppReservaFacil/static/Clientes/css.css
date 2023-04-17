@@ -151,6 +151,9 @@ body{
         border-radius: 10px;
         box-shadow: 0px 1px 1px;
     }
+    .div-choicefield{
+        height: 28px;
+    }
     /*Div Mediano usado en agendar hora*/
     .div-mediano{
         height: 600px;
