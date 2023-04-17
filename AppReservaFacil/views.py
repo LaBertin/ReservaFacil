@@ -118,7 +118,13 @@ def cliente_Agendar_hora(request):
                 'formDate': DateForm()
             }
             global Especialistas
-            values = request.POST.get('pedir_cita')
+            valores = request.POST.get('pedir_cita')
+            print(valores)
+            values = valores.split(' ')[0]
+            dias = valores.split(' ',1)[1].replace(' ','').split(',')
+            print("Jorge")
+            print(dias)
+            print("Jorgepasóvalores")
             Especialistas = Especialista.objects.filter(ID_Especialista=values)
             print(Especialistas)
             contexto = {'especialista':Especialistas}  

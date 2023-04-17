@@ -19,18 +19,18 @@
                     {% for esp in qsListaEspecialidad %}
                     {% if forloop.parentloop.counter == forloop.counter%}
                         <td>Dias de atencion: {{esp}}</td>
+                        <td>  
+                            <form method="post">
+                                {% csrf_token %}
+                                <button class="btn-naranja-mediano" value="{{x.ID_Especialista}} {{ esp }}" type="submit"
+                                        name="pedir_cita">
+                                        Pedir Cita
+                                </button>
+                            </form>
+                        </td>
                     {% endif %}
-                    {% endfor %}  
-
-                    <td>
-                    <form method="post">
-                        {% csrf_token %}
-                        <button class="btn-naranja-mediano" value="{{ x.ID_Especialista}}" type="submit"
-                                name="pedir_cita">
-                                Pedir Cita
-                        </button>
-                    </form>
-                    </td>
+                    {% endfor %}
+                    
                     <br>
                     <br>
                 </tr>
