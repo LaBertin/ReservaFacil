@@ -9,9 +9,9 @@
             <div class="row">
 
                 <table>
-                    {% for x in hora.hora %}
+                    {% for x in list_horas %}
                     <tr>
-                            <td>Hora: {{x}}:00:00</td>
+                            <td>Hora: {{x}}</td>
                             <td>
                             <form method="post">
                                 {% csrf_token %}

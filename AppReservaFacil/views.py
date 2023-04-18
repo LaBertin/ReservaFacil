@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import *
 from .models import *
 from django.contrib.auth.forms import *
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 from django.core.mail import send_mail
 from django.conf import settings
 from django import template
@@ -114,18 +114,98 @@ def cerrarsesionusuario(request):
 def cliente_Agendar_hora(request):
     formulario_area_medica = {'formAreaMedica':AgendarForm}
     if request.method == 'POST':
-        if 'pedir_cita' in request.POST:                 
+        if 'ver_especialista' in request.POST:
+            global especialidad_select
+
+            values = request.POST.get('pedir_hora')
+            especialidad_select = request.POST.get('especialidad_a')
+            print(especialidad_select)
+            
+            #Obtenemos todos los medicos con la especialidad registrada.
+            qspecialista = Especialista.objects.filter(Especialidad_P = especialidad_select)
+            qspecialistas = Especialista.objects.filter(Especialidad_S = especialidad_select)
+            qspecialistat = Especialista.objects.filter(Especialidad_T = especialidad_select)
+            qspecialistac = Especialista.objects.filter(Especialidad_C = especialidad_select)
+            
+
+            qsListaEspecialidad=[]
+            for x in qspecialista:
+                qsListaEspecialidad.append(x.Dia_Esp_P)
+
+            for x in qspecialistas:
+                qsListaEspecialidad.append(x.Dia_Esp_S)
+
+            for x in qspecialistat:
+                qsListaEspecialidad.append(x.Dia_Esp_T)
+
+            for x in qspecialistac:
+                qsListaEspecialidad.append(x.Dia_Esp_C)
+
+            print(qsListaEspecialidad)
+
+            #Juntamos todos los resultados en un mismo Queryset
+            qspecialista = qspecialista | qspecialistas | qspecialistat | qspecialistac
+
+
+            
+            qspecialista = {'qspecialista':qspecialista, 'qsListaEspecialidad':qsListaEspecialidad,'especialidad_select':especialidad_select}
+            
+        
+
+            return render(request, 'clientes/listar_Especialistas.html', qspecialista)
+        if 'pedir_cita' in request.POST:    
             global Especialistas
+            global dias_es
+            global fechas
+            global dataformDate 
+            global ID_Especialista
+            global minutos_especialidad
+            
             valores = request.POST.get('pedir_cita')
             print(valores)
             values = valores.split(' ')[0]
-            global dias_es
             dias_es = str(valores.split(' ',1)[1].replace(' ',''))
             dias_en = dias_es.replace('Lunes','Monday').replace('Martes','Tuesday').replace('Miercoles','Wednesday').replace('Jueves','Thursday').replace('Viernes','Friday').replace('Sabado','Saturday').replace('Domingo','Sunday')
+            dias_es2 = dias_es.replace('Lunes','lun').replace('Martes','mar').replace('Miercoles','mie').replace('Jueves','jue').replace('Viernes','vie').replace('Sabado','sab').replace('Domingo','dom').split(',')
             print("Jorge")
             print(dias_en)
             print("Jorgepasóvalores")
             Especialistas = Especialista.objects.filter(ID_Especialista=values)
+            Especialistas2 = Especialista.objects.get(ID_Especialista=values)
+            print(type(Especialistas2.Dia_Esp_P))
+
+            dias_p = Especialistas2.Dia_Esp_P
+            dias_p = [d.strip() for d in dias_p]
+            print(f'dias P {dias_p}')
+
+            dias_s = Especialistas2.Dia_Esp_S
+            dias_s = [d.strip() for d in dias_s]
+            print(f'dias S {dias_s}')
+
+            dias_t = Especialistas2.Dia_Esp_T
+            dias_t = [d.strip() for d in dias_t]
+            print(f'dias T {dias_t}')
+
+            dias_c = Especialistas2.Dia_Esp_C
+            dias_c = [d.strip() for d in dias_c]
+            print(f'probando cositas {type(dias_p)}')
+
+            minutos_especialidad = 0
+
+            if(dias_es2 == dias_p):
+                minutos_especialidad = Especialistas2.Minutes_Esp_P
+                print(f'Print Especilidad minutos P: {minutos_especialidad}')
+            elif(dias_es2 == dias_s):
+                minutos_especialidad = Especialistas2.Minutes_Esp_S
+                print(f'Print Especilidad minutos S: {minutos_especialidad}')
+            elif(dias_es2 == dias_t):
+                minutos_especialidad = Especialistas2.Minutes_Esp_T
+                print(f'Print Especilidad minutos T: {minutos_especialidad}')
+            else:
+                minutos_especialidad = Especialistas2.Minutes_Esp_C
+                print(f'Print Especilidad minutos C: {minutos_especialidad}')
+            
+
             print(Especialistas)
             contexto = {'especialista':Especialistas}  
             ID_Especialista = Especialistas[0].ID_Especialista
@@ -151,7 +231,6 @@ def cliente_Agendar_hora(request):
 
             # Imprimir la fecha resultante
             print(next_year)
-            global fechas
             fechas = []
             while hoy <= next_year:
                 diasemana = hoy.weekday()
@@ -160,17 +239,17 @@ def cliente_Agendar_hora(request):
                     fechas.append(hoy)
                 hoy += timedelta(days=1)
           
-            global dataformDate 
             dataformDate = {
                 'formDate': DateForm(),
                 'fechas': fechas,
             }
 
             return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)    
-        print("Request method = POST")
         if 'seleccionar_hora' in request.POST:
-            print(type(dias_es))
             global Fecha
+
+
+            print(type(dias_es))
             Fecha = DateForm(request.POST)
             print('Fecha:', Fecha)
             Fecha = Fecha.cleaned_data
@@ -178,22 +257,19 @@ def cliente_Agendar_hora(request):
 
             print(Fecha)
             if Fecha in fechas:
-                print("Fecha")
-                print(Fecha)
-                print(type(Fecha))
-                Fecha_Actual = datetime.today()
-                Fecha_Actual = datetime.date(Fecha_Actual)
-                print("Fecha Actual")
-                print(Fecha_Actual)
-                print(type(Fecha_Actual))
-                if Fecha > Fecha_Actual:
-                    hora =  list(range(8,21))
-                    horacontext = {'hora':hora}
-                    print(hora)
-                    print(type(hora))
-                    print(horacontext)
-                    print("Pedir Hora Post")
-                    return render(request, 'clientes/cliente_Seleccionar_Hora.html', {'hora':horacontext})
+                fecha_ini = datetime.combine(Fecha, time(hour=8, minute=0))
+                hora_ini = fecha_ini.hour
+                print(hora_ini)
+                fecha_fin = datetime.combine(Fecha, time(hour=21, minute=0))
+                hora_fin = fecha_fin.hour
+                print(hora_fin)
+                list_horas = []
+                while fecha_ini.hour < hora_fin:
+                    list_horas.append(fecha_ini.strftime('%H:%M:%S'))
+                    fecha_ini = fecha_ini + timedelta(minutes=minutos_especialidad)
+                print(list_horas)
+                list_horas = {'list_horas':list_horas}
+                return render(request, 'clientes/cliente_Seleccionar_Hora.html', list_horas)
             else:
                 messages.error(request, "Ingrese una fecha en los dias: "+dias_es+".")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html',dataformDate)
@@ -230,42 +306,7 @@ def cliente_Agendar_hora(request):
                 messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
         
-        values = request.POST.get('pedir_hora')
-        filtro = request.POST.get('filter_esp')
-        especialidad_select = request.POST.get('especialidad_a')
-        
-        #Obtenemos todos los medicos con la especialidad registrada.
-        qspecialista = Especialista.objects.filter(Especialidad_P = especialidad_select)
-        qspecialistas = Especialista.objects.filter(Especialidad_S = especialidad_select)
-        qspecialistat = Especialista.objects.filter(Especialidad_T = especialidad_select)
-        qspecialistac = Especialista.objects.filter(Especialidad_C = especialidad_select)
-        
 
-        qsListaEspecialidad=[]
-        for x in qspecialista:
-            qsListaEspecialidad.append(x.Dia_Esp_P)
-
-        for x in qspecialistas:
-            qsListaEspecialidad.append(x.Dia_Esp_S)
-
-        for x in qspecialistat:
-            qsListaEspecialidad.append(x.Dia_Esp_T)
-
-        for x in qspecialistac:
-            qsListaEspecialidad.append(x.Dia_Esp_C)
-
-        print(qsListaEspecialidad)
-
-        #Juntamos todos los resultados en un mismo Queryset
-        qspecialista = qspecialista | qspecialistas | qspecialistat | qspecialistac
-
-
-        
-        qspecialista = {'qspecialista':qspecialista, 'qsListaEspecialidad':qsListaEspecialidad}
-        
-       
-
-        return render(request, 'clientes/listar_Especialistas.html', qspecialista)
     return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
 
 def Cliente_anular_hora(request):
