@@ -10,19 +10,21 @@
 
                 <table>
                     {% for x in list_horas %}
-                    <tr>
-                            <td>Hora: {{x}}</td>
-                            <td>
-                            <form method="post">
-                                {% csrf_token %}
-                                <button class="btn-naranja-mediano" value="{{x}}" type="submit"
-                                        name="hora_seleccionada">
-                                        Seleccionar hora
-                                </button>
-                            </form>
-                            </td>
-                        
-                    </tr>  
+                    {% if forloop.counter0|divisibleby:5 %}
+                        <tr> <!-- Nueva fila cada 5 botones -->
+                    {% endif %}
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <button class="btn-naranja-mediano" value="{{x}}" type="submit"
+                                    name="hora_seleccionada" style="display: inline-block ; width: 180px; height: 90px; margin: 20px;"> 
+                                    {{x}}
+                            </button>
+                        </form>
+                        </td> 
+                    {% if forloop.counter|divisibleby:5 or forloop.last %}
+                        </tr> <!-- Cierre de la fila si se llegó al límite de 5 botones o es el último elemento -->
+                    {% endif %}
                     {% endfor %}
                 </table>
             </div>      
