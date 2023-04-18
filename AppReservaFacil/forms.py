@@ -92,9 +92,10 @@ class LoginUsuario(AuthenticationForm):
     pass
 
 class DateForm(forms.Form):
-    date = forms.DateTimeField(
-    widget=DateInput(attrs={"name":"somdate", "value":today, "min":today ,"max":max} )
+    date = forms.DateField(
+    widget=DateInput(attrs={"name":"somdate", "value":today})
     )
+    
 
 class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())

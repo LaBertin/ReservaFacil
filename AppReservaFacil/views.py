@@ -9,6 +9,8 @@ from datetime import datetime, timedelta
 from django.core.mail import send_mail
 from django.conf import settings
 from django import template
+import calendar
+
 
 # Create your views here.
 
@@ -112,18 +114,16 @@ def cerrarsesionusuario(request):
 def cliente_Agendar_hora(request):
     formulario_area_medica = {'formAreaMedica':AgendarForm}
     if request.method == 'POST':
-        if 'pedir_cita' in request.POST:     
-            global dataformDate 
-            dataformDate = {
-                'formDate': DateForm()
-            }
+        if 'pedir_cita' in request.POST:                 
             global Especialistas
             valores = request.POST.get('pedir_cita')
             print(valores)
             values = valores.split(' ')[0]
-            dias = valores.split(' ',1)[1].replace(' ','').split(',')
+            global dias_es
+            dias_es = str(valores.split(' ',1)[1].replace(' ',''))
+            dias_en = dias_es.replace('Lunes','Monday').replace('Martes','Tuesday').replace('Miercoles','Wednesday').replace('Jueves','Thursday').replace('Viernes','Friday').replace('Sabado','Saturday').replace('Domingo','Sunday')
             print("Jorge")
-            print(dias)
+            print(dias_en)
             print("Jorgepasóvalores")
             Especialistas = Especialista.objects.filter(ID_Especialista=values)
             print(Especialistas)
@@ -131,36 +131,71 @@ def cliente_Agendar_hora(request):
             ID_Especialista = Especialistas[0].ID_Especialista
             print("ID_Especialistas:\n")
             print(ID_Especialista)
-            
+
+            # Obtener la fecha actual
+            hoy = date.today()
+
+            # Calcular la fecha dentro de un año
+            next_year = hoy + timedelta(days=365)
+            print(next_year)
+
+            # Verificar si el año resultante es bisiesto
+            if calendar.isleap(next_year.year):
+                print("JAJAJA Prueba qlia con bisiesto po wn la wea poco probable")
+                # Si es bisiesto, ajustar la fecha al 29 de febrero
+                next_year = next_year.replace(month=2, day=29)
+            else:
+                print("No")
+                # Si no es bisiesto, mantener la fecha tal como está
+                next_year = next_year.replace(year=next_year.year)
+
+            # Imprimir la fecha resultante
+            print(next_year)
+            global fechas
+            fechas = []
+            while hoy <= next_year:
+                diasemana = hoy.weekday()
+                nombredia = calendar.day_name[diasemana]
+                if nombredia in dias_en:
+                    fechas.append(hoy)
+                hoy += timedelta(days=1)
+          
+            global dataformDate 
+            dataformDate = {
+                'formDate': DateForm(),
+                'fechas': fechas,
+            }
 
             return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)    
         print("Request method = POST")
         if 'seleccionar_hora' in request.POST:
+            print(type(dias_es))
             global Fecha
             Fecha = DateForm(request.POST)
             print('Fecha:', Fecha)
             Fecha = Fecha.cleaned_data
             Fecha = Fecha['date']
-            print('Fecha obtenida')
-            Fecha= datetime.date(Fecha)
-            print("Fecha")
+
             print(Fecha)
-            print(type(Fecha))
-            Fecha_Actual = datetime.today()
-            Fecha_Actual = datetime.date(Fecha_Actual)
-            print("Fecha Actual")
-            print(Fecha_Actual)
-            print(type(Fecha_Actual))
-            if Fecha > Fecha_Actual:
-                hora =  list(range(8,21))
-                horacontext = {'hora':hora}
-                print(hora)
-                print(type(hora))
-                print(horacontext)
-                print("Pedir Hora Post")
-                return render(request, 'clientes/cliente_Seleccionar_Hora.html', {'hora':horacontext})
+            if Fecha in fechas:
+                print("Fecha")
+                print(Fecha)
+                print(type(Fecha))
+                Fecha_Actual = datetime.today()
+                Fecha_Actual = datetime.date(Fecha_Actual)
+                print("Fecha Actual")
+                print(Fecha_Actual)
+                print(type(Fecha_Actual))
+                if Fecha > Fecha_Actual:
+                    hora =  list(range(8,21))
+                    horacontext = {'hora':hora}
+                    print(hora)
+                    print(type(hora))
+                    print(horacontext)
+                    print("Pedir Hora Post")
+                    return render(request, 'clientes/cliente_Seleccionar_Hora.html', {'hora':horacontext})
             else:
-                messages.error(request, "Seleccione una fecha mayor o igual a la actual.")
+                messages.error(request, "Ingrese una fecha en los dias: "+dias_es+".")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html',dataformDate)
         #Si pulsa el botón de seleccionar hora
         if 'hora_seleccionada' in request.POST:
