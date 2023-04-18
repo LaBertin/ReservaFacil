@@ -16,9 +16,7 @@
                     <td>
                         <form method="post">
                             {% csrf_token %}
-
-                            {% for y in list_Citas_Reservadas %}
-                                {% if y in x %}
+                                {% if x in list_Citas_Reservadas %}
 
                                     <button id="btn-selecc-hora" class="btn-rojo-mediano" value="{{x}}" type="submit"
                                             name="hora_seleccionada"> 
@@ -33,7 +31,6 @@
                                     </button>
                                     
                                 {% endif %}
-                            {% endfor %}
                         </form>
                         </td> 
                     {% if forloop.counter|divisibleby:5 or forloop.last %}

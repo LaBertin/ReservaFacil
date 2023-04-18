@@ -304,12 +304,14 @@ def cliente_Agendar_hora(request):
             if Citas_Usuario<3:
                 Cita.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
                 messages.success(request, "Hora creada con éxito")
+                """
                 send_mail(
                     'Cita programada con éxito',
                     'Su cita con el especialista '+str(Especialistas[0])+' programada para la fecha: '+str(Fecha)+' a las '+str(hora_seleccionada)+' ha sido programada con éxito',
                     'settings.EMAIL_HOST_USER',
                     [Mail]  
                 )
+                """
                 return render(request, 'clientes/cliente_Hora_creada.html', {'hora_seleccionada':hora_seleccionada})
             else:
                 messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
@@ -360,12 +362,14 @@ def Cliente_anular_hora(request):
         Usuario=User.objects.get(username=request.user.username)
         Mail=Usuario.email
         Cita.objects.filter(ID_Cita=Anular_Hora).delete()
+        """
         send_mail(
                     'Cita anulada',
                     'Su cita con el especialista '+str(Especialista_Cita)+' programada para la fecha: '+str(Fecha)+' a las '+str(Hora)+' ha sido anulada.',
                     'settings.EMAIL_HOST_USER',
                     [Mail]  
                 )
+        """
         messages.success(request, "Cita anulada con éxito")
         return render(request, 'clientes/cliente_Hora_anulada.html', {'hora_principal':Anular_Hora_Principal})
     if request.user.is_authenticated:
@@ -417,12 +421,14 @@ def Cliente_consultar_hora(request):
         Especialista_Cita=Datos.ID_Especialista
         Mail=User.objects.get(username=request.user.username).email
         Confirmar_Cita_str=str(Confirmar_Cita)
+        """
         send_mail(
                     'Cita confirmada',
                     'Su cita con el especialista '+str(Especialista_Cita)+' programada para la fecha: '+str(Fecha)+' a las '+str(Hora)+' ha sido confirmada.',
                     'settings.EMAIL_HOST_USER',
                     [Mail]  
                 )
+        """
         messages.success(request,"Cita con fecha: "+Confirmar_Cita_str+ " confirmada con éxito")
 
 
