@@ -476,11 +476,6 @@ def Cliente_consultar_hora(request):
     else:
         return render(request, 'clientes/cliente_Consultar_Cita.html')
 
-
-#####################################################################################
-#####################################################################################
-########################## Base de Datos de Admin_Agregar ############################
-
 def agregar_empleado(request):
     nuevo_emp_form = {
         'formEspecialista': FormEspecialista()
