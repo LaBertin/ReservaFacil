@@ -268,7 +268,15 @@ def cliente_Agendar_hora(request):
                     list_horas.append(fecha_ini.strftime('%H:%M:%S'))
                     fecha_ini = fecha_ini + timedelta(minutes=minutos_especialidad)
                 print(list_horas)
-                list_horas = {'list_horas':list_horas}
+                Citas_Reservadas = Cita.objects.filter(ID_Especialista=ID_Especialista,Fecha_Cita=Fecha)
+                list_Citas_Reservadas = []
+                for x in Citas_Reservadas:
+                    list_Citas_Reservadas.append(x.Hora_Cita.split(' ')[-1])
+                    print("Hora_Cita")
+                    print(x.Hora_Cita)
+
+                print(list_Citas_Reservadas)
+                list_horas = {'list_horas':list_horas, 'list_Citas_Reservadas':list_Citas_Reservadas}
                 return render(request, 'clientes/cliente_Seleccionar_Hora.html', list_horas)
             else:
                 messages.error(request, "Ingrese una fecha en los dias: "+dias_es+".")
@@ -283,9 +291,10 @@ def cliente_Agendar_hora(request):
             print("Mail:\n")
             print(Mail)
             hora_seleccionada = request.POST.get('hora_seleccionada')
-            hora = hora_seleccionada+':00'
+            print("hora seleccionada")
+            print(hora_seleccionada)
             print(Fecha)
-            hora_seleccionada = str(Fecha)+str(' '+hora)
+            hora_seleccionada = str(Fecha)+str(' '+hora_seleccionada)
             print(hora_seleccionada)
             print("ID_Especialistas:\n")
             print(Especialistas[0])
@@ -293,11 +302,11 @@ def cliente_Agendar_hora(request):
             print("Deberia entrar al for")
             print(Citas_Usuario)
             if Citas_Usuario<3:
-                Cita.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=Fecha, Hora_Cita=hora, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
+                Cita.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
                 messages.success(request, "Hora creada con éxito")
                 send_mail(
                     'Cita programada con éxito',
-                    'Su cita con el especialista '+str(Especialistas[0])+' programada para la fecha: '+str(Fecha)+' a las '+str(hora)+' ha sido programada con éxito',
+                    'Su cita con el especialista '+str(Especialistas[0])+' programada para la fecha: '+str(Fecha)+' a las '+str(hora_seleccionada)+' ha sido programada con éxito',
                     'settings.EMAIL_HOST_USER',
                     [Mail]  
                 )

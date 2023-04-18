@@ -40,6 +40,30 @@ header {
             text-decoration: none;
             color: #42444E;
         }
+
+    .btn-rojo-mediano{
+            height: 40px;
+            width: 140px;
+            background-color: #c94b4b;
+            border-style: none;
+            border-radius: 5px;
+            margin: auto;
+        }
+            .btn-rojo-mediano:hover{
+                text-decoration: none;
+                color: #42444E;
+                background-color: #c94b4b;
+            }
+            /*Modifico el text dentro del btn para que no aparezca el underline*/
+            .btn-rojo-mediano a{
+                text-decoration: none;
+                color: #42444E;
+            }
+            /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+            .btn-rojo-mediano a:hover{
+                text-decoration: none;
+                color: #42444E;
+            }
     /*Div que mueve la imagen a la izquierda*/
     div#div-nav-left{
         float: left;
@@ -139,6 +163,25 @@ body{
         border: none;
         background: none;
     }
+
+    .cuadrado-rojo {
+        width: 25px; 
+        height: 25px; 
+        background: #c94b4b;
+   }
+   .cuadrado-anaranjado {
+        width: 25px; 
+        height: 25px; 
+        background: #FAA92F;
+    }
+
+    #btn-selecc-hora{
+        display: inline-block ; 
+        width: 180px;
+        height: 90px; 
+        margin: 20px;
+    }
+
     form .btn_agendar_hora:hover{
         background-color:transparent ;
     }
@@ -154,6 +197,22 @@ body{
     .div-choicefield{
         height: 28px;
     }
+
+    /* Estilos para la barra de desplazamiento */
+    ::-webkit-scrollbar {
+        width: 11px;
+    }
+    
+    /* Estilos para el indicador de posición */
+    ::-webkit-scrollbar-thumb {
+        background-color: #555;
+        border-radius: 6px;
+    }
+    
+    /* Estilos para el indicador de posición al pasar el mouse */
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #999;
+    }
     /*Div Mediano usado en agendar hora*/
     .div-mediano{
         height: 600px;
@@ -162,6 +221,7 @@ body{
         text-align: center;
         border-radius: 10px;
         box-shadow: 0px 1px 1px;
+
     }
     .div-grande{
         height: 700px;
@@ -170,6 +230,8 @@ body{
         text-align: center;
         border-radius: 10px;
         box-shadow: 0px 1px 1px;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
     #titulo-seleccionar-area{
         margin-top: 20px;
