@@ -30,4 +30,5 @@ urlpatterns = [
     path('obtener_especialidades/<int:area_medica_id>/', views. obtener_especialidades, name='obtener_especialidades'),
     path('admin_Agregar_Especialista/', views.agregar_empleado),    
     path('admin_Agregar_Operador/', views.agregar_operador),
+    path('agenda_especialista/',views.especialista_Agenda),
 ]
