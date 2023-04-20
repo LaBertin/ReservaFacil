@@ -14,7 +14,7 @@
     
     <div class="div-mediano">
         <h2 id="titulo-inicio-sesion">Agregar Especialista</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
                 <br>
@@ -52,7 +52,7 @@
                         <div >
                             <h6>Foto</h6>
                         </div>
-                        <div >
+                        <div>
                             {{ formEspecialista.Foto_E }}
                         </div>
                         
@@ -160,68 +160,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div>
-                        <!--<div >
-                            <h6>Especialidad 2</h6>
-                        </div>
-                        <div onchange="ocultarDiasS()" class="div-choicefield">
-                            {{formEspecialista.especialidad_s}}
-                        </div>
-                        <br>
-                        <br>
-                        <div class="notDisplay" id="esp_display_t">
-                            <h6>Especialidad 3</h6>
-                        </div>
-                        <div class="notDisplay" id="esp_display2_t" onchange="ocultarDiasT()">
-                            {{ formEspecialista.especialidad_t }}
-                        </div>
-                        <br>
-                        <br>
-                        <div class="notDisplay" id="esp_display_c">
-                            <h6>Especialidad 4</h6>
-                        </div>
-                        <div class="notDisplay" id="esp_display2_c" onchange="ocultarDiasC()">
-                            {{ formEspecialista.especialidad_c }}
-                        </div>
-                        
-                    </div>
-
-                    #Dias especialidades
-                    <div class="col">
-                        
-                        <br>
-                        <div class="wrappernone" id="divespecialidads">
-                        <div class="wrapper" onchange="grupoMultiSelect()">
-                            {{formEspecialista.dia_p}}
-                        </div>
-                        <div class="wrappernone" id="divespecialidads" onchange="grupoMultiSelect()">
-                            {{formEspecialista.dia_s }}
-                        </div>
-                        <div class="wrappernone" id="divespecialidadt" onchange="grupoMultiSelect()">
-                            {{formEspecialista.dia_t }}
-                        </div>
-                        <div class="wrappernone" id="divespecialidadc" onchange="grupoMultiSelect()">
-                            {{formEspecialista.dia_c }}
-                        </div>
-                    </div>
-
-                    #Minutos de atención
-                    
-
-
-                        <div class="notDisplay" id="divmins">
-                            {{formEspecialista.minutes_s}}
-                        </div>
-                        <div class="notDisplay" id="divmint">
-                            {{formEspecialista.minutes_t}}
-                        </div>
-                        <div class="notDisplay" id="divminc">
-                            {{formEspecialista.minutes_c}}
-                        </div>
-                        
-                    </div>-->
-                </div>
 
             </div>
             <br>
