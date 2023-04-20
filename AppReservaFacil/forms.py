@@ -14,6 +14,8 @@ max = today.replace(today.year+ 1)
 
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
 MINUTOS_CHOICES=[(None,'--------'),(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
+SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
+
 
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
@@ -47,7 +49,7 @@ class FormEspecialista(forms.Form):
 class FormOperador(forms.Form):
     nom_com_operador = forms.CharField(max_length=256)
     rut = forms.CharField(max_length=9)
-    sexo = forms.ChoiceField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]), required=True,initial=0)
+    sexo = forms.ChoiceField(choices = (SEXO_CHOICES), required=True,initial=0)
     email_o = forms.EmailField()
     fecha_nac_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     direccion_operador = forms.CharField(max_length=256)
@@ -55,6 +57,14 @@ class FormOperador(forms.Form):
     fecha_ini_con_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     fecha_fin_con_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     
+class FormPaciente(forms.Form):
+    nom_com_pac = forms.CharField(max_length=256)
+    rut_pac = forms.CharField(max_length=9)
+    sexo_pac = forms.ChoiceField(choices= SEXO_CHOICES, required = True, initial = 0)
+    fecha_nac_pac = forms.DateField(widget=NumberInput(attrs={'type':'date'}))
+    direccion_pac = forms.CharField(max_length=256)
+    telefono_pac = forms.CharField(max_length=9)
+
 
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
@@ -102,10 +112,9 @@ class LoginUsuario(AuthenticationForm):
 
 class DateForm(forms.Form):
     date = forms.DateField(
-    widget=DateInput(attrs={"name":"somdate", "value":today, "min":today, "max":max})
+    widget=DateInput(attrs={"name":"somdate", "value":today, "min": today, "max":max})
     )
     
-
 class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
     especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())

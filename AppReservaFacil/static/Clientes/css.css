@@ -73,9 +73,15 @@ header {
     div#div-nav-left{
         float: left;
     }
+
     /*Div que mueve la lista de items a la derecha*/
     div#div-nav-right{
         float: right;
+    }
+
+    div#div-nav-center{
+        float: center;
+        margin-top: 15px;
     }
     /*Posición de la imagen*/
     header div img{

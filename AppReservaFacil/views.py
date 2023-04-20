@@ -65,15 +65,10 @@ def inicio(request):
 
 def inicioSesion(request):
     return render(request, "Clientes/inicioSesion.html")
-
 # Dirección URL de vistas de Admin
 # admin es el nombre de la carper donde se almacena los html
-
-
-
 def admin_crearUsuario(request):
     return render(request, 'admin/admin_crearUsuario.html')
-
 #Definiciones del 
 
 def registrousuario(request):
@@ -93,29 +88,73 @@ def registrousuario(request):
             user = User.objects.get(username = usuario)
             grupo_Pacientes = Group.objects.get(name='Pacientes') 
             user.groups.add(grupo_Pacientes)
+            count_paciente = Paciente.objects.all().count()+1
+            Usuario_P = User.objects.filter(username=usuario)[0]
+            Paciente.objects.create(ID_Paciente=count_paciente, Usuario_P = Usuario_P)
             messages.success(request, "Te has registrado con éxito")
-            return render(request, 'clientes/registro.html', formulario1)
+            return redirect('inicioSesion')
         else:
             formulario=FormRegistrarUsuario()
             messages.error(request, "Error al registrarte")
 
     return render(request, 'Clientes/registro.html', formulario1)
 
+def perfil_cliente(request):
+    formulario_pac = {'formulario_pac': FormPaciente}
+    if request.method=='POST':
+        form_completo = FormPaciente(data = request.POST)
+        if form_completo.is_valid():
+
+            nombre_pac = form_completo.cleaned_data['nom_com_pac']
+            rut_pac = form_completo.cleaned_data['rut_pac']
+            sexo_pac = form_completo.cleaned_data['sexo_pac']
+            fecha_nac_pac = form_completo.cleaned_data['fecha_nac_pac']
+            direccion_pac = form_completo.cleaned_data['direccion_pac']
+            telefono_pac = form_completo.cleaned_data['telefono_pac']
+            first_login = False
+
+            usuario = User.objects.get(username=request.user.username)
+            Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente=nombre_pac,Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
+            messages.success(request, "Exito al actualizar")
+            return redirect('index')
+        else:
+            formulario_pac = FormPaciente()
+            messages.error(request, "Error")
+    return render(request, 'Clientes/perfil_cliente.html', formulario_pac)
 
 def iniciarsesionusuario(request):
     data = {
         'formIniciarSesionUsuario': LoginUsuario()
     }
     if request.method=='POST':
+        
         formulario=LoginUsuario(data=request.POST)
         print(formulario.is_valid())
         print(formulario.errors)
         if formulario.is_valid():
             usuario = authenticate(username=formulario.cleaned_data['username'], password=formulario.cleaned_data['password'])
-            print(usuario)
+            print(f'Usuario: {usuario}')
             login(request,usuario)
-            messages.success(request, "Has iniciado sesión con éxito")
-            return redirect(to='../')
+            usuario_prueba = User.objects.get(username = formulario.cleaned_data['username'])
+
+            usuarioqs = User.objects.filter(username = request.user.username)
+            print('PASO EL LOGIN LOCO')
+            paciente_qs = Paciente.objects.filter(Usuario_P = usuario_prueba)
+            
+            valor_hasgroup = has_group(usuarioqs[0], 'Pacientes')
+            print(f'retorno: {valor_hasgroup}')
+            if valor_hasgroup:
+                if paciente_qs[0].Primer_Login:
+                    paciente_qs[0].Primer_Login = False
+                    messages.success(request, "Has iniciado sesión con éxito")
+                    return redirect(to='perfil')
+                else:
+                    messages.success(request, "Has iniciado sesión con éxito")
+                    return redirect(to='index')
+            else:
+                messages.success(request, "Has iniciado sesión con éxito")
+                return redirect(to='index')
+
         else:
             messages.error(request, "Error al iniciar sesión")
 
@@ -140,7 +179,6 @@ def cliente_Agendar_hora(request):
             qspecialista = Especialista.objects.filter(Especialidad_P = especialidad_select)
             qspecialistas = Especialista.objects.filter(Especialidad_S = especialidad_select)
             
-
             qsListaEspecialidad=[]
             for x in qspecialista:
                 qsListaEspecialidad.append(x.Dia_Esp_P)
@@ -157,8 +195,6 @@ def cliente_Agendar_hora(request):
 
             
             qspecialista = {'qspecialista':qspecialista, 'qsListaEspecialidad':qsListaEspecialidad,'especialidad_select':especialidad_select}
-            
-        
 
             return render(request, 'clientes/listar_Especialistas.html', qspecialista)
         if 'pedir_cita' in request.POST:    
@@ -170,7 +206,8 @@ def cliente_Agendar_hora(request):
             global minutos_especialidad
             
             valores = request.POST.get('pedir_cita')
-            print(valores)
+            print(f'Valores del pedir cita {valores}')
+            print(type(valores))
             values = valores.split(' ')[0]
             dias_es = str(valores.split(' ',1)[1].replace(' ',''))
             dias_en = dias_es.replace('Lunes','Monday').replace('Martes','Tuesday').replace('Miercoles','Wednesday').replace('Jueves','Thursday').replace('Viernes','Friday').replace('Sabado','Saturday').replace('Domingo','Sunday')
@@ -213,9 +250,7 @@ def cliente_Agendar_hora(request):
                 minutos_especialidad = Especialistas2.Minutes_Esp_C
                 print(f'Print Especilidad minutos C: {minutos_especialidad}')
             
-
             print(Especialistas)
-            contexto = {'especialista':Especialistas}  
             ID_Especialista = Especialistas[0].ID_Especialista
             print("ID_Especialistas:\n")
             print(ID_Especialista)
@@ -324,8 +359,6 @@ def cliente_Agendar_hora(request):
             else:
                 messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
-        
-
     return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
 
 def Cliente_anular_hora(request):
@@ -386,8 +419,7 @@ def Cliente_anular_hora(request):
         
         return render(request, 'clientes/cliente_Anular_Hora.html', {'citas_cliente':citas_cliente})
     else:
-        return render(request, 'clientes/cliente_Anular_Hora.html')
-    
+        return render(request, 'clientes/cliente_Anular_Hora.html')    
 
 def Cliente_consultar_hora(request):
     if 'confirmar_cita' in request.POST:
@@ -701,7 +733,7 @@ def agregar_empleado(request):
                 Minutes_Esp_S_Sab = None
                 Minutes_Esp_S_Dom = None
             
-            id_especialista = User.objects.all().count()+1
+            id_especialista = Especialista.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
             uar = " ".join(nom_com_especialista.split()[-2:-1]).lower()
             print(f'uar: {uar}')
@@ -820,8 +852,83 @@ def obtener_especialidades(request, area_medica_id):
 #Views Especialistas
 
 def especialista_Agenda(request):
-    
-    return render(request, "Especialistas/especialista_Agenda.html")
+    form_agenda = {'form_agenda': DateForm()}
+    user = User.objects.get(username=request.user.username)
+    datos_esp = Especialista.objects.get(Usuario_E=user)
+
+    if request.method=='POST':
+
+        #Obtengo los dias validos para el calendario
+        dias_esp_p = datos_esp.Dia_Esp_P
+        dias_esp_s = datos_esp.Dia_Esp_S
+        dias_esp_t = datos_esp.Dia_Esp_T
+        dias_esp_c = datos_esp.Dia_Esp_C
+
+        print(f'dias antes de d.strip {dias_esp_p} : {type(dias_esp_p)}')
+        dias_esp_p = [d.strip() for d in dias_esp_p]
+        dias_esp_s = [d.strip() for d in dias_esp_s]
+        dias_esp_t = [d.strip() for d in dias_esp_t]
+        dias_esp_c = [d.strip() for d in dias_esp_c]
+
+        print(f'dias despues de d.strip {dias_esp_p} : {type(dias_esp_p)}')
+
+        dias_trabajar =[]
+        dias_trabajar = listadias(dias_trabajar, dias_esp_p, dias_esp_s, dias_esp_t, dias_esp_c)
+        dias_trabajar = ','.join(dias_trabajar)
+
+        dias_en = dias_trabajar.replace('lun','Monday').replace('mar','Tuesday').replace('mie','Wednesday').replace('jue','Thursday').replace('vie','Friday').replace('sab','Saturday').replace('dom','Sunday')
+        dias_es = dias_trabajar.replace('lun','Lunes').replace('mar','Martes').replace('mie','Miercoles').replace('jue','Jueves').replace('vie','Viernes').replace('sab','Sabado').replace('dom','Domingo')
+        
+        dias_es= dias_es.split(',')
+
+        orden_dias = {'Lunes':1,'Martes':2,'Miercoles':3,'Jueves':4,'Viernes':5,'Sabado':6,'Domingo':7}
+        
+        dias_ordenados = sorted(dias_es, key=lambda dia: orden_dias[dia])
+        str_dias = ', '.join(dias_ordenados)
+
+        hoy = date.today()
+
+        # Calcular la fecha dentro de un año
+        next_year = hoy + timedelta(days=365)
+        print(next_year)
+
+        # Verificar si el año resultante es bisiesto
+        if calendar.isleap(next_year.year):
+            print("JAJAJA Prueba qlia con bisiesto po wn la wea poco probable")
+            # Si es bisiesto, ajustar la fecha al 29 de febrero
+            next_year = next_year.replace(month=2, day=29)
+        else:
+            print("No")
+            # Si no es bisiesto, mantener la fecha tal como está
+            next_year = next_year.replace(year=next_year.year)
+
+        # Imprimir la fecha resultante
+        print(next_year)
+        fechas = []
+        while hoy <= next_year:
+            diasemana = hoy.weekday()
+            nombredia = calendar.day_name[diasemana]
+            if nombredia in dias_en:
+                fechas.append(hoy)
+            hoy += timedelta(days=1)
+
+        Fecha = DateForm(request.POST)
+        print(f'fechas {Fecha}')
+        Fecha = Fecha.cleaned_data
+        Fecha = Fecha['date']
+        print(f'fechas cleaned {Fecha}')
+        if Fecha in fechas:
+
+            cita_fecha = Cita.objects.filter(ID_Especialista = datos_esp.ID_Especialista,Fecha_Cita = Fecha)
+            
+            agenda_especialista = {"cita_fecha": cita_fecha}
+
+            return render(request, "Especialistas/agenda_dia.html", agenda_especialista)
+        else:
+            messages.error(request, "Ingrese una fecha en los dias: "+str_dias+".")
+            print('ESTOY EN EL ELSE')
+            return render(request,  "Especialistas/especialista_Agenda.html", form_agenda)
+    return render(request, "Especialistas/especialista_Agenda.html", form_agenda)
 
 #Views Operadores
 
@@ -852,4 +959,20 @@ def chatsito(request):
     mensajes = Mensaje.objects.filter(Nombre_Remitente=remitente, Nombre_Destinatario=destinatario_E) | Mensaje.objects.filter(Nombre_Remitente=destinatario_E, Nombre_Destinatario=remitente)
     mensajes = mensajes.order_by('fecha')
     return render(request, 'General/chat.html', {'remitente': remitente, 'destinatario': destinatario_E, 'mensajes': mensajes})
+    
+
+def listadias(lista,diap,dias,diat,diac):
+    for x in diap:
+        lista.append(x)
+
+    for x in dias:
+        lista.append(x)
+
+    for x in diat:
+        lista.append(x)
+
+    for x in diac:
+        lista.append(x)
+
+    return lista
 

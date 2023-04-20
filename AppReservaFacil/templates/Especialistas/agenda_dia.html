@@ -1,0 +1,20 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Agendar Cita</title>
+<div id="main-content-centro">
+
+    <div class="div-grande">
+
+        <h2 id="titulo-inicio-sesion">Seleccione Hora</h2>
+            <div class="row">
+                <table>
+                   {% for cita in cita_fecha %}
+                        <td>Cliente: {{cita.ID_Cliente}}</td>
+                   {% endfor %}
+                </table>
+            </div>      
+        <button type="button" class="btn-naranja-mediano"><a href="/">Inicio</a></button>
+        </div>
+  
+</div>
+{% endblock %}

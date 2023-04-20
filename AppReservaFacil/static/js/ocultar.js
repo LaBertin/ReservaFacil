@@ -71,3 +71,77 @@ function ocultarDiasC(){
         document.getElementById("divminc").className="notDisplay"
     }
 }
+
+
+function grupoMultiSelect(){
+    var multi_p = document.getElementsByName("dia_p")
+    var multi_s = document.getElementsByName("dia_s")
+    var multi_t = document.getElementsByName("dia_t")
+    var multi_c = document.getElementsByName("dia_c")
+
+    const actualizarCampos = () =>{
+        const valoresSeleccionados_p = Array.from(multi_p)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+        
+            const valoresSeleccionados_s = Array.from(multi_s)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+            const valoresSeleccionados_t = Array.from(multi_t)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+            const valoresSeleccionados_c = Array.from(multi_c)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        
+
+        Array.from(multi_p).forEach(checkbox => {
+            if(valoresSeleccionados_c.includes(checkbox.value)||valoresSeleccionados_t.includes(checkbox.value)||valoresSeleccionados_s.includes(checkbox.value)){
+                checkbox.disabled = true
+            }else{
+                checkbox.disabled = false
+            }
+        })
+
+        Array.from(multi_s).forEach(checkbox => {
+            if(valoresSeleccionados_p.includes(checkbox.value)||valoresSeleccionados_c.includes(checkbox.value)||valoresSeleccionados_t.includes(checkbox.value)){
+                checkbox.disabled = true
+            }else{
+                checkbox.disabled = false
+            }
+        })
+
+        Array.from(multi_t).forEach(checkbox => {
+            if(valoresSeleccionados_p.includes(checkbox.value)||valoresSeleccionados_s.includes(checkbox.value)||valoresSeleccionados_c.includes(checkbox.value)){
+                checkbox.disabled = true
+            }else{
+                checkbox.disabled = false
+            }
+        })
+
+        Array.from(multi_c).forEach(checkbox => {
+            if(valoresSeleccionados_p.includes(checkbox.value)||valoresSeleccionados_s.includes(checkbox.value)||valoresSeleccionados_t.includes(checkbox.value)){
+                checkbox.disabled = true
+            }else{
+                checkbox.disabled = false
+            }
+        })
+    }
+
+    Array.from(multi_p).forEach(checkbox => {
+        checkbox.addEventListener('change', actualizarCampos);
+      });
+
+    Array.from(multi_s).forEach(checkbox => {
+        checkbox.addEventListener('change', actualizarCampos);
+      });
+    Array.from(multi_t).forEach(checkbox => {
+        checkbox.addEventListener('change', actualizarCampos);
+      });
+    Array.from(multi_c).forEach(checkbox => {
+        checkbox.addEventListener('change', actualizarCampos);
+    });
+}

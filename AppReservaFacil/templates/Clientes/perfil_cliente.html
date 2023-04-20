@@ -1,0 +1,53 @@
+{% extends "./index.html" %}
+{% block footer %}
+<title>Registro</title>
+<div id="main-content-centro">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="div-pequeño">
+        <h2 id="titulo-inicio-sesion">Perfil del Paciente</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div id="div-nav-center">
+                <h6>Nombre: </h6>
+
+                {{formulario_pac.nom_com_pac}}
+            </div>
+            <div id="div-nav-center">
+                <h6>Rut: </h6>
+                
+                {{formulario_pac.rut_pac}}
+            </div>
+            <div id="div-nav-center">
+                <h6>Sexo: </h6>
+                
+                {{formulario_pac.sexo_pac}}
+            </div>
+            <div id="div-nav-center">
+                <h6>Fecha de nacimiento: </h6>
+                
+                {{formulario_pac.fecha_nac_pac}}
+            </div>
+            <div id="div-nav-center">
+                <h6>Direccion: </h6>
+                
+                {{formulario_pac.direccion_pac}}
+            </div>
+            <div id="div-nav-center">
+                <h6>Telefono: </h6>
+                {{formulario_pac.telefono_pac}}
+            </div>
+            <br>
+            <button type="submit" value="Registrar" id="" class="btn-naranja-mediano">Registrar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+</html>

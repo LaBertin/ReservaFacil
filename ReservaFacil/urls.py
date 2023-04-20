@@ -19,10 +19,11 @@ from AppReservaFacil import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.index),
+    path('', views.index, name='index'),
     path('inicio/', views.inicio),
-    path('inicioSesion/', views.iniciarsesionusuario),
+    path('inicioSesion/', views.iniciarsesionusuario, name='inicioSesion'),
     path('registro/', views.registrousuario),
+    path('perfil/', views.perfil_cliente, name = 'perfil'),
     path('cerrarSesion/', views.cerrarsesionusuario),
     path('agendar_hora/', views.cliente_Agendar_hora),
     path('anular_hora/', views.Cliente_anular_hora),
@@ -34,4 +35,5 @@ urlpatterns = [
 
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),
+    path('agenda_especialista/',views.especialista_Agenda),
 ]

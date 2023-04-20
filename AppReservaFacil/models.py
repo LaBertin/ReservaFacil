@@ -5,10 +5,13 @@ import os
 from django.conf import settings
  
 from multiselectfield import MultiSelectField
+
 # Create your models here.
 
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
 MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
+SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
+
 class Area_Medica(models.Model):
     ID_Area_Medica = models.IntegerField(primary_key=True, unique=True)
     Nombre_Area_Medica = models.CharField(max_length=256)
@@ -81,7 +84,7 @@ class Operador(models.Model):
     ID_Operador = models.IntegerField(primary_key=True, unique=True)
     Nombre_completo_O = models.CharField(max_length=256)
     Rut = models.CharField(max_length=9, null=True)
-    Sexo = models.CharField(choices = ([('Femenino','Femenino'), ('Masculino','Masculino')]),max_length=9, null=True)
+    Sexo = models.CharField(choices = SEXO_CHOICES, max_length=9, null=True)
     Fecha_de_nacimiento_O = models.DateField(null=True)
     Direccion_O = models.CharField(max_length=256, null=True)
     Telefono_O = models.CharField(max_length=9, null=True)
@@ -108,6 +111,24 @@ class Cita(models.Model):
     def __datetime__ (self):
         return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
     
+class Paciente(models.Model):
+    ID_Paciente = models.IntegerField(primary_key=True, unique=True)
+    Nombre_Paciente = models.CharField(max_length = 256)
+    Rut = models.CharField(max_length=9, null = True)
+    Sexo = models.CharField(SEXO_CHOICES, max_length=9, null = True)
+    Fecha_de_nacimiento_P = models.DateField(null = True)
+    Direccion_P = models.CharField(max_length=256, null = True)
+    Telefono_P = models.CharField(max_length=9, null = True)
+    Usuario_P = models.ForeignKey(User, null=True, on_delete=models.RESTRICT)
+    Primer_Login = models.BooleanField(default=True)
+
+    def __str__(self):
+        ID_Paciente = str(self.ID_Paciente)
+        return f'{self.Nombre_Paciente} {ID_Paciente}'
+    
+    class Meta:
+        verbose_name = 'Paciente'
+        verbose_name_plural = 'Pracientes'
     
 class Mensaje(models.Model):
     Nombre_Remitente = models.CharField(max_length=100, editable=False)
@@ -117,3 +138,7 @@ class Mensaje(models.Model):
 
 
     
+    class Meta:
+        verbose_name = 'Mensaje'
+        verbose_name_plural = 'Mensajes'
+
