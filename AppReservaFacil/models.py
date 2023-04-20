@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.auth.models import *
 import os
 from django.conf import settings
+ 
 from multiselectfield import MultiSelectField
 
 # Create your models here.
@@ -37,6 +38,10 @@ class Especialidad(models.Model):
         verbose_name_plural='Especialidades'
 
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
+
+
+def foto_e_path(instance, filename):
+    return os.path.join('AppReservaFacil/static/img', str(instance.ID_Especialista), filename)
 
 class Especialista(models.Model):
     ID_Especialista = models.IntegerField(primary_key=True, unique=True)
@@ -81,7 +86,7 @@ class Operador(models.Model):
     Fecha_de_nacimiento_O = models.DateField(null=True)
     Direccion_O = models.CharField(max_length=256, null=True)
     Telefono_O = models.CharField(max_length=9, null=True)
-    Foto_O = models.ImageField(null=True)
+    Foto_O = models.ImageField(upload_to='Operador', null=True)
     Fecha_de_contrato_O = models.DateField(null=True)
     Fecha_fin_de_contrato_O = models.DateField(null=True)
     Usuario_O = models.ForeignKey(User, null=True, on_delete=models.RESTRICT)

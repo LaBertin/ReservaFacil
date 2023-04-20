@@ -137,9 +137,11 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, 'AppReservaFacil/static/Clientes')
 ]
 
+MEDIA_URL = '/img/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'AppReservaFacil/static/img')
 
-MEDIA_URL = '/img/'
+
 
 STATIC_URL = 'static/'
 
