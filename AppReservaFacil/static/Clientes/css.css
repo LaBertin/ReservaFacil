@@ -40,6 +40,11 @@ header {
             text-decoration: none;
             color: #42444E;
         }
+    
+    .select-checkbox div div label {
+        margin-top: 2px;
+        margin-bottom: 2px;
+    }
 
     .btn-rojo-mediano{
             height: 40px;

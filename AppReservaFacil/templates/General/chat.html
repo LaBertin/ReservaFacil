@@ -1,0 +1,21 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Cerrar sesión</title>
+<div id="main-content-centro">
+    <div class="div-grande">
+        <h2 id="titulo-inicio-sesion">Chat</h2>
+            <h1>Chat con {{ destinatario.username }}</h1>
+            <div class="mensajes">
+            {% for mensaje in mensajes %}
+                {% if mensaje.remitente == remitente %}
+                <p class="mensaje enviado">{{ mensaje.contenido }}</p>
+                {% else %}
+                <p class="mensaje recibido">{{ mensaje.contenido }}</p>
+                {% endif %}
+            {% endfor %}
+            </div>
+        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+    </div>
+    
+</div>
+{% endblock %}

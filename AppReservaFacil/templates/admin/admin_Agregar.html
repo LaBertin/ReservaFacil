@@ -3,7 +3,6 @@
 <link href="../../static/Admin/agregar.css" rel="stylesheet">
 <script src="../../static/js/ocultar.js"></script>
 <title>Agregar Especialista</title>
-<div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert"  id="message_box">
@@ -18,7 +17,7 @@
         <form method="post">
             {% csrf_token %}
             <div class="container">
-
+                <br>
                 <div class="row">
                     <!--Datos Personales Especialista-->
                     <div class="col">
@@ -49,9 +48,19 @@
                         <div >
                             {{ formEspecialista.direccion_especialista }}
                         </div>
-                        <br>
+                        <br>    
                         <div >
-                            <h6>Contacto</h6>
+                            <h6>Foto</h6>
+                        </div>
+                        <div >
+                            {{ formEspecialista.Foto_E }}
+                        </div>
+                        
+                    </div>
+
+                    <div class="col">
+                        <div >
+                            <h6>Telefono</h6>
                         </div>
                         <div >
                             {{formEspecialista.contacto_especialista}}
@@ -63,23 +72,97 @@
                         <div >
                             {{formEspecialista.rut}}
                         </div>
+                        <br>
+                        <div>
+                            <h6>Fecha inicio contrato</h6>
+                        </div>
+                        <div>
+                            {{formEspecialista.ini_con_especialista}}
+                        </div>
+                        <br>
+                        <div>
+                            <h6>Fecha fin contrato</h6>
+                        </div>
+                        <div>
+                            {{formEspecialista.fin_con_especialista}}
+                        </div>
                     </div>
                 
                     <!--Especialidades-->
                     <div class="col">
                         <br>
-                        <div>
-                            <h6>Especialidad 1</h6>
+                        <h6>Especialidad 1</h6>
+                        <div class="col">
+                            {{ formEspecialista.especialidad_p }}
                         </div>
-
-                        <div >
-                            <div class="div-choicefield">
-                                {{ formEspecialista.especialidad_p }}
+                        <div class="d-flex">
+                            <div class="flex-grow-1 ms-3 select-checkbox div-choicefield">
+                              {{formEspecialista.dia_p}}
+                            </div>
+                            <div class="flex-grow-1 me-3">
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Lun}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Mar}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Mie}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Jue}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Vie}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Sab}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_P_Dom}}
+                                </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="col">
                         <br>
-                        <br>
-                        <div >
+                        <h6>Especialidad 2</h6>
+                        <div class="col">
+                            {{ formEspecialista.especialidad_s }}
+                        </div>
+                        <div class="d-flex">
+                            <div class="flex-grow-1 ms-3 select-checkbox div-choicefield">
+                              {{formEspecialista.dia_s}}
+                            </div>
+                            <div class="flex-grow-1 me-3">
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Lun}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Mar}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Mie}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Jue}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Vie}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Sab}}
+                                </div>
+                                <div class ="div-choicefield">
+                                    {{formEspecialista.Minutes_Esp_S_Dom}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <!--<div >
                             <h6>Especialidad 2</h6>
                         </div>
                         <div onchange="ocultarDiasS()" class="div-choicefield">
@@ -104,11 +187,9 @@
                         
                     </div>
 
-                    <!--Dias especialidades-->
+                    #Dias especialidades
                     <div class="col">
-                        <div class="wrapper">
-                            {{formEspecialista.dia_p}}
-                        </div>
+                        
                         <br>
                         <div class="wrappernone" id="divespecialidads">
                             {{formEspecialista.dia_s }}
@@ -121,11 +202,10 @@
                         </div>
                     </div>
 
-                    <!--Minutos de atención-->
-                    <div class="col">
-                        <div class ="display">
-                            {{formEspecialista.minutes_p}}
-                        </div>
+                    #Minutos de atención
+                    
+
+
                         <div class="notDisplay" id="divmins">
                             {{formEspecialista.minutes_s}}
                         </div>
@@ -136,11 +216,11 @@
                             {{formEspecialista.minutes_c}}
                         </div>
                         
-                    </div>
+                    </div>-->
                 </div>
 
             </div>
-            
+            <br>
             <br>
             <br>
             <button type="submit" value="Agregar" class="btn-naranja-mediano">Agregar</button>

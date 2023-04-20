@@ -1,6 +1,9 @@
 from django.db import models
 from django import forms
 from django.contrib.auth.models import *
+import os
+from django.conf import settings
+ 
 from multiselectfield import MultiSelectField
 # Create your models here.
 
@@ -33,6 +36,12 @@ class Especialidad(models.Model):
 
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
 
+media_root = settings.MEDIA_ROOT
+
+
+def foto_e_path(instance, filename):
+    return os.path.join('AppReservaFacil/static/img', str(instance.ID_Especialista), filename)
+
 class Especialista(models.Model):
     ID_Especialista = models.IntegerField(primary_key=True, unique=True)
     Nombre_completo_E = models.CharField(max_length=256)
@@ -41,20 +50,28 @@ class Especialista(models.Model):
     Fecha_de_nacimiento_E = models.DateField(null=True)
     Direccion_E = models.CharField(max_length=256, null=True)
     Telefono_E = models.CharField(max_length=9, null=True)
-    Foto_E = models.ImageField(null=True)
+    ini_con_especialista = models.DateField(null=True)
+    fin_con_especialista = models.DateField(null=True)
+    Foto_E = models.ImageField(upload_to=foto_e_path,null=True)
     Especialidad_P = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_P")
     Especialidad_S = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_S")
-    Especialidad_T = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_T")
-    Especialidad_C = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT,related_name="Especialidad_C")
     Dia_Esp_P = MultiSelectField(choices=DIAS_CHOICES)
     Dia_Esp_S = MultiSelectField(choices=DIAS_CHOICES)
-    Dia_Esp_T = MultiSelectField(choices=DIAS_CHOICES)
-    Dia_Esp_C = MultiSelectField(choices=DIAS_CHOICES)
-    Minutes_Esp_P = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
-    Minutes_Esp_S = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
-    Minutes_Esp_T = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
-    Minutes_Esp_C = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
-    Usuario_E = models.ForeignKey(User, null=True, on_delete=models.RESTRICT )
+    Minutes_Esp_P_Lun = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_P_Mar = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_P_Mie = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_P_Jue = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_P_Vie = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_P_Sab = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_P_Dom = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Lun = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Mar = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Mie = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Jue = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Vie = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Sab = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Minutes_Esp_S_Dom = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
+    Usuario_E = models.ForeignKey(User, null=True, on_delete=models.CASCADE )
 
     def __str__(self):
         ID_Especialista = str(self.ID_Especialista)
@@ -92,4 +109,11 @@ class Cita(models.Model):
         return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
     
     
+class Mensaje(models.Model):
+    Nombre_Remitente = models.CharField(max_length=100, editable=False)
+    Nombre_Destinatario = models.CharField(max_length=100, editable=False)
+    contenido = models.TextField()
+    fecha = models.DateTimeField(auto_now_add=True)
+
+
     

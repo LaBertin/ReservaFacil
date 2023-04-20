@@ -32,6 +32,15 @@
                     {% else %}
                         <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/inicioSesion">Iniciar Sesión</a></button>
                     {% endif %}
+                 {% elif request.user|has_group:"Operadores" %} 
+                    <li><a href="/Agendar">Finanzas</a></li>
+                    <li><a href="/select_Destinatario">Mensajería</a></li>
+                    <li><a href="/consultar_hora">Emitir Receta</a></li>
+                    {% if user.is_authenticated %}
+                        <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
+                    {% else %}
+                        <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/inicioSesion">Iniciar Sesión</a></button>
+                    {% endif %}
                 {% else %}
                     <li><a href="/agendar_hora">Agendar Cita</a></li>
                     <li><a href="/consultar_hora">Consultar Cita</a></li>
@@ -48,11 +57,11 @@
     </div>
     
 </header>
-
+<div id="main-content-centro">
 {% block footer %}
 <!--En caso de ser Especialista el inicio cambia-->
 {% if request.user|has_group:"Especialistas" %} 
-    <div id="main-content-centro">
+    
         <title>ReservaFácil - Inicio Especialista</title>
             {% if messages %}
                 {% for message in messages %}
@@ -63,7 +72,7 @@
                 {% endfor %}
             {% endif %}
         <div class="div-pequeño">
-            <img src="../../static/img/{{Foto_E}}" class="img-redonda" width="150" height="150">
+            <img src="{% static Especialista_Cont.Foto_E.url %}" alt="Foto del especialista" class="img-redonda" width="150" height="150"> 
             <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_E}}</h1>
             <br>
             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Agenda</a></button>
@@ -71,6 +80,32 @@
             <br>
             <br>
             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Ficha Médica</a></button>
+            <br>
+            <br>
+            <br>
+            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Emitir Receta</a></button>
+        </div>
+    </div>
+{% elif request.user|has_group:"Operadores" %} 
+    <div id="main-content-centro">
+        <title>ReservaFácil - Inicio Operador</title>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" id="alerto" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        <div class="div-pequeño">
+            <img src="../../static/img/{{Foto_E}}" class="img-redonda" width="150" height="150">
+            <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_O}}</h1>
+            <br>
+            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Finanzas</a></button>
+            <br>
+            <br>
+            <br>
+            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="select_Destinatario">Mensajería</a></button>
             <br>
             <br>
             <br>
@@ -96,7 +131,7 @@
 
 
 {% endblock %}
-
+</div>
 <footer>
     <div class="col">© 2023 ReservaFácil, todos los derechos reservados.</div>
     <div class="col">Logo</div>

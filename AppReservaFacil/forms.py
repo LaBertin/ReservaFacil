@@ -22,19 +22,28 @@ class FormEspecialista(forms.Form):
     fecha_nac_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     direccion_especialista = forms.CharField(max_length=256)
     contacto_especialista = forms.CharField(max_length=9)
+    ini_con_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    fin_con_especialista = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    Foto_E = forms.ImageField(required=False)
     especialidad_p = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0)
     especialidad_s = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
-    especialidad_t = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
-    especialidad_c = forms.ModelChoiceField(queryset=Especialidad.objects.all() ,initial=0,required=False)
     dia_p = forms.CharField(widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
     dia_s = forms.CharField(required=False, widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
-    dia_t = forms.CharField(required=False, widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
-    dia_c = forms.CharField(required=False, widget=forms.CheckboxSelectMultiple(choices=DIAS_CHOICES, attrs={'class':'boton'}))
-    minutes_p = forms.ChoiceField(choices=MINUTOS_CHOICES, initial=0)
-    minutes_s = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
-    minutes_t = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
-    minutes_c = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
-
+    Minutes_Esp_P_Lun = forms.ChoiceField(choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_P_Mar = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_P_Mie = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_P_Jue = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_P_Vie = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_P_Sab = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_P_Dom = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Lun = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Mar = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Mie = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Jue = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Vie = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Sab = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    Minutes_Esp_S_Dom = forms.ChoiceField(required=False, choices=MINUTOS_CHOICES, initial=0)
+    
 class FormOperador(forms.Form):
     nom_com_operador = forms.CharField(max_length=256)
     rut = forms.CharField(max_length=9)
@@ -93,10 +102,17 @@ class LoginUsuario(AuthenticationForm):
 
 class DateForm(forms.Form):
     date = forms.DateField(
-    widget=DateInput(attrs={"name":"somdate", "value":today})
+    widget=DateInput(attrs={"name":"somdate", "value":today, "min":today, "max":max})
     )
     
 
 class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
     especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())
+
+class MensajeForm(forms.ModelForm):
+    contenido = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}))
+
+    class Meta:
+        model = Mensaje
+        fields = ['contenido']

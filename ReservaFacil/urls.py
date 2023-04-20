@@ -28,6 +28,10 @@ urlpatterns = [
     path('anular_hora/', views.Cliente_anular_hora),
     path('consultar_hora/', views.Cliente_consultar_hora),
     path('obtener_especialidades/<int:area_medica_id>/', views. obtener_especialidades, name='obtener_especialidades'),
+
     path('admin_Agregar_Especialista/', views.agregar_empleado),    
     path('admin_Agregar_Operador/', views.agregar_operador),
+
+    path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
+    path('chat/', views.chatsito, name='chat'),
 ]

@@ -1,0 +1,40 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Seleccionar Destinatario</title>
+<div id="main-content-centro">
+    <div class="div-grande">
+        <h2 id="titulo-inicio-sesion">Seleccione un destinatario</h2>
+        <form method="GET" action="{% url 'select_Destinatario' %}">
+            <input type="text" name="filtro" placeholder="Buscar por nombre...">
+            <button type="submit" class="btn-naranja-mediano">Buscar</button>
+        </form>
+          
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Chat</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for especialista in especialistas_filtrados %}
+            <tr>
+                <form method="POST">
+                    {% csrf_token %}
+                    <td>{{ especialista.Nombre_completo_E }}</td>
+                    <td><button class="btn-naranja-mediano" value="{{especialista.Nombre_completo_E}}" type="submit"name="chat_btn">Chatear</button></td>
+                </form>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="2">No se encontraron resultados.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+               
+        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+    </div>
+    
+</div>
+{% endblock %}

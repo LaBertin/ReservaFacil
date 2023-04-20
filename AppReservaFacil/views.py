@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django import template
 import calendar
+import unicodedata
 
 
 # Create your views here.
@@ -32,16 +33,30 @@ def index(request):
         if Bool_Grupo == True:
             print(nombre_Usuario)
             nombre_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Nombre_completo_E
-            img_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Foto_E
             nombre_Especialista = nombre_Especialista.split(' ')
             nombre_Especialista = nombre_Especialista[0]+' '+nombre_Especialista[3]
+            Especialista_Cont = Especialista.objects.get(Usuario_E=nombre_Usuario)
             print(nombre_Especialista)
-            print(img_Especialista)
-            return render(request, "Clientes/index.html", {'Nombre_E':nombre_Especialista,'Foto_E':img_Especialista})
+            return render(request, "Clientes/index.html", {'Nombre_E':nombre_Especialista,'Especialista_Cont':Especialista_Cont})
 
         else:
             print("Otro")
-        return render(request, "Clientes/index.html")
+            Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Operadores']).exists()
+            if Bool_Grupo == True:
+                print(nombre_Usuario)
+                nombre_Operador = Operador.objects.filter(Usuario_O=nombre_Usuario)[0].Nombre_completo_O
+                img_Operador = Operador.objects.filter(Usuario_O=nombre_Usuario)[0].Foto_O
+                nombre_Operador = nombre_Operador.split(' ')
+                nombre_Operador = nombre_Operador[0]+' '+nombre_Operador[3]
+                print(nombre_Operador)
+                print(img_Operador)
+                return render(request, "Clientes/index.html", {'Nombre_O':nombre_Operador,'Foto_O':img_Operador})
+
+            else:
+                print("Otro")
+                Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Operadores']).exists()
+                return render(request, "Clientes/index.html")
+        
     else:
         return render(request, "Clientes/index.html")
 
@@ -124,8 +139,6 @@ def cliente_Agendar_hora(request):
             #Obtenemos todos los medicos con la especialidad registrada.
             qspecialista = Especialista.objects.filter(Especialidad_P = especialidad_select)
             qspecialistas = Especialista.objects.filter(Especialidad_S = especialidad_select)
-            qspecialistat = Especialista.objects.filter(Especialidad_T = especialidad_select)
-            qspecialistac = Especialista.objects.filter(Especialidad_C = especialidad_select)
             
 
             qsListaEspecialidad=[]
@@ -135,16 +148,11 @@ def cliente_Agendar_hora(request):
             for x in qspecialistas:
                 qsListaEspecialidad.append(x.Dia_Esp_S)
 
-            for x in qspecialistat:
-                qsListaEspecialidad.append(x.Dia_Esp_T)
-
-            for x in qspecialistac:
-                qsListaEspecialidad.append(x.Dia_Esp_C)
 
             print(qsListaEspecialidad)
 
             #Juntamos todos los resultados en un mismo Queryset
-            qspecialista = qspecialista | qspecialistas | qspecialistat | qspecialistac
+            qspecialista = qspecialista | qspecialistas 
 
 
             
@@ -238,7 +246,7 @@ def cliente_Agendar_hora(request):
                 if nombredia in dias_en:
                     fechas.append(hoy)
                 hoy += timedelta(days=1)
-          
+
             dataformDate = {
                 'formDate': DateForm(),
                 'fechas': fechas,
@@ -493,6 +501,10 @@ def agregar_empleado(request):
             direccion_especialista = request.POST.get('direccion_especialista')
             print(direccion_especialista)
 
+            foto_e = formulario.cleaned_data['Foto_E']
+            print(type(foto_e))
+            print(foto_e)
+
             contacto_especialista = request.POST.get('contacto_especialista')
             print(contacto_especialista)
             
@@ -502,6 +514,13 @@ def agregar_empleado(request):
             sexo = request.POST.get('sexo')
             print(sexo)
 
+            fecha_ini_con = request.POST.get('ini_con_especialista')
+            print(fecha_ini_con)
+
+            fecha_ini_fin = request.POST.get('fin_con_especialista')
+            print(fecha_ini_fin)
+
+
             especialidad_p = request.POST.get('especialidad_p')
             print(especialidad_p)
             especialidad_p=Especialidad.objects.filter(Codigo_especialidad=especialidad_p).get()
@@ -509,29 +528,13 @@ def agregar_empleado(request):
 
             especialidad_s = request.POST.get('especialidad_s')
             print(especialidad_s)
+
             if especialidad_s != "":
                 especialidad_s=Especialidad.objects.filter(Codigo_especialidad=especialidad_s).get()
                 print(especialidad_s)
             else:
                 especialidad_s = None
 
-            especialidad_t = request.POST.get('especialidad_t')
-            print(especialidad_t)
-            if especialidad_t != "":
-                especialidad_t=Especialidad.objects.filter(Codigo_especialidad=especialidad_t).get()
-                print(especialidad_t)
-            else:
-                especialidad_t = None
-
-            especialidad_c = request.POST.get('especialidad_c')
-            print(especialidad_c)
-            if especialidad_c != "":
-                especialidad_c=Especialidad.objects.filter(Codigo_especialidad=especialidad_c).get()
-                print(especialidad_c)
-            else:
-                especialidad_c = None
-
-            
             dia_p = formulario.cleaned_data['dia_p'].replace("'","").strip('][').split(', ')
             print(dia_p)
             print(type(dia_p))
@@ -543,87 +546,171 @@ def agregar_empleado(request):
                 print("dia_s sin nada")
                 dia_s = None
 
-            if formulario.cleaned_data['dia_t']!="":
-                dia_t = formulario.cleaned_data['dia_t'].replace("'","").strip('][').split(', ')
-                print(dia_t)
+
+            #Minutos Especialidad P
+
+            if formulario.cleaned_data['Minutes_Esp_P_Lun']!="":
+                Minutes_Esp_P_Lun = formulario.cleaned_data['Minutes_Esp_P_Lun']
+                print(f'Minutes_Esp_P_Lun {Minutes_Esp_P_Lun}')
+                print(type(Minutes_Esp_P_Lun))
             else:
-                print("dia_t sin nada")
-                dia_t = None
+                print("Minutes_Esp_P_Lun nada")
+                Minutes_Esp_P_Lun=None
+                print(Minutes_Esp_P_Lun)
+                print(type(Minutes_Esp_P_Lun))
 
-            if formulario.cleaned_data['dia_c']!="":
-                dia_c = formulario.cleaned_data['dia_c'].replace("'","").strip('][').split(', ')
-                print(dia_c)
+            if formulario.cleaned_data['Minutes_Esp_P_Mar']!="":
+                Minutes_Esp_P_Mar = formulario.cleaned_data['Minutes_Esp_P_Mar']
+                print(f'Minutes_Esp_P_Mar {Minutes_Esp_P_Mar}')
+                print(type(Minutes_Esp_P_Mar))
             else:
-                print("dia_c sin nada")
-                dia_c = None
+                print("Minutes_Esp_P_Mar nada")
+                Minutes_Esp_P_Mar=None
+                print(Minutes_Esp_P_Mar)
+                print(type(Minutes_Esp_P_Mar))
 
-
-
-            if formulario.cleaned_data['minutes_p']!="":
-                minutos_p = formulario.cleaned_data['minutes_p']
-                print(f'Minutos primaria {minutos_p}')
-                print(type(minutos_p))
+            if formulario.cleaned_data['Minutes_Esp_P_Mie']!="":
+                Minutes_Esp_P_Mie = formulario.cleaned_data['Minutes_Esp_P_Mie']
+                print(f'Minutes_Esp_P_Mie {Minutes_Esp_P_Mie}')
+                print(type(Minutes_Esp_P_Mie))
             else:
-                print("Minutos P nada")
-                minutos_p=None
-                print(minutos_p)
-                print(type(minutos_p))
+                print("Minutes_Esp_P_Mie nada")
+                Minutes_Esp_P_Mie=None
+                print(Minutes_Esp_P_Mie)
+                print(type(Minutes_Esp_P_Mie))            
 
-            if formulario.cleaned_data['minutes_s']!="":
-                minutos_s = formulario.cleaned_data['minutes_s']
-                print(f'Minutos primaria {minutos_s}')
-                print(type(minutos_s))
+            if formulario.cleaned_data['Minutes_Esp_P_Jue']!="":
+                Minutes_Esp_P_Jue = formulario.cleaned_data['Minutes_Esp_P_Jue']
+                print(f'Minutes_Esp_P_Jue {Minutes_Esp_P_Jue}')
+                print(type(Minutes_Esp_P_Jue))
             else:
-                print("Minutos S nada")
-                minutos_s=None
-                print(minutos_s)
-                print(type(minutos_s))
+                print("Minutes_Esp_P_Jue nada")
+                Minutes_Esp_P_Jue=None
+                print(Minutes_Esp_P_Jue)
+                print(type(Minutes_Esp_P_Jue))     
 
-            if formulario.cleaned_data['minutes_t']!="":
-                minutos_t = formulario.cleaned_data['minutes_t']
-                print(f'Minutos primaria {minutos_t}')
-                print(type(minutos_t))
+            if formulario.cleaned_data['Minutes_Esp_P_Vie']!="":
+                Minutes_Esp_P_Vie = formulario.cleaned_data['Minutes_Esp_P_Vie']
+                print(f'Minutes_Esp_P_Vie {Minutes_Esp_P_Vie}')
+                print(type(Minutes_Esp_P_Vie))
             else:
-                print("Minutos T nada")
-                minutos_t=None
-                print(minutos_t)
-                print(type(minutos_t))
+                print("Minutes_Esp_P_Vie nada")
+                Minutes_Esp_P_Vie=None
+                print(Minutes_Esp_P_Vie)
+                print(type(Minutes_Esp_P_Vie))  
 
-            if formulario.cleaned_data['minutes_c']!="":
-                minutos_c = formulario.cleaned_data['minutes_c']
-                print(f'Minutos primaria {minutos_c}')
-                print(type(minutos_c))
+            if formulario.cleaned_data['Minutes_Esp_P_Sab']!="":
+                Minutes_Esp_P_Sab = formulario.cleaned_data['Minutes_Esp_P_Sab']
+                print(f'Minutes_Esp_P_Sab {Minutes_Esp_P_Sab}')
+                print(type(Minutes_Esp_P_Sab))
             else:
-                print("Minutos T nada")
-                minutos_c=None
-                print(minutos_c)
-                print(type(minutos_c))
+                print("Minutes_Esp_P_Sab nada")
+                Minutes_Esp_P_Sab=None
+                print(Minutes_Esp_P_Sab)
+                print(type(Minutes_Esp_P_Sab))  
+
+            if formulario.cleaned_data['Minutes_Esp_P_Dom']!="":
+                Minutes_Esp_P_Dom = formulario.cleaned_data['Minutes_Esp_P_Dom']
+                print(f'Minutes_Esp_P_Dom {Minutes_Esp_P_Dom}')
+                print(type(Minutes_Esp_P_Dom))
+            else:
+                print("Minutes_Esp_P_Dom nada")
+                Minutes_Esp_P_Dom=None
+                print(Minutes_Esp_P_Dom)
+                print(type(Minutes_Esp_P_Dom))  
+
+            #Minutos Especialidad S
+
+            if formulario.cleaned_data['Minutes_Esp_S_Lun']!="":
+                Minutes_Esp_S_Lun = formulario.cleaned_data['Minutes_Esp_S_Lun']
+                print(f'Minutes_Esp_S_Lun {Minutes_Esp_S_Lun}')
+                print(type(Minutes_Esp_S_Lun))
+            else:
+                print("Minutes_Esp_S_Lun nada")
+                Minutes_Esp_S_Lun=None
+                print(Minutes_Esp_S_Lun)
+                print(type(Minutes_Esp_S_Lun))
+
+            if formulario.cleaned_data['Minutes_Esp_S_Mar']!="":
+                Minutes_Esp_S_Mar = formulario.cleaned_data['Minutes_Esp_S_Mar']
+                print(f'Minutes_Esp_S_Mar {Minutes_Esp_S_Mar}')
+                print(type(Minutes_Esp_S_Mar))
+            else:
+                print("Minutes_Esp_S_Mar nada")
+                Minutes_Esp_S_Mar=None
+                print(Minutes_Esp_S_Mar)
+                print(type(Minutes_Esp_S_Mar))
+
+            if formulario.cleaned_data['Minutes_Esp_S_Mie']!="":
+                Minutes_Esp_S_Mie = formulario.cleaned_data['Minutes_Esp_S_Mie']
+                print(f'Minutes_Esp_S_Mie {Minutes_Esp_S_Mie}')
+                print(type(Minutes_Esp_S_Mie))
+            else:
+                print("Minutes_Esp_S_Mie nada")
+                Minutes_Esp_S_Mie=None
+                print(Minutes_Esp_S_Mie)
+                print(type(Minutes_Esp_S_Mie))            
+
+            if formulario.cleaned_data['Minutes_Esp_S_Jue']!="":
+                Minutes_Esp_S_Jue = formulario.cleaned_data['Minutes_Esp_S_Jue']
+                print(f'Minutes_Esp_S_Jue {Minutes_Esp_S_Jue}')
+                print(type(Minutes_Esp_S_Jue))
+            else:
+                print("Minutes_Esp_S_Jue nada")
+                Minutes_Esp_S_Jue=None
+                print(Minutes_Esp_S_Jue)
+                print(type(Minutes_Esp_S_Jue))     
+
+            if formulario.cleaned_data['Minutes_Esp_S_Vie']!="":
+                Minutes_Esp_S_Vie = formulario.cleaned_data['Minutes_Esp_S_Vie']
+                print(f'Minutes_Esp_S_Vie {Minutes_Esp_S_Vie}')
+                print(type(Minutes_Esp_S_Vie))
+            else:
+                print("Minutes_Esp_S_Vie nada")
+                Minutes_Esp_S_Vie=None
+                print(Minutes_Esp_S_Vie)
+                print(type(Minutes_Esp_S_Vie))            
+            
+            if formulario.cleaned_data['Minutes_Esp_S_Sab']!="":
+                Minutes_Esp_S_Sab = formulario.cleaned_data['Minutes_Esp_S_Sab']
+                print(f'Minutes_Esp_S_Sab {Minutes_Esp_S_Sab}')
+                print(type(Minutes_Esp_S_Sab))
+            else:
+                print("Minutes_Esp_S_Sab nada")
+                Minutes_Esp_S_Sab=None
+                print(Minutes_Esp_S_Sab)
+                print(type(Minutes_Esp_S_Sab))          
+
+            if formulario.cleaned_data['Minutes_Esp_S_Dom']!="":
+                Minutes_Esp_S_Dom = formulario.cleaned_data['Minutes_Esp_S_Dom']
+                print(f'Minutes_Esp_S_Dom {Minutes_Esp_S_Dom}')
+                print(type(Minutes_Esp_S_Dom))
+            else:
+                print("Minutes_Esp_S_Dom nada")
+                Minutes_Esp_S_Dom=None
+                print(Minutes_Esp_S_Dom)
+                print(type(Minutes_Esp_S_Dom))              
 
             if especialidad_s == None:
                 dia_s = None
-                minutos_s = None
-                dia_t = None
-                minutos_t = None
-                dia_c = None
-                minutos_c = None
+                Minutes_Esp_S_Lun = None
+                Minutes_Esp_S_Mar = None
+                Minutes_Esp_S_Mie = None
+                Minutes_Esp_S_Jue = None
+                Minutes_Esp_S_Vie = None
+                Minutes_Esp_S_Sab = None
+                Minutes_Esp_S_Dom = None
             
-            if especialidad_t == None:
-                dia_t = None
-                minutos_t = None
-                dia_c = None
-                minutos_c = None
-
-            if especialidad_c == None:
-                dia_c = None
-                minutos_c = None
-
             id_especialista = User.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
             uar = " ".join(nom_com_especialista.split()[-2:-1]).lower()
+            print(f'uar: {uar}')
             io = fecha_nac_especialista[:-6]
             print(io)
             usuario=us+'.'+uar+io
-
+            usuario=unicodedata.normalize('NFKD', usuario)
+            usuario=''.join([c for c in usuario if not unicodedata.combining(c)])
+            print(f'Usuario: {usuario}')
             contra=rut
             print(contra)
             sena= nom_com_especialista.split()[-1].lower()
@@ -641,9 +728,12 @@ def agregar_empleado(request):
                 Usuario_E = User.objects.filter(username=usuario)[0]
                 print(Usuario_E)
                 print("Usuario Creado")
-                Especialista.objects.create(ID_Especialista=id_especialista, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Telefono_E=contacto_especialista, 
-                                            Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, Especialidad_S=especialidad_s, Especialidad_T=especialidad_t, Especialidad_C=especialidad_c,Usuario_E=Usuario_E, 
-                                            Minutes_Esp_P = minutos_p, Minutes_Esp_S = minutos_s, Minutes_Esp_T = minutos_t, Minutes_Esp_C = minutos_c, Dia_Esp_P=dia_p, Dia_Esp_S = dia_s, Dia_Esp_T=dia_t, Dia_Esp_C=dia_c)
+                Especialista.objects.create(ID_Especialista=id_especialista, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Foto_E = foto_e,
+                                            Telefono_E=contacto_especialista, ini_con_especialista=fecha_ini_con,fin_con_especialista=fecha_ini_fin,Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, 
+                                            Especialidad_S=especialidad_s, Usuario_E=Usuario_E, Dia_Esp_P=dia_p, Dia_Esp_S = dia_s, Minutes_Esp_P_Lun = Minutes_Esp_P_Lun, Minutes_Esp_P_Mar = Minutes_Esp_P_Mar,
+                                            Minutes_Esp_P_Mie = Minutes_Esp_P_Mie, Minutes_Esp_P_Jue = Minutes_Esp_P_Jue, Minutes_Esp_P_Sab = Minutes_Esp_P_Sab, Minutes_Esp_P_Dom = Minutes_Esp_P_Dom,
+                                            Minutes_Esp_S_Lun = Minutes_Esp_S_Lun, Minutes_Esp_S_Mar = Minutes_Esp_S_Mar, Minutes_Esp_S_Mie = Minutes_Esp_S_Mie, Minutes_Esp_S_Jue = Minutes_Esp_S_Jue,
+                                            Minutes_Esp_S_Vie = Minutes_Esp_S_Vie, Minutes_Esp_S_Sab = Minutes_Esp_S_Sab, Minutes_Esp_S_Dom = Minutes_Esp_S_Dom)
                 messages.success(request, "Te has registrado con éxito")
                 return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
             else:
@@ -726,7 +816,40 @@ def obtener_especialidades(request, area_medica_id):
     especialidades = Especialidad.objects.filter(Area_Medica_F=area_medica_id)
     options = [(especialidad.pk, str(especialidad)) for especialidad in especialidades]
     return JsonResponse(options, safe=False)
-    
+
+#Views Especialistas
+
 def especialista_Agenda(request):
     
     return render(request, "Especialistas/especialista_Agenda.html")
+
+#Views Operadores
+
+def select_destinatario(request):
+    global destinatario
+    todos_Especialistas = Especialista.objects.all()
+    filtro = request.GET.get('filtro')
+    if filtro:
+        todos_Especialistas = todos_Especialistas.filter(Nombre_completo_E__icontains=filtro)
+
+    contexto = {
+        'especialistas_filtrados': todos_Especialistas,
+    }
+
+    if request.method=='POST':
+        destinatario = request.POST['chat_btn']
+        print("destinatario")
+        print(destinatario)
+        return redirect('chat')
+
+    return render(request, "General/select_Destinatario.html", contexto)
+
+def chatsito(request):
+    remitente = User.objects.filter(username=request.user.username)
+    destinatario_E = Especialista.objects.get(Nombre_completo_E=destinatario)
+    print(remitente)
+    print(destinatario_E)
+    mensajes = Mensaje.objects.filter(Nombre_Remitente=remitente, Nombre_Destinatario=destinatario_E) | Mensaje.objects.filter(Nombre_Remitente=destinatario_E, Nombre_Destinatario=remitente)
+    mensajes = mensajes.order_by('fecha')
+    return render(request, 'General/chat.html', {'remitente': remitente, 'destinatario': destinatario_E, 'mensajes': mensajes})
+
