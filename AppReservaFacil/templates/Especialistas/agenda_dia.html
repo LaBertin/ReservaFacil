@@ -7,36 +7,10 @@
 
         <h2 id="titulo-inicio-sesion">Seleccione Hora</h2>
             <div class="row">
-                <h4 class="text-align"><canvas class="cuadrado-anaranjado"></canvas> Libre <canvas class="cuadrado-rojo"></canvas> Reservado</h4>
                 <table>
-                    {% for x in list_horas %}
-                    {% if forloop.counter0|divisibleby:5 %}
-                        <tr> <!-- Nueva fila cada 5 botones -->
-                    {% endif %}
-                    <td>
-                        <form method="post">
-                            {% csrf_token %}
-                                {% if x in list_Citas_Reservadas %}
-
-                                    <button id="btn-selecc-hora" class="btn-rojo-mediano" value="{{x}}" type="submit"
-                                            name="hora_seleccionada"> 
-                                            {{x}}
-                                    </button>
-
-                                {% else %}
-
-                                    <button id="btn-selecc-hora" class="btn-naranja-mediano" value="{{x}}" type="submit"
-                                            name="hora_seleccionada"> 
-                                            {{x}}
-                                    </button>
-                                    
-                                {% endif %}
-                        </form>
-                        </td> 
-                    {% if forloop.counter|divisibleby:5 or forloop.last %}
-                        </tr> <!-- Cierre de la fila si se llegó al límite de 5 botones o es el último elemento -->
-                    {% endif %}
-                    {% endfor %}
+                   {% for cita in cita_fecha %}
+                        <td>Cliente: {{cita.ID_Cliente}}</td>
+                   {% endfor %}
                 </table>
             </div>      
         <button type="button" class="btn-naranja-mediano"><a href="/">Inicio</a></button>
