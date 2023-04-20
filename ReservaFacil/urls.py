@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from AppReservaFacil import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,4 +38,4 @@ urlpatterns = [
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),
     path('agenda_especialista/',views.especialista_Agenda),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

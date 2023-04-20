@@ -186,14 +186,11 @@ def cliente_Agendar_hora(request):
             for x in qspecialistas:
                 qsListaEspecialidad.append(x.Dia_Esp_S)
 
-
             print(qsListaEspecialidad)
 
             #Juntamos todos los resultados en un mismo Queryset
             qspecialista = qspecialista | qspecialistas 
 
-
-            
             qspecialista = {'qspecialista':qspecialista, 'qsListaEspecialidad':qsListaEspecialidad,'especialidad_select':especialidad_select}
 
             return render(request, 'clientes/listar_Especialistas.html', qspecialista)
@@ -533,7 +530,8 @@ def agregar_empleado(request):
             direccion_especialista = request.POST.get('direccion_especialista')
             print(direccion_especialista)
 
-            foto_e = formulario.cleaned_data['Foto_E']
+            
+            foto_e = request.FILES['Foto_E']
             print(type(foto_e))
             print(foto_e)
 
@@ -804,6 +802,7 @@ def agregar_operador(request):
             print(fecha_ini_con_operador_o)
             fecha_fin_con_operador_o = formulario.cleaned_data['fecha_fin_con_operador']
             print(fecha_fin_con_operador_o)
+            foto_o = request.FILES['Foto_O']
             id_operador = User.objects.all().count()+1
             us = nombre_O[:2].lower()
             uar = " ".join(nombre_O.split()[-2:-1]).lower()
@@ -827,7 +826,7 @@ def agregar_operador(request):
                 grupo_o = Group.objects.get(name='Operadores')
                 usuario_nom.groups.add(grupo_o)
                 Usuario_O = User.objects.filter(username=usuario)[0]
-                Operador.objects.create(ID_Operador=id_operador, Nombre_completo_O=nombre_O, Rut=rut_o, Sexo=sexo_o,
+                Operador.objects.create(ID_Operador=id_operador, Nombre_completo_O=nombre_O, Rut=rut_o, Sexo=sexo_o,Foto_O=foto_o,
                                         Fecha_de_nacimiento_O=fecha_nac_operador_o, Direccion_O=direccion_operador_o,
                                         Telefono_O=contacto_operador_o, Fecha_de_contrato_O = fecha_ini_con_operador_o,
                                         Fecha_fin_de_contrato_O = fecha_fin_con_operador_o, Usuario_O=Usuario_O)

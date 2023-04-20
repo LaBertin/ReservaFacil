@@ -134,12 +134,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATICFILES_DIRS = [
-   os.path.join(BASE_DIR, 'AppReservaFacil/static')
+   os.path.join(BASE_DIR, 'AppReservaFacil/static/Clientes')
 ]
+
+MEDIA_URL = '/img/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'AppReservaFacil/static/img')
 
-MEDIA_URL = '/img/'
+
 
 STATIC_URL = 'static/'
 

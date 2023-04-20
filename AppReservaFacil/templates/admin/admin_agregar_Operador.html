@@ -13,7 +13,7 @@
     
     <div class="div-mediano">
         <h2 id="titulo-inicio-sesion">Agregar Operador</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
 
@@ -38,6 +38,12 @@
                         </div>
                         <div class="div-choicefield">
                             {{formOperador.sexo}}
+                        </div>
+                        <div >
+                            <h6>Foto</h6>
+                        </div>
+                        <div>
+                            {{ formEspecialista.Foto_O }}
                         </div>
                         <br>
                         <div>

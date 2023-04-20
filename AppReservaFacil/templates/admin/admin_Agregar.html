@@ -14,7 +14,7 @@
     
     <div class="div-mediano">
         <h2 id="titulo-inicio-sesion">Agregar Especialista</h2>
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="container">
                 <br>
@@ -52,7 +52,7 @@
                         <div >
                             <h6>Foto</h6>
                         </div>
-                        <div >
+                        <div>
                             {{ formEspecialista.Foto_E }}
                         </div>
                         
@@ -96,11 +96,11 @@
                             {{ formEspecialista.especialidad_p }}
                         </div>
                         <div class="d-flex">
-                            <div class="flex-grow-1 ms-3 select-checkbox div-choicefield">
+                            <div class="flex-grow-1 ms-3 select-checkbox div-choicefield" onchange="grupoMultiSelect()">
                               {{formEspecialista.dia_p}}
                             </div>
                             <div class="flex-grow-1 me-3">
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield" onchange="">
                                     {{formEspecialista.Minutes_Esp_P_Lun}}
                                 </div>
                                 <div class ="div-choicefield">
@@ -132,7 +132,7 @@
                             {{ formEspecialista.especialidad_s }}
                         </div>
                         <div class="d-flex">
-                            <div class="flex-grow-1 ms-3 select-checkbox div-choicefield">
+                            <div class="flex-grow-1 ms-3 select-checkbox div-choicefield" onchange="grupoMultiSelect()">
                               {{formEspecialista.dia_s}}
                             </div>
                             <div class="flex-grow-1 me-3">
