@@ -24,7 +24,7 @@
         <nav>
             <ul>
                 {% if request.user|has_group:"Especialistas" %} 
-                    <li><a href="/Agendar">Agenda</a></li>
+                    <li><a href="/agenda_especialista">Agenda</a></li>
                     <li><a href="/modificar_hora">Ficha Médica</a></li>
                     <li><a href="/consultar_hora">Emitir Receta</a></li>
                     {% if user.is_authenticated %}
@@ -75,7 +75,7 @@
             <img src="{% static Especialista_Cont.Foto_E.url %}" alt="Foto del especialista" class="img-redonda" width="150" height="150"> 
             <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_E}}</h1>
             <br>
-            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="agenda_especialista/">Agenda</a></button>
+            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="agenda_especialista">Agenda</a></button>
             <br>
             <br>
             <br>
@@ -87,7 +87,6 @@
         </div>
     </div>
 {% elif request.user|has_group:"Operadores" %} 
-    <div id="main-content-centro">
         <title>ReservaFácil - Inicio Operador</title>
             {% if messages %}
                 {% for message in messages %}
@@ -111,7 +110,6 @@
             <br>
             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Emitir Receta</a></button>
         </div>
-    </div>
 {% else %}
     <!--En caso de ser Paciente el inicio cambia-->
     <div id="main-content">

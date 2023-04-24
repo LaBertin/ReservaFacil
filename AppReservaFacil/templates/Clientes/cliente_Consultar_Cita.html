@@ -1,7 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
 <title>Consultar Cita</title>
-    <div id="main-content-centro">
         {% if user.is_authenticated %}
         {% if messages %}
             {% for message in messages %}
@@ -16,12 +15,18 @@
                 <div class="row">
                     {% if citas_cliente %}
                         <table>
+                            <tr>
+                                <td>Fecha de cita</td>
+                                <td>Especialista</td>
+                                <td>Confirmación de la cita</td>
+                                <td></td>
+                            </tr>
                             {% for x in citas_cliente %}
                                 {% if x.Confirmacion_Cita == False %}
                                     <tr>
-                                        <td>Fecha de cita: {{x.ID_Cita}}</td>
-                                        <td>Especialista: {{x.ID_Especialista}} </td>
-                                        <td>Confirmación de la cita: <a class="text-warning">Sin Confirmar</a></td>
+                                        <td>{{x.ID_Cita}}</td>
+                                        <td>{{x.ID_Especialista}} </td>
+                                        <td><a class="text-warning">Sin Confirmar</a></td>
                                         <td>
                                             <form method="post">
                                                 {% csrf_token %}
@@ -34,9 +39,9 @@
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td>Fecha de cita: {{x.ID_Cita}}</td>
-                                        <td>Especialista: {{x.ID_Especialista}} </td>
-                                        <td>Confirmación de la cita: <a class="text-success">Confirmado</a></td>
+                                        <td>{{x.ID_Cita}}</td>
+                                        <td>{{x.ID_Especialista}} </td>
+                                        <td><a class="text-success">Confirmado</a></td>
                                         <td>
                                             <form method="post">
                                                 {% csrf_token %}
@@ -62,5 +67,4 @@
             <h1 id="titulo-seleccionar-area">Ingrese sesión para consultar citas.</h1>
         {% endif %}
         </div>
-    </div>
 {% endblock %}

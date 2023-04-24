@@ -1,7 +1,6 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
 <title>Seleccionar Destinatario</title>
-<div id="main-content-centro">
     <div class="div-grande">
         <h2 id="titulo-inicio-sesion">Seleccione un destinatario</h2>
         <form method="GET" action="{% url 'select_Destinatario' %}">
@@ -35,6 +34,4 @@
                
         <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
     </div>
-    
-</div>
 {% endblock %}

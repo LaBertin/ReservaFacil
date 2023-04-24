@@ -1,7 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
 <title>Anular Hora</title>
-<div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
@@ -15,5 +14,4 @@
         <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
     </div>
     
-</div>
 {% endblock %}

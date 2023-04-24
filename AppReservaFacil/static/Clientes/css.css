@@ -40,6 +40,30 @@ header {
             text-decoration: none;
             color: #42444E;
         }
+
+        .btn-verde-mediano{
+            height: 40px;
+            width: 140px;
+            background-color: #28A745;
+            border-style: none;
+            border-radius: 5px;
+            margin: auto;
+        }
+            .btn-verde-mediano:hover{
+                text-decoration: none;
+                color: #42444E;
+                background-color: #28A745;
+            }
+            /*Modifico el text dentro del btn para que no aparezca el underline*/
+            .btn-verde-mediano a{
+                text-decoration: none;
+                color: #42444E;
+            }
+            /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+            .btn-verde-mediano a:hover{
+                text-decoration: none;
+                color: #42444E;
+            }
     
     .select-checkbox div div label {
         margin-top: 2px;
@@ -180,10 +204,10 @@ body{
         height: 25px; 
         background: #c94b4b;
    }
-   .cuadrado-anaranjado {
+   .cuadrado-verde {
         width: 25px; 
         height: 25px; 
-        background: #FAA92F;
+        background: #28A745;
     }
 
     #btn-selecc-hora{

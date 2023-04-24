@@ -1,7 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
 <title>Confirmar Cita</title>
-    <div id="main-content-centro">
         {% if user.is_authenticated %}
         <div class="div-mediano">
             <h2 id="titulo-seleccionar-area">Consultar Hora</h2>
@@ -55,5 +54,4 @@
             <h1 id="titulo-seleccionar-area">Ingrese sesión para anular horas</h1>
         {% endif %}
         </div>
-    </div>
 {% endblock %}

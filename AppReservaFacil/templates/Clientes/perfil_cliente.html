@@ -1,7 +1,6 @@
 {% extends "./index.html" %}
 {% block footer %}
 <title>Registro</title>
-<div id="main-content-centro">
     {% if messages %}
         {% for message in messages %}
             <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
@@ -45,9 +44,8 @@
                 {{formulario_pac.telefono_pac}}
             </div>
             <br>
-            <button type="submit" value="Registrar" id="" class="btn-naranja-mediano">Registrar</button>
+            <button type="submit" value="Registrar" id="" class="btn-naranja-mediano">Actualizar</button>
         </form>
     </div>
-</div>
 {% endblock %}
 </html>

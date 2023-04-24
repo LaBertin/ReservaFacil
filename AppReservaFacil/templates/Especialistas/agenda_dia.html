@@ -1,20 +1,40 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
 <title>Agendar Cita</title>
-<div id="main-content-centro">
-
     <div class="div-grande">
 
         <h2 id="titulo-inicio-sesion">Seleccione Hora</h2>
             <div class="row">
                 <table>
-                   {% for cita in cita_fecha %}
-                        <td>Cliente: {{cita.ID_Cliente}}</td>
-                   {% endfor %}
-                </table>
+                    <tr>
+                      <td>Fecha y hora de la cita</td>
+                      <td>Paciente</td>
+                      <td>Especialidad</td>
+                    </tr>
+                    {% for x in list_horas %}
+                    <tr>
+                      <td>
+                        {{x}}
+                      </td>
+                      {% for nP in list_Paciente_Nom %}
+                      {% if forloop.parentloop.counter == forloop.counter%}
+                          <td>{{nP}}</td>
+                          <td>  
+                              <form method="post">
+                                  {% csrf_token %}
+                                  <button class="btn-naranja-mediano"  type="submit"
+                                          name="ver_detalles">
+                                          Ver detalles
+                                  </button>
+                              </form>
+                          </td>
+                      {% endif %}
+                      {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </table>
+                  
             </div>      
         <button type="button" class="btn-naranja-mediano"><a href="/">Inicio</a></button>
         </div>
-  
-</div>
 {% endblock %}
