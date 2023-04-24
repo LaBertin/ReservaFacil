@@ -72,7 +72,7 @@ class Especialista(models.Model):
     Minutes_Esp_S_Vie = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
     Minutes_Esp_S_Sab = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
     Minutes_Esp_S_Dom = models.IntegerField(null = True, choices=MINUTOS_CHOICES)
-    Usuario_E = models.ForeignKey(User, null=True, on_delete=models.CASCADE )
+    Usuario_E = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         ID_Especialista = str(self.ID_Especialista)
@@ -134,7 +134,8 @@ class Mensaje(models.Model):
     contenido = models.TextField()
     fecha = models.DateTimeField(auto_now_add=True)
 
-
+    def __str__(self):
+        return f"Remitente: {self.Nombre_Remitente}, Destinatario: {self.Nombre_Destinatario}"
     
     class Meta:
         verbose_name = 'Mensaje'

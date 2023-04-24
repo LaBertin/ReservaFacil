@@ -97,7 +97,7 @@
                 {% endfor %}
             {% endif %}
         <div class="div-pequeño">
-            <img src="../../static/img/{{Foto_E}}" class="img-redonda" width="150" height="150">
+            <img src="{% static Operador_Cont.Foto_O.url %}" alt="Foto del Operador" class="img-redonda" width="150" height="150">
             <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_O}}</h1>
             <br>
             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Finanzas</a></button>
@@ -108,7 +108,7 @@
             <br>
             <br>
             <br>
-            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Emitir Receta</a></button>
+            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="funciones_citas_operador">Citas</a></button>
         </div>
 {% else %}
     <!--En caso de ser Paciente el inicio cambia-->

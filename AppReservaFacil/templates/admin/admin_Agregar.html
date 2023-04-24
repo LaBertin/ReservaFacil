@@ -96,29 +96,30 @@
                             {{ formEspecialista.especialidad_p }}
                         </div>
                         <div class="d-flex">
+                            
                             <div class="flex-grow-1 ms-3 select-checkbox div-choicefield" onchange="grupoMultiSelect()">
                               {{formEspecialista.dia_p}}
                             </div>
                             <div class="flex-grow-1 me-3">
-                                <div class ="div-choicefield" onchange="">
+                                <div class ="notDisplay" id="div_min_lun_p">
                                     {{formEspecialista.Minutes_Esp_P_Lun}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_mar_p">
                                     {{formEspecialista.Minutes_Esp_P_Mar}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_mie_p">
                                     {{formEspecialista.Minutes_Esp_P_Mie}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_jue_p">
                                     {{formEspecialista.Minutes_Esp_P_Jue}}
-                                </div>
-                                <div class ="div-choicefield">
+                                </div> 
+                                <div class ="div-choicefield notDisplay" id="div_min_vie_p">
                                     {{formEspecialista.Minutes_Esp_P_Vie}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_sab_p">
                                     {{formEspecialista.Minutes_Esp_P_Sab}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_dom_p">
                                     {{formEspecialista.Minutes_Esp_P_Dom}}
                                 </div>
                             </div>
@@ -136,25 +137,25 @@
                               {{formEspecialista.dia_s}}
                             </div>
                             <div class="flex-grow-1 me-3">
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_lun_s">
                                     {{formEspecialista.Minutes_Esp_S_Lun}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_mar_s">
                                     {{formEspecialista.Minutes_Esp_S_Mar}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_mie_s">
                                     {{formEspecialista.Minutes_Esp_S_Mie}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_jue_s">
                                     {{formEspecialista.Minutes_Esp_S_Jue}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_vie_s">
                                     {{formEspecialista.Minutes_Esp_S_Vie}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_sab_s">
                                     {{formEspecialista.Minutes_Esp_S_Sab}}
                                 </div>
-                                <div class ="div-choicefield">
+                                <div class ="div-choicefield notDisplay" id="div_min_dom_s">
                                     {{formEspecialista.Minutes_Esp_S_Dom}}
                                 </div>
                             </div>

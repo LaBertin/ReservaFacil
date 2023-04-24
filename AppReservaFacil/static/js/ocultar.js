@@ -79,6 +79,7 @@ function grupoMultiSelect(){
     var multi_t = document.getElementsByName("dia_t")
     var multi_c = document.getElementsByName("dia_c")
 
+    
     const actualizarCampos = () =>{
         const valoresSeleccionados_p = Array.from(multi_p)
             .filter(checkbox => checkbox.checked)
@@ -96,17 +97,96 @@ function grupoMultiSelect(){
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.value);
 
-        
+
+        const min_lun = document.getElementById("div_min_lun_p");
+        const min_mar = document.getElementById("div_min_mar_p");
+        const min_mie = document.getElementById("div_min_mie_p");
+        const min_jue = document.getElementById("div_min_jue_p");
+        const min_vie = document.getElementById("div_min_vie_p");
+        const min_sab = document.getElementById("div_min_sab_p");
+        const min_dom = document.getElementById("div_min_dom_p");
 
         Array.from(multi_p).forEach(checkbox => {
+            checkbox.addEventListener('change', function(event){
+                if (event.target.checked && event.target.value == 'lun'){
+                    min_lun.style.display="block"
+                }else if (event.target.checked && event.target.value == 'mar'){
+                    min_mar.style.display="block"
+                }else if (event.target.checked && event.target.value == 'mie'){
+                    min_mie.style.display="block"
+                }else if (event.target.checked && event.target.value == 'jue'){
+                    min_jue.style.display="block"
+                }else if (event.target.checked && event.target.value == 'vie'){
+                    min_vie.style.display="block"
+                }else if (event.target.checked && event.target.value == 'sab'){
+                    min_sab.style.display="block"
+                }else if (event.target.checked && event.target.value == 'dom'){
+                    min_dom.style.display="block"
+                }else if (!event.target.checked && event.target.value == 'lun'){
+                    min_lun.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'mar'){
+                    min_mar.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'mie'){
+                    min_mie.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'jue'){
+                    min_jue.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'vie'){
+                    min_vie.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'sab'){
+                    min_sab.style.display="none"
+                }else{
+                    min_dom.style.display="none"
+                }
+            })
+            
             if(valoresSeleccionados_c.includes(checkbox.value)||valoresSeleccionados_t.includes(checkbox.value)||valoresSeleccionados_s.includes(checkbox.value)){
                 checkbox.disabled = true
+                
             }else{
                 checkbox.disabled = false
             }
         })
 
+        const min_lun_s = document.getElementById("div_min_lun_s");
+        const min_mar_s = document.getElementById("div_min_mar_s");
+        const min_mie_s = document.getElementById("div_min_mie_s");
+        const min_jue_s = document.getElementById("div_min_jue_s");
+        const min_vie_s = document.getElementById("div_min_vie_s");
+        const min_sab_s = document.getElementById("div_min_sab_s");
+        const min_dom_s = document.getElementById("div_min_dom_s");
+
         Array.from(multi_s).forEach(checkbox => {
+            checkbox.addEventListener('change', function(event){
+                if (event.target.checked && event.target.value == 'lun'){
+                    min_lun_s.style.display="block"
+                }else if (event.target.checked && event.target.value == 'mar'){
+                    min_mar_s.style.display="block"
+                }else if (event.target.checked && event.target.value == 'mie'){
+                    min_mie_s.style.display="block"
+                }else if (event.target.checked && event.target.value == 'jue'){
+                    min_jue_s.style.display="block"
+                }else if (event.target.checked && event.target.value == 'vie'){
+                    min_vie_s.style.display="block"
+                }else if (event.target.checked && event.target.value == 'sab'){
+                    min_sab_s.style.display="block"
+                }else if (event.target.checked && event.target.value == 'dom'){
+                    min_dom_s.style.display="block"
+                }else if (!event.target.checked && event.target.value == 'lun'){
+                    min_lun_s.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'mar'){
+                    min_mar_s.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'mie'){
+                    min_mie_s.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'jue'){
+                    min_jue_s.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'vie'){
+                    min_vie_s.style.display="none"
+                }else if (!event.target.checked && event.target.value == 'sab'){
+                    min_sab_s.style.display="none"
+                }else{
+                    min_dom_s.style.display="none"
+                }
+            })
             if(valoresSeleccionados_p.includes(checkbox.value)||valoresSeleccionados_c.includes(checkbox.value)||valoresSeleccionados_t.includes(checkbox.value)){
                 checkbox.disabled = true
             }else{

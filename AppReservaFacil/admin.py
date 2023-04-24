@@ -14,3 +14,6 @@ admin.site.register(Cita)
 admin.site.register(Operador)
 
 admin.site.register(Paciente)
+
+admin.site.register(Mensaje)
+
