@@ -56,6 +56,7 @@ class FormOperador(forms.Form):
     contacto_operador = forms.CharField(max_length=9)
     fecha_ini_con_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
     fecha_fin_con_operador = forms.DateField(widget=NumberInput(attrs={'type': 'date'}))
+    foto_o = forms.ImageField(required = False)
     
 class FormPaciente(forms.Form):
     nom_com_pac = forms.CharField(max_length=256)
@@ -119,9 +120,5 @@ class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
     especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())
 
-class MensajeForm(forms.ModelForm):
-    contenido = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}))
-
-    class Meta:
-        model = Mensaje
-        fields = ['contenido']
+class FormMensaje(forms.Form):
+    texto = forms.CharField(max_length=256)

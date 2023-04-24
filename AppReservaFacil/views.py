@@ -24,7 +24,6 @@ register = template.Library()
 def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists() 
 
-
 # Dirección URL de vistas de Clientes
 def index(request):
     if request.user.is_authenticated==True:
@@ -45,12 +44,12 @@ def index(request):
             if Bool_Grupo == True:
                 print(nombre_Usuario)
                 nombre_Operador = Operador.objects.filter(Usuario_O=nombre_Usuario)[0].Nombre_completo_O
-                img_Operador = Operador.objects.filter(Usuario_O=nombre_Usuario)[0].Foto_O
+                Operador_Cont = Operador.objects.get(Usuario_O=nombre_Usuario)
                 nombre_Operador = nombre_Operador.split(' ')
                 nombre_Operador = nombre_Operador[0]+' '+nombre_Operador[3]
                 print(nombre_Operador)
-                print(img_Operador)
-                return render(request, "Clientes/index.html", {'Nombre_O':nombre_Operador,'Foto_O':img_Operador})
+                print(Operador_Cont)
+                return render(request, "Clientes/index.html", {'Nombre_O':nombre_Operador,'Operador_Cont':Operador_Cont})
 
             else:
                 print("Otro")
@@ -802,7 +801,7 @@ def agregar_operador(request):
             print(fecha_ini_con_operador_o)
             fecha_fin_con_operador_o = formulario.cleaned_data['fecha_fin_con_operador']
             print(fecha_fin_con_operador_o)
-            foto_o = request.FILES['Foto_O']
+            foto_o = request.FILES['foto_o']
             id_operador = User.objects.all().count()+1
             us = nombre_O[:2].lower()
             uar = " ".join(nombre_O.split()[-2:-1]).lower()
@@ -830,6 +829,7 @@ def agregar_operador(request):
                                         Fecha_de_nacimiento_O=fecha_nac_operador_o, Direccion_O=direccion_operador_o,
                                         Telefono_O=contacto_operador_o, Fecha_de_contrato_O = fecha_ini_con_operador_o,
                                         Fecha_fin_de_contrato_O = fecha_fin_con_operador_o, Usuario_O=Usuario_O)
+                messages.success(request, "Operador registrado exitosamente!")
                 return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
             else:
                 formulario=FormOperador()
@@ -849,7 +849,6 @@ def obtener_especialidades(request, area_medica_id):
     return JsonResponse(options, safe=False)
 
 #Views Especialistas
-
 def especialista_Agenda(request):
     form_agenda = {'form_agenda': DateForm()}
     user = User.objects.get(username=request.user.username)
@@ -930,20 +929,23 @@ def especialista_Agenda(request):
     return render(request, "Especialistas/especialista_Agenda.html", form_agenda)
 
 #Views Operadores
-
 def select_destinatario(request):
     global destinatario
     todos_Especialistas = Especialista.objects.all()
-    filtro = request.GET.get('filtro')
-    if filtro:
-        todos_Especialistas = todos_Especialistas.filter(Nombre_completo_E__icontains=filtro)
 
     contexto = {
         'especialistas_filtrados': todos_Especialistas,
     }
-
+    print(f'Valor de contexto: {contexto}')
     if request.method=='POST':
-        destinatario = request.POST['chat_btn']
+        filtro = request.POST.get('chat_btn')
+        print(f'Valor de filtro: {filtro}')
+        if filtro:
+            print(f'Valor de filtro dentro del If: {filtro}')
+            todos_Especialistas = todos_Especialistas.filter(Nombre_completo_E__icontains=filtro)
+            print(f'Valor de todos_Especialistas: {todos_Especialistas}')
+
+        destinatario = todos_Especialistas[0].Nombre_completo_E
         print("destinatario")
         print(destinatario)
         return redirect('chat')
@@ -951,15 +953,26 @@ def select_destinatario(request):
     return render(request, "General/select_Destinatario.html", contexto)
 
 def chatsito(request):
-    remitente = User.objects.filter(username=request.user.username)
+    print('ANTES DEL REMITENTE')
+    remitente = User.objects.filter(username=request.user.username)[0].username
+    print('ANTES DE DESTINATARIO')
     destinatario_E = Especialista.objects.get(Nombre_completo_E=destinatario)
+    print('ANTES DE DESTINATARIO')
     print(remitente)
     print(destinatario_E)
-    mensajes = Mensaje.objects.filter(Nombre_Remitente=remitente, Nombre_Destinatario=destinatario_E) | Mensaje.objects.filter(Nombre_Remitente=destinatario_E, Nombre_Destinatario=remitente)
+    mensajes = Mensaje.objects.filter(Nombre_Remitente=remitente, Nombre_Destinatario=destinatario) | Mensaje.objects.filter(Nombre_Remitente=destinatario, Nombre_Destinatario=remitente)
+    print('DESPUES DE DESTINATARIO')
     mensajes = mensajes.order_by('fecha')
-    return render(request, 'General/chat.html', {'remitente': remitente, 'destinatario': destinatario_E, 'mensajes': mensajes})
-    
 
+    formmensaje = FormMensaje()
+    contexto = {'remitente': remitente, 'destinatario': destinatario, 'mensajes': mensajes, 'formmensaje': formmensaje}
+
+    if request.method == 'POST':
+        print('DENTRO DEL IF')
+        return render(request, 'General/chat.html', contexto)
+        
+    return render(request, 'General/chat.html', contexto)
+    
 def listadias(lista,diap,dias,diat,diac):
     for x in diap:
         lista.append(x)
@@ -975,3 +988,25 @@ def listadias(lista,diap,dias,diat,diac):
 
     return lista
 
+def operador_funciones(request):
+    return render(request, 'Operador/funciones_operador.html')
+
+def operador_consulta_agenda(request):
+    lista_especialista = Especialista.objects.all()
+    context = {'lista_especialista': lista_especialista}
+
+    if request.method == 'POST':
+        print('')
+    return render(request, 'Operador/operador_agenda_especialista.html',context)
+
+def operador_agendar_cita(request):
+    return render(request, 'Operador/operador_agendar_cita.html')
+
+def operador_modificar_cita(request):
+    return render(request, 'Operador/operador_confirmar_paciente.html')
+
+def operador_confirmacion(request):
+    return render(request, 'Operador/operador_modificar_cita.html')
+    
+def operador_pago(request):
+    return render(request, 'Operador/operador_pago.html')

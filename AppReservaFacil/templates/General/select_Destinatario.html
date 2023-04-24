@@ -4,7 +4,7 @@
 <div id="main-content-centro">
     <div class="div-grande">
         <h2 id="titulo-inicio-sesion">Seleccione un destinatario</h2>
-        <form method="GET" action="{% url 'select_Destinatario' %}">
+        <form method="POST" action="{% url 'select_Destinatario' %}">
             <input type="text" name="filtro" placeholder="Buscar por nombre...">
             <button type="submit" class="btn-naranja-mediano">Buscar</button>
         </form>
