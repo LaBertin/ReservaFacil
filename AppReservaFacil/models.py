@@ -2,6 +2,7 @@ from django.db import models
 from django import forms
 from django.contrib.auth.models import *
 import os
+from django.conf import settings
  
 from multiselectfield import MultiSelectField
 

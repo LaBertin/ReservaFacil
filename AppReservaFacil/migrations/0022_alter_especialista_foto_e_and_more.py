@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='especialista',
             name='Foto_E',
-            field=models.ImageField(null=True, upload_to=AppReservaFacil.models.foto_e_path),
+            field=models.ImageField(null=True),
         ),
         migrations.AlterField(
             model_name='especialista',

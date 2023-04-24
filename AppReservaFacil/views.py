@@ -518,7 +518,8 @@ def agregar_empleado(request):
     }
     if request.method=='POST':
         csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
-        formulario=FormEspecialista(data=request.POST)
+        formulario = FormEspecialista(data = request.POST)
+
         if formulario.is_valid():
             nom_com_especialista = request.POST.get('nom_com_especialista')
             print(nom_com_especialista)
@@ -859,19 +860,15 @@ def especialista_Agenda(request):
         #Obtengo los dias validos para el calendario
         dias_esp_p = datos_esp.Dia_Esp_P
         dias_esp_s = datos_esp.Dia_Esp_S
-        dias_esp_t = datos_esp.Dia_Esp_T
-        dias_esp_c = datos_esp.Dia_Esp_C
 
         print(f'dias antes de d.strip {dias_esp_p} : {type(dias_esp_p)}')
         dias_esp_p = [d.strip() for d in dias_esp_p]
         dias_esp_s = [d.strip() for d in dias_esp_s]
-        dias_esp_t = [d.strip() for d in dias_esp_t]
-        dias_esp_c = [d.strip() for d in dias_esp_c]
 
         print(f'dias despues de d.strip {dias_esp_p} : {type(dias_esp_p)}')
 
         dias_trabajar =[]
-        dias_trabajar = listadias(dias_trabajar, dias_esp_p, dias_esp_s, dias_esp_t, dias_esp_c)
+        dias_trabajar = listadias(dias_trabajar, dias_esp_p, dias_esp_s)
         dias_trabajar = ','.join(dias_trabajar)
 
         dias_en = dias_trabajar.replace('lun','Monday').replace('mar','Tuesday').replace('mie','Wednesday').replace('jue','Thursday').replace('vie','Friday').replace('sab','Saturday').replace('dom','Sunday')
