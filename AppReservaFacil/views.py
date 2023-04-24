@@ -952,35 +952,37 @@ def especialista_Agenda(request):
     return render(request, "Especialistas/especialista_Agenda.html", form_agenda)
 
 def especialista_list_citas(request):
-    list_horas = request.GET.get('list_horas').replace("'","").replace("[","").replace("]","").split(', ')
-    list_Citas_Reservadas = request.GET.get('list_Citas_Reservadas')
-    fecha_Elegida = request.GET.get('fecha_Elegida')
-    esp_Del_Dia = request.GET.get('esp_Del_Dia')
 
-    print(f'list_horas: {list_horas}')
-    print(type(list_horas))
-    print(f'list_Citas_Reservadas: {list_Citas_Reservadas}')
-    print(type(list_Citas_Reservadas))
-    print(f'fecha_Elegida: {fecha_Elegida}')
-    print(type(fecha_Elegida))
-    print(f'esp_Del_Dia: {esp_Del_Dia}')
-    print(type(esp_Del_Dia))
+    if request.method == 'POST':
+        print("POST")
+        if 'ver_documentos_esp' in request.POST:
+            print("ver_documentos_esp")
+        if 'eliminar_cita_esp' in request.POST:
+            ID_Cita = request.POST.get('eliminar_cita_esp')
+            print(type(ID_Cita))
+
+
+    list_horas = request.GET.get('list_horas').replace("'","").replace("[","").replace("]","").split(', ')
+    list_Citas_Reservadas = request.GET.get('list_Citas_Reservadas').replace("'","").replace("[","").replace("]","").split(', ')
+    fecha_Elegida = request.GET.get('fecha_Elegida')
+    esp_Del_Dia = request.GET.get('esp_Del_Dia').replace("'","").replace("[","").replace("]","").split(', ')
     list_Real_Horas = []
     nombre_Pacientes = []
-    for horas in list_Citas_Reservadas.replace("'","").replace("[","").replace("]","").split(', '):
+    list_Citas_Agen = []
+    for i in range(len(list_Citas_Reservadas)):
+        horas = list_Citas_Reservadas[i]
         ID_Cita = fecha_Elegida +' '+ horas
         ID_Cita = datetime.strptime(ID_Cita,'%d/%m/%Y %H:%M:%S')
-        print(ID_Cita)
-        print(type(ID_Cita))
         cita_ID_Paciente = Cita.objects.get(ID_Cita = ID_Cita).ID_Cliente
         fecha_El = Cita.objects.get(ID_Cita = ID_Cita).ID_Cita
         nombre_Paciente = Paciente.objects.get(Usuario_P = cita_ID_Paciente).Nombre_Paciente
         nombre_Pacientes.append(nombre_Paciente)
         list_Real_Horas.append(fecha_El)
-        print(f'Paciente Lista: {nombre_Pacientes}')
-        print(f'Horas reales {list_Real_Horas}')
-
-    list_horas = {'list_horas':list_Real_Horas, 'list_Citas_Reservadas':list_Citas_Reservadas, 'fecha_Elegida':fecha_Elegida, 'esp_Del_Dia':esp_Del_Dia, 'list_Paciente_Nom':nombre_Pacientes}
+        for j in range(len(esp_Del_Dia)):
+            esp = esp_Del_Dia[j]
+        list_Citas_Agen.append([fecha_El,nombre_Paciente,esp])
+    list_Citas_Agen = sorted(list_Citas_Agen, key=lambda cita: cita[0])
+    list_horas = {'list_Citas_Reservadas':list_Citas_Agen}
 
     return render(request, "Especialistas/agenda_dia.html", list_horas)
 
