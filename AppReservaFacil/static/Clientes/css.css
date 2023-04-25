@@ -15,7 +15,54 @@ header {
     height: 80px;
     background-color: #42444E;
     
-}
+}   
+    .btn-rojo-pequeño{
+        height: 40px;
+        width: 70px;
+        background-color: #c94b4b;
+        border-style: none;
+        border-radius: 5px;
+        margin: auto;
+    }
+        .btn-rojo-pequeño:hover{
+            text-decoration: none;
+            color: #42444E;
+            background-color: #c94b4b;
+        }
+        /*Modifico el text dentro del btn para que no aparezca el underline*/
+        .btn-rojo-pequeño a{
+            text-decoration: none;
+            color: #42444E;
+        }
+        /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+        .btn-rojo-pequeño a:hover{
+            text-decoration: none;
+            color: #42444E;
+        }
+
+    .btn-naranja-pequeño{
+        height: 40px;
+        width: 70px;
+        background-color: #FAA92F;
+        border-style: none;
+        border-radius: 5px;
+        margin: auto;
+    }
+        .btn-naranja-pequeño:hover{
+            text-decoration: none;
+            color: #42444E;
+            background-color: #FAA92F;
+        }
+        /*Modifico el text dentro del btn para que no aparezca el underline*/
+        .btn-naranja-pequeño a{
+            text-decoration: none;
+            color: #42444E;
+        }
+        /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+        .btn-naranja-pequeño a:hover{
+            text-decoration: none;
+            color: #42444E;
+        }
     /*Btn mediano, este botón se usará mas veces pero lo creé en el header así que lo dejo identado*/
     .btn-naranja-mediano{
         height: 40px;
@@ -44,7 +91,7 @@ header {
         .btn-verde-mediano{
             height: 40px;
             width: 140px;
-            background-color: #28A745;
+            background-color: #71bd79;
             border-style: none;
             border-radius: 5px;
             margin: auto;
@@ -52,7 +99,7 @@ header {
             .btn-verde-mediano:hover{
                 text-decoration: none;
                 color: #42444E;
-                background-color: #28A745;
+                background-color: #71bd79;
             }
             /*Modifico el text dentro del btn para que no aparezca el underline*/
             .btn-verde-mediano a{
@@ -207,7 +254,7 @@ body{
    .cuadrado-verde {
         width: 25px; 
         height: 25px; 
-        background: #28A745;
+        background: #71bd79;
     }
 
     #btn-selecc-hora{
