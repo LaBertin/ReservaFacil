@@ -228,33 +228,7 @@ def cliente_Agendar_hora(request):
             print("ID_Especialistas:\n")
             print(ID_Especialista)
 
-            # Obtener la fecha actual
-            hoy = date.today()
-
-            # Calcular la fecha dentro de un año
-            next_year = hoy + timedelta(days=365)
-            print(next_year)
-
-            # Verificar si el año resultante es bisiesto
-            if calendar.isleap(next_year.year):
-                print("Bisiesto")
-                # Si es bisiesto, ajustar la fecha al 29 de febrero
-                next_year = next_year.replace(month=2, day=29)
-            else:
-                print("No")
-                # Si no es bisiesto, mantener la fecha tal como está
-                next_year = next_year.replace(year=next_year.year)
-
-            # Imprimir la fecha resultante
-            print(next_year)
-            fechas = []
-            while hoy <= next_year:
-                diasemana = hoy.weekday()
-                nombredia = calendar.day_name[diasemana]
-                if nombredia in dias_en:
-                    fechas.append(hoy)
-                hoy += timedelta(days=1)
-
+            fechas = dias_trabaja_especialista(dias_en)
             dataformDate = {
                 'formDate': DateForm(),
                 'fechas': fechas,
@@ -348,6 +322,36 @@ def cliente_Agendar_hora(request):
                 messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
     return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
+
+def dias_trabaja_especialista(dias_en):
+    # Obtener la fecha actual
+    hoy = date.today()
+
+    # Calcular la fecha dentro de un año
+    next_year = hoy + timedelta(days=365)
+    print(next_year)
+
+    # Verificar si el año resultante es bisiesto
+    if calendar.isleap(next_year.year):
+        print("Bisiesto")
+        # Si es bisiesto, ajustar la fecha al 29 de febrero
+        next_year = next_year.replace(month=2, day=29)
+    else:
+        print("No")
+        # Si no es bisiesto, mantener la fecha tal como está
+        next_year = next_year.replace(year=next_year.year)
+
+    # Imprimir la fecha resultante
+    print(next_year)
+    fechas = []
+    while hoy <= next_year:
+        diasemana = hoy.weekday()
+        nombredia = calendar.day_name[diasemana]
+        if nombredia in dias_en:
+            fechas.append(hoy)
+        hoy += timedelta(days=1)
+
+    return fechas
 
 def Cliente_anular_hora(request):
     if 'anular_hora' in request.POST:
@@ -890,31 +894,8 @@ def especialista_Agenda(request):
             else:
                 print("NOP")
 
-            hoy = date.today()
 
-            # Calcular la fecha dentro de un año
-            next_year = hoy + timedelta(days=365)
-            print(next_year)
-
-            # Verificar si el año resultante es bisiesto
-            if calendar.isleap(next_year.year):
-                print("bisiesto")
-                # Si es bisiesto, ajustar la fecha al 29 de febrero
-                next_year = next_year.replace(month=2, day=29)
-            else:
-                print("No")
-                # Si no es bisiesto, mantener la fecha tal como está
-                next_year = next_year.replace(year=next_year.year)
-
-            # Imprimir la fecha resultante
-            print(next_year)
-            fechas = []
-            while hoy <= next_year:
-                diasemana = hoy.weekday()
-                nombredia = calendar.day_name[diasemana]
-                if nombredia in Dias_Esp_Comp_En:
-                    fechas.append(hoy)
-                hoy += timedelta(days=1)
+            fechas = dias_trabaja_especialista(Dias_Esp_Comp_En)
             if Fecha in fechas:
                 print(f'Fecha estaba en fechas')
                 fecha_ini = datetime.combine(Fecha, time(hour=8, minute=0))
@@ -950,6 +931,39 @@ def especialista_Agenda(request):
                 print('ESTOY EN EL ELSE')
                 return render(request,  "Especialistas/especialista_Agenda.html", form_agenda)
     return render(request, "Especialistas/especialista_Agenda.html", form_agenda)
+
+def dias_minutos_especialidad(dia_seleccionado, dias_str, dias_especialista, fecha, id_especialista):
+    if dia_seleccionado in dias_str:
+        dia_seleccionado = dia_seleccionado.replace('lun','Lun').replace('mar','Mar').replace('mie','Mie').replace('jue','Jue').replace('vie','Vie').replace('sab','Sab').replace('dom','Dom')
+        Minutes_Esp_Dinamico = "Minutes_Esp_P_" + dia_seleccionado
+        minutos_esp = dias_especialista[0].__dict__[Minutes_Esp_Dinamico]
+        especialidad = dias_especialista[0].Especialidad_P
+        print(f'Especialidad_P: {especialidad}')
+    else:
+        dia_seleccionado = dia_seleccionado.replace('lun','Lun').replace('mar','Mar').replace('mie','Mie').replace('jue','Jue').replace('vie','Vie').replace('sab','Sab').replace('dom','Dom')
+        Minutes_Esp_Dinamico = "Minutes_Esp_S_" + dia_seleccionado
+        minutos_esp = dias_especialista[0].__dict__[Minutes_Esp_Dinamico]
+        especialidad = dias_especialista[0].Especialidad_S
+        print(f'Especialidad_S: {especialidad}')
+    fecha_ini = datetime.combine(fecha, time(hour=8, minute=0))
+    hora_ini = fecha_ini.hour
+    print(hora_ini)
+    fecha_fin = datetime.combine(fecha, time(hour=21, minute=0))
+    hora_fin = fecha_fin.hour
+    print(hora_fin)
+    list_horas = []
+    while fecha_ini.hour < hora_fin:
+        list_horas.append(fecha_ini.strftime('%H:%M:%S'))
+        fecha_ini = fecha_ini + timedelta(minutes=minutos_esp)
+    print(list_horas)
+    Citas_Reservadas = Cita.objects.filter(ID_Especialista=id_especialista,Fecha_Cita=fecha)
+    list_Citas_Reservadas = []
+    for x in Citas_Reservadas:
+        list_Citas_Reservadas.append(x.Hora_Cita.split(' ')[-1])
+        print("Hora_Cita")
+        print(x.Hora_Cita)
+   
+    return list_horas, list_Citas_Reservadas, especialidad
 
 def especialista_list_citas(request):
     list_horas = request.GET.get('list_horas').replace("'","").replace("[","").replace("]","").split(', ')
@@ -1027,9 +1041,6 @@ def chatsito(request):
         return render(request, 'General/chat.html', contexto)
         
     return render(request, 'General/chat.html', contexto)
-
-
-    
     
 def listadias(lista,diap,dias):
     for x in diap:
@@ -1043,16 +1054,65 @@ def listadias(lista,diap,dias):
 def operador_funciones(request):
     return render(request, 'Operador/funciones_operador.html')
 
-def operador_consulta_agenda(request):
+def operador_lista_agenda(request):
     lista_especialista = Especialista.objects.all()
     context = {'lista_especialista': lista_especialista}
+    if request.method == 'POST':
+        especialista_select = request.POST.get('consultar')
+        print(especialista_select)
+        url = reverse('calendario_especialista')+'?especialista_select={}'.format(especialista_select)
+        return redirect(url)
+    return render(request, 'Operador/operador_listar_especialista.html',context)
+
+def operador_calendario_especialista(request):
+    id_especialista = request.GET.get('especialista_select')
+    print(id_especialista)
+    dias_especialista = Especialista.objects.filter(ID_Especialista = id_especialista)
+    semana = []
+    semana = list(dias_especialista[0].Dia_Esp_P) + list(dias_especialista[0].Dia_Esp_S)
+    dias_es = ','.join(semana).replace('lun','Lunes').replace('mar','Martes').replace('mie','Miercoles').replace('jue','Jueves').replace('vie','Viernes').replace('sab','Sabado').replace('dom','Domingo')
+    dias_en = ','.join(semana).replace('lun','Monday').replace('mar','Tuesday').replace('mie','Wednesday').replace('jue','Thursday').replace('vie','Friday').replace('sab','Saturday').replace('dom','Sunday')
+    print(dias_en)
+    fecha_ope = dias_trabaja_especialista(dias_en)
+    calendario_especialista = {
+        'formDate': DateForm(),
+        'fechas': fecha_ope
+    }
+    if request.method == 'POST':
+        fecha = DateForm(request.POST)
+        if fecha.is_valid():
+            fecha = fecha.cleaned_data['date']
+            dia_seleccionado = calendar.day_name[fecha.weekday()]
+            dia_seleccionado = dia_seleccionado.replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+
+            if fecha in fecha_ope:
+                dias_str_p = ','.join(dias_especialista[0].Dia_Esp_P)
+                lista, lista_reserva, especialidad = dias_minutos_especialidad(dia_seleccionado, dias_str_p, dias_especialista, fecha, id_especialista)
+                url = reverse('operador_horas_esp')+'?lista={}&lista_reserva={}&id_especialista={}&especialidad={}'.format(lista,lista_reserva,id_especialista,especialidad)
+                return redirect(url)
+                #return render(request, 'Operador/operador_horas_especialista.html', lista)
+            else:
+                messages.error(request, "Ingrese una fecha en los dias: "+str(dias_es).replace('[','').replace(']','').replace("'","")+".")
+                return render(request,'Operador/operador_calendario_especialista.html', calendario_especialista)
+    return render(request, 'Operador/operador_calendario_especialista.html', calendario_especialista)
+
+def operador_horas_especialista(request):
+    id_especialista = request.GET.get('id_especialista')
+    especialidad = request.GET.get('especialidad')
+    list_horas = request.GET.get('lista').replace("'","").replace("[","").replace("]","").split(', ')
+    list_Citas_Reservadas = request.GET.get('lista_reserva').replace("'","").replace("[","").replace("]","").split(', ')
+    listavalores = {"list_horas":list_horas,"list_Citas_Reservadas": list_Citas_Reservadas, "especialidad" : especialidad}
 
     if request.method == 'POST':
-        print('')
-    return render(request, 'Operador/operador_agenda_especialista.html',context)
+        valor = request.POST.get('hora_agendar')
+        url = reverse('agendar_citas_paciente')+'?valor={}&id_especialista={}'.format(valor,id_especialista)
+        return redirect(url)
+
+    return render(request, 'Operador/operador_horas_especialista.html', listavalores)
 
 def operador_agendar_cita(request):
-    return render(request, 'Operador/operador_agendar_cita.html')
+    form_pac = FormPaciente()
+    return render(request, 'Operador/operador_agendar_cita.html', form_pac)
 
 def operador_modificar_cita(request):
     return render(request, 'Operador/operador_confirmar_paciente.html')

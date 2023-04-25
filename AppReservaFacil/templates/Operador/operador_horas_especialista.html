@@ -1,0 +1,40 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Consultar agenda especialista</title>
+
+    <div class="div-grande">
+
+        <h2 id="titulo-inicio-sesion">Seleccione Hora</h2>
+            <h3 id="titulo-inicio-sesion">Especialidad : {{especialidad}}</h3>
+            <div class="row">
+                <h4 class="text-align"><canvas class="cuadrado-verde"></canvas> Libre <canvas class="cuadrado-rojo"></canvas> Reservado</h4>
+                <table>
+                    {% for x in list_horas %}
+                    {% if forloop.counter0|divisibleby:5 %}
+                        <tr> <!-- Nueva fila cada 5 botones -->
+                    {% endif %}
+                    <td>
+                        <form method="post">
+                            {% csrf_token %}
+                                {% if x in list_Citas_Reservadas %}
+                                    <button id="btn-selecc-hora" class="btn-rojo-mediano" value="{{x}}" type="submit"
+                                            name="hora_agendar"> 
+                                            {{x}}
+                                    </button>
+                                {% else %}
+                                    <button id="btn-selecc-hora" class="btn-verde-mediano" value="{{x}}" type="submit"
+                                            name="hora_agendar"> 
+                                            {{x}}
+                                    </button>
+                                {% endif %}
+                        </form>
+                    </td> 
+                    {% if forloop.counter|divisibleby:5 or forloop.last %}
+                        </tr> <!-- Cierre de la fila si se llegó al límite de 5 botones o es el último elemento -->
+                    {% endif %}
+                    {% endfor %}
+                </table>
+            </div>      
+        <button type="button" class="btn-naranja-mediano"><a href="/">Inicio</a></button>
+        </div>
+{% endblock %}
