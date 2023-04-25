@@ -44,7 +44,9 @@ urlpatterns = [
 
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),
+    path('ficha_medica/', views.list_ficha_medica, name='ficha_medica'),
 
     path('agenda_especialista/',views.especialista_Agenda, name='agenda_especialista'),
-    path('agenda_dia/', views.especialista_list_citas, name='agenda_dia')
+    path('agenda_dia/', views.especialista_list_citas, name='agenda_dia'),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

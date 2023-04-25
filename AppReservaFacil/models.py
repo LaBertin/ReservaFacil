@@ -11,6 +11,9 @@ from multiselectfield import MultiSelectField
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
 MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
 SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
+SISTEMA_SALUD=[('SegCom','Seguro Complementario'), ('ISAPRE','ISAPRE'), ('FONASA','FONASA'),('FFAA','Fuerzas Armadas')]
+GRUPO_SANGUINEO=[('Amas','A+'),('Omas','O+'),('Bmas','B+'),('ABmas','AB+'),('Amenos','A-'),('Omenos','O-'),('Bmenos','B-'),('ABmenos','AB-')]
+
 
 class Area_Medica(models.Model):
     ID_Area_Medica = models.IntegerField(primary_key=True, unique=True)
@@ -36,9 +39,6 @@ class Especialidad(models.Model):
     class Meta:
         verbose_name='Especialidad'
         verbose_name_plural='Especialidades'
-
-DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
-
 
 def foto_e_path(instance, filename):
     return os.path.join('AppReservaFacil/static/img', str(instance.ID_Especialista), filename)
@@ -140,4 +140,55 @@ class Mensaje(models.Model):
     class Meta:
         verbose_name = 'Mensaje'
         verbose_name_plural = 'Mensajes'
+
+class Ficha_Medica(models.Model):
+    ID_Ficha_Medica = models.IntegerField(primary_key=True, unique=True)
+    RUT_Pac = models.CharField(max_length=9, null = True)
+    Nombre_Com_Pac = models.CharField(max_length = 256)
+    Direccion_Pac = models.CharField(max_length=256, null = True)
+    Telefono_Pac = models.CharField(max_length=9, null = True)
+    Sis_Sal_Pac = models.CharField(choices = SISTEMA_SALUD, max_length=21, null=True)
+    Grupo_Sanguineo = models.CharField(choices=GRUPO_SANGUINEO, max_length=7, null=True)
+
+    Al_Antibioticos = models.BooleanField(null=True)
+    Antibioticos_TI = models.CharField(max_length = 256)
+
+    Al_Medicamentos = models.BooleanField(null=True)
+    Medicamentos_TI = models.CharField(max_length = 256)
+
+    Al_Alimentos = models.BooleanField(null=True)
+    Alimentos_TI = models.CharField(max_length = 256)
+
+    Al_Ani_Ins = models.BooleanField(null=True)
+    Ani_Ins_TI = models.CharField(max_length = 256)
+
+    Enf_Cronic = models.BooleanField(null=True)
+    Enf_Cronic_TI = models.CharField(max_length = 256)
+
+    Med_Tom_Actu = models.TextField(max_length=256)
+
+    def __str__(self):
+        ID_Ficha_Medica = str(self.ID_Ficha_Medica)
+        return f'{ID_Ficha_Medica}'
+    
+    class Meta:
+        verbose_name = 'Ficha Médica'
+        verbose_name_plural = 'Fichas Médicas'
+
+class Ficha_Cita(models.Model):
+    ID_Ficha_Cita = models.IntegerField(primary_key=True, unique=True)
+    Ficha_Medica_Pac = models.ForeignKey(Ficha_Medica,null=True, on_delete=models.RESTRICT)
+    RUT_Pac = models.ForeignKey(Paciente,null=True, on_delete=models.RESTRICT)
+    Nombre_Com_Esp = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
+    Diagnostico_Cita = models.TextField(max_length=256)
+
+    def __str__(self):
+        ID_Ficha_Cita = str(self.ID_Ficha_Cita)
+        return f'{ID_Ficha_Cita}'
+    
+    class Meta:
+        verbose_name = 'Ficha Cita'
+        verbose_name_plural = 'Fichas Citas'
+
+
 

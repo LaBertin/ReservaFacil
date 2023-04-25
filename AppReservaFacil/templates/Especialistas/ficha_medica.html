@@ -1,0 +1,21 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Ficha Médica</title>
+    <div class="div-grande">
+        <h2 id="titulo-inicio-sesion">Ficha Médica</h2>
+        {% if texto %}
+            <div class="texto-centrado-verticalmente">
+                <h3>{{texto}}</h3>
+            </div>
+            <h4>¿Deseas crear una ficha médica nueva?</h4>
+            <button type="button" class="btn-naranja-mediano" name="red_form_ficha_med">
+                Crear Ficha Médica
+            </button>
+            <br>
+        {% else %}
+            <p>PICOOOOOO</p>
+        {% endif %}   
+        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+    </div>  
+</div>
+{% endblock %}

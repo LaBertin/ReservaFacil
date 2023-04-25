@@ -239,7 +239,29 @@ body{
         border-radius: 50%;
         margin-top: 20px;
       }
-      
+    .td-pequeno{
+        width: 50px;
+    }
+    .texto-centrado-verticalmente {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50%;
+      }
+    .bubble-text {
+        width: 500px;
+        height: 450px;
+        position: fixed;
+        top: 50vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+    }
     .btn_agendar_hora{
         padding: 0;
         border: none;

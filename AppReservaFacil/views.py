@@ -12,6 +12,7 @@ from django import template
 import calendar
 from django.urls import reverse
 import unicodedata
+import json
 
 
 # Create your views here.
@@ -316,6 +317,7 @@ def cliente_Agendar_hora(request):
         if 'hora_seleccionada' in request.POST:
             print("Hora Seleccionada")
             Usuario = User.objects.get(username=request.user.username)
+            username = Usuario
             Mail = Usuario.email
             print("Usuario:\n")
             print(Usuario)
@@ -329,24 +331,29 @@ def cliente_Agendar_hora(request):
             print(hora_seleccionada)
             print("ID_Especialistas:\n")
             print(Especialistas[0])
-            Citas_Usuario = Cita.objects.filter(Fecha_Cita=Fecha).count()
+            Citas_Usuario = Cita.objects.filter(Fecha_Cita=Fecha, ID_Cliente = username).count()
             print("Deberia entrar al for")
             print(Citas_Usuario)
-            if Citas_Usuario<3:
-                Cita.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
-                messages.success(request, "Hora creada con éxito")
-                """
-                send_mail(
-                    'Cita programada con éxito',
-                    'Su cita con el especialista '+str(Especialistas[0])+' programada para la fecha: '+str(Fecha)+' a las '+str(hora_seleccionada)+' ha sido programada con éxito',
-                    'settings.EMAIL_HOST_USER',
-                    [Mail]  
-                )
-                """
-                return render(request, 'clientes/cliente_Hora_creada.html', {'hora_seleccionada':hora_seleccionada})
-            else:
-                messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
+            cita_existe = Cita.objects.filter(ID_Cita = hora_seleccionada).exists()
+            if cita_existe:
+                messages.error(request, "La cita seleccionada ya ha sido reservada")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
+            else:
+                if Citas_Usuario<3:
+                    Cita.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
+                    messages.success(request, "Hora creada con éxito")
+                    """
+                    send_mail(
+                        'Cita programada con éxito',
+                        'Su cita con el especialista '+str(Especialistas[0])+' programada para la fecha: '+str(Fecha)+' a las '+str(hora_seleccionada)+' ha sido programada con éxito',
+                        'settings.EMAIL_HOST_USER',
+                        [Mail]  
+                    )
+                    """
+                    return render(request, 'clientes/cliente_Hora_creada.html', {'hora_seleccionada':hora_seleccionada})
+                else:
+                    messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
+                    return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
     return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
 
 def Cliente_anular_hora(request):
@@ -952,16 +959,29 @@ def especialista_Agenda(request):
     return render(request, "Especialistas/especialista_Agenda.html", form_agenda)
 
 def especialista_list_citas(request):
-
     if request.method == 'POST':
         print("POST")
-        if 'ver_documentos_esp' in request.POST:
-            print("ver_documentos_esp")
-        if 'eliminar_cita_esp' in request.POST:
-            ID_Cita = request.POST.get('eliminar_cita_esp')
-            print(type(ID_Cita))
-
-
+        if 'doc_pac' in request.POST:
+            nom_pac = request.POST.get('doc_pac')
+            url = reverse('ficha_medica') + '?nom_pac={}'.format(nom_pac)
+            print(f'nom_pac: {nom_pac}')
+            return redirect(url)
+        if 'conf_delet_cit' in request.POST:
+            ID_Cita_del = request.POST.get('conf_delet_cit').split(' ')
+            print(ID_Cita_del)
+            Ndia = ID_Cita_del[0]
+            print(type(Ndia))
+            print(f'Wena:{Ndia}')
+            Mes = ID_Cita_del[2].replace('Enero','01').replace('Febrero','02').replace('Marzo','03').replace('Abril','04').replace('Mayo','05').replace('Junio','06').replace('Julio','07').replace('Agosto','08').replace('Septiembre','09').replace('Octubre','10').replace('Noviembre','11').replace('Diciembre','12')
+            Anno = ID_Cita_del[4]
+            Hora = ID_Cita_del[7]
+            ID_Cita_del = Ndia+'/'+Mes+'/'+Anno+' '+Hora
+            ID_Cita_del = datetime.strptime(ID_Cita_del,'%d/%m/%Y %H:%M')
+            print(type(ID_Cita_del))
+            print(f'{ID_Cita_del}')
+            Cita.objects.get(ID_Cita = ID_Cita_del).delete()
+            messages.success(request, "Hora anulada con éxito")
+            return redirect('agenda_especialista')
     list_horas = request.GET.get('list_horas').replace("'","").replace("[","").replace("]","").split(', ')
     list_Citas_Reservadas = request.GET.get('list_Citas_Reservadas').replace("'","").replace("[","").replace("]","").split(', ')
     fecha_Elegida = request.GET.get('fecha_Elegida')
@@ -985,6 +1005,25 @@ def especialista_list_citas(request):
     list_horas = {'list_Citas_Reservadas':list_Citas_Agen}
 
     return render(request, "Especialistas/agenda_dia.html", list_horas)
+
+def list_ficha_medica(request):
+    if request.method == 'POST':
+        if 'red_form_ficha_med' in request.POST:
+            return render(request, "Especialistas/ficha_medica.html")
+        
+    nom_pac = request.GET.get('nom_pac')
+    print(f'Nombre: {nom_pac}')
+    rut_pac = Paciente.objects.get(Nombre_Paciente = nom_pac).Rut
+    print(rut_pac)
+    if Ficha_Medica.objects.filter(RUT_Pac = rut_pac).exists():
+        Ficha_Med_Pac = Ficha_Medica.objects.get(RUT_Pac = rut_pac)
+        contexto = {'Ficha_Med_Pac':Ficha_Med_Pac}
+        return render(request,"Especialistas/ficha_medica.html", contexto)
+    else:
+        contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
+        return render(request, "Especialistas/ficha_medica.html", contexto)
+
+
 
 #Views Operadores
 def select_destinatario(request):
