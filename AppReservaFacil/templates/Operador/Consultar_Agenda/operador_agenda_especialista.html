@@ -1,4 +1,4 @@
-{% extends "../Clientes/index.html" %}
+{% extends "../../Clientes/index.html" %}
 {% block footer %}
 <title>Consultar Agenda</title>
 <div id="main-content-centro">
@@ -20,7 +20,7 @@
                             <td>Nombre: {{x.Nombre_completo_E}}</td>
                             <td>Telefono: {{x.Telefono_E}}</td>
                             <td>
-                                <form action="post">
+                                <form method="post">
                                     {% csrf_token %}
                                     <button class="btn-naranja-mediano" value="{{x.ID_Especialista}}"
                                     type="submit" name="consultar">Consultar genda</button>

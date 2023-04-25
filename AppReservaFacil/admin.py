@@ -17,3 +17,5 @@ admin.site.register(Paciente)
 
 admin.site.register(Mensaje)
 
+admin.site.register(CitaSinUsuario)
+
