@@ -98,17 +98,7 @@ class Operador(models.Model):
         verbose_name='Operador'
         verbose_name_plural='Operadores'
 
-class Cita(models.Model):
-    ID_Cita = models.DateTimeField(primary_key=True, unique=True)
-    Fecha_Cita = models.CharField(max_length=20, null=True)
-    Hora_Cita = models.CharField(max_length=20, null=True)
-    Confirmacion_Cita = models.BooleanField(default=False)
-    ID_Cliente = models.ForeignKey(User,null=True, on_delete=models.RESTRICT)
-    ID_Especialista = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
 
-    def __datetime__ (self):
-        return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
-    
 class Paciente(models.Model):
     ID_Paciente = models.IntegerField(primary_key=True, unique=True)
     Nombre_Paciente = models.CharField(max_length = 256)
@@ -127,7 +117,32 @@ class Paciente(models.Model):
     class Meta:
         verbose_name = 'Paciente'
         verbose_name_plural = 'Pracientes'
+
+class Cita(models.Model):
+    ID_Cita = models.DateTimeField(primary_key=True, unique=True)
+    Fecha_Cita = models.CharField(max_length=20, null=True)
+    Hora_Cita = models.CharField(max_length=20, null=True)
+    Confirmacion_Cita = models.BooleanField(default=False)
+    ID_Cliente = models.ForeignKey(User,null=True, on_delete=models.RESTRICT)
+    ID_Especialista = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
+
+    def __datetime__ (self):
+        return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
     
+
+class CitaSinUsuario(models.Model):
+    ID_Cita = models.DateTimeField(primary_key=True, unique=True)
+    Fecha_Cita = models.CharField(max_length=20, null=True)
+    Hora_Cita = models.CharField(max_length=20, null=True)
+    Confirmacion_Cita = models.BooleanField(default=False)
+    Rut_Paciente = models.CharField(max_length=9, null=False)
+    Email_Contacto = models.EmailField(null=True)
+    Telefono_Contacto = models.IntegerField(null=True)
+    ID_Especialista = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
+    
+    def __datetime__ (self):
+        return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
+
 class Mensaje(models.Model):
     Nombre_Remitente = models.CharField(max_length=100, editable=False)
     Nombre_Destinatario = models.CharField(max_length=100, editable=False)

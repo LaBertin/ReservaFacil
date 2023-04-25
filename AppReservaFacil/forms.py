@@ -66,6 +66,11 @@ class FormPaciente(forms.Form):
     direccion_pac = forms.CharField(max_length=256)
     telefono_pac = forms.CharField(max_length=9)
 
+class FormPacienteSinUser(forms.Form):
+    rut_pac = forms.CharField(max_length=9)
+    email_pac = forms.EmailField(label='email')
+    telefono_pac = forms.IntegerField()
+
 
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  

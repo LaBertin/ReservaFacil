@@ -1,9 +1,9 @@
-{% extends "../Clientes/index.html" %}
+{% extends "../../Clientes/index.html" %}
 {% block footer %}
-<title>Datos Paciente</title>
+<title>Modificar cita</title>
 <div id="main-content-centro">
 
-    <div class="div-grande">
+    <div class="div-pequeño">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
@@ -12,9 +12,14 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Formulario Paciente</h2>
+        <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
             <div class="row">
-                
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="rut" >
+
+                    <button class="btn-naranja-mediano" type="submit" name="agendar_operador">Consultar Citas</button>
+                </form>
             </div>      
         </div>
 </div>

@@ -36,12 +36,17 @@ urlpatterns = [
     path('admin_Agregar_Operador/', views.agregar_operador),
 
     path('funciones_citas_operador/', views.operador_funciones, name='funciones_citas_operador'),
+    #Consultar_Agenda
     path('agenda_citas/', views.operador_lista_agenda, name='agenda_citas'),
     path('agendar_citas_paciente/', views.operador_agendar_cita, name='agendar_citas_paciente'),
     path('confirmacion/', views.operador_confirmacion, name='confirmacion'),
-    path('modificar_cita/', views.operador_modificar_cita, name='modificar_cita'),
     path('calendario_especialista/', views.operador_calendario_especialista, name='calendario_especialista'),
     path('operador_horas_esp/', views.operador_horas_especialista, name = 'operador_horas_esp'),
+    
+    #Modificar_Cita
+    path('modificar_cita/', views.operador_modificar_cita, name='modificar_cita'),
+    path('modificar_lista/', views.operador_modificar_lista, name='modificar_lista'),
+
     path('pago/', views.operador_pago, name='pago'),
 
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
