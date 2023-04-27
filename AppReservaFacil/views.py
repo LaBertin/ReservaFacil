@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, QueryDict, JsonResponse
 from django.contrib.auth import login, authenticate, logout
+from django.http import JsonResponse
 from django.contrib import messages
+import requests
 from .forms import *
 from .models import *
 from django.contrib.auth.forms import *
@@ -305,20 +307,22 @@ def cliente_Agendar_hora(request):
             print("hora seleccionada")
             print(hora_seleccionada)
             print(Fecha)
-            hora_seleccionada = str(Fecha)+str(' '+hora_seleccionada)
+            
+            feccha_id = str(Fecha)+str(' '+hora_seleccionada)
+
             print(hora_seleccionada)
             print("ID_Especialistas:\n")
             print(Especialistas[0])
             Citas_Usuario = Cita.objects.filter(Fecha_Cita=Fecha, ID_Cliente = username).count()
             print("Deberia entrar al for")
             print(Citas_Usuario)
-            cita_existe = Cita.objects.filter(ID_Cita = hora_seleccionada).exists()
+            cita_existe = Cita.objects.filter(ID_Cita = feccha_id).exists()
             if cita_existe:
                 messages.error(request, "La cita seleccionada ya ha sido reservada")
                 return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
             else:
                 if Citas_Usuario<3:
-                    Cita.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
+                    Cita.objects.create(ID_Cita=feccha_id,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0])
                     messages.success(request, "Hora creada con éxito")
                     """
                     send_mail(
@@ -328,7 +332,7 @@ def cliente_Agendar_hora(request):
                         [Mail]  
                     )
                     """
-                    return render(request, 'clientes/cliente_Hora_creada.html', {'hora_seleccionada':hora_seleccionada})
+                    return render(request, 'clientes/cliente_Hora_creada.html', {'fecha':Fecha, 'valor':hora_seleccionada})
                 else:
                     messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
                     return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
@@ -1042,8 +1046,6 @@ def list_ficha_medica(request):
         contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
         return render(request, "Especialistas/ficha_medica.html", contexto)
 
-
-
 #Views Operadores
 def select_destinatario(request):
     global destinatario
@@ -1173,39 +1175,20 @@ def operador_agendar_cita(request):
         email = request.POST.get('email_pac')
         telefono = request.POST.get('telefono_pac')
         esp = Especialista.objects.filter(ID_Especialista = id_especialista)
-        hora_seleccionada = str(fecha)+str(' '+valor)
-        CitaSinUsuario.objects.create(ID_Cita=hora_seleccionada,Fecha_Cita=fecha, Hora_Cita=hora_seleccionada, Rut_Paciente=rut, ID_Especialista=esp[0])
+        fecha_id = str(fecha)+str(' '+valor)
+        CitaSinUsuario.objects.create(ID_Cita=fecha_id,Fecha_Cita=fecha, Hora_Cita=valor, Rut_Paciente=rut, ID_Especialista=esp[0])
         print(f'Datos {rut} {email} {telefono} {esp}')
+        context = {'valor':valor , 'fecha':fecha}
         messages.success(request, "Hora creada con éxito")
-        return render(request, 'clientes/cliente_Hora_creada.html', {'hora_seleccionada':hora_seleccionada})
+        return render(request, 'clientes/cliente_Hora_creada.html', context)
     return render(request, 'Operador/Consultar_Agenda/operador_agendar_cita.html', context)
 
 def operador_modificar_cita(request):
-    
-    
-    
+    consulta_rut  = ConsultarRut()
+    context = {"consulta_rut":consulta_rut}
+    citas_usuarios = None
+    citas_sin_usuario = None
     if request.method == "POST":
-        citas_usuarios = None
-        citas_sin_usuario = None
-        valor = request.POST.get('rut')
-
-        if Paciente.objects.filter(Rut = valor).exists():
-            pacientes = Paciente.objects.get(Rut = valor)
-            citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P)
-            print(f'Citas con usuario  {citas_usuarios} ')
-            if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
-                citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
-                print(f'Citas con usuario y sin {citas_usuarios} {citas_sin_usuario}')
-        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
-            citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
-            print(f'Citas sin usuario {citas_sin_usuario}')
-        else:
-            messages.error(request, "El rut ingresado no se encuentra en el sistema.")
-
-
-        context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
-        print(context)
-
         if 'conf_delet_cit' in request.POST:
             ID_Cita = request.POST.get('conf_delet_cit').split(' ')
             print(ID_Cita)
@@ -1223,21 +1206,297 @@ def operador_modificar_cita(request):
             if Cita.objects.filter(ID_Cita = ID_Cita).exists():
                 Cita.objects.filter(ID_Cita = ID_Cita).delete()
                 messages.success(request, "Cita eliminada con exito")
+                return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
             else:
                 holaaa = CitaSinUsuario.objects.filter(ID_Cita = ID_Cita)
                 holaaa.delete()
                 messages.success(request, "Cita eliminada con exito")
+                return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+            
+        if 'seleccion' in request.POST:
+            print('INICIO DE SELECCION ESTOY AQUI')
+            ID_Cita = request.POST.get('seleccion')
+            ID_Cita = request.POST.get('seleccion').split(' ')
+            print(ID_Cita)
+            Ndia = ID_Cita[0]
+            print(type(Ndia))
+            print(f'Wena:{Ndia}')
+            #ID_Cita = ' '.join(ID_Cita)
+            Mes = ID_Cita[2].replace('Enero','01').replace('Febrero','02').replace('Marzo','03').replace('Abril','04').replace('Mayo','05').replace('Junio','06').replace('Julio','07').replace('Agosto','08').replace('Septiembre','09').replace('Octubre','10').replace('Noviembre','11').replace('Diciembre','12')
+            Anno = ID_Cita[4]
+            Hora = ID_Cita[7]
+            ID_Cita = Ndia+'/'+Mes+'/'+Anno+' '+Hora
+            ID_Cita = datetime.strptime(ID_Cita,'%d/%m/%Y %H:%M')
+            print(ID_Cita)
+            print('ANTES DEL IF AQUI')
+            if Cita.objects.filter(ID_Cita = ID_Cita).exists():
+                print('DENTRO DEL IF AQUI')
+                cita_seleccionada = Cita.objects.filter(ID_Cita = ID_Cita)
+                id_seleccion = ID_Cita
+                fecha_seleccion = cita_seleccionada[0].Fecha_Cita
+                hora_seleccion = cita_seleccionada[0].Hora_Cita
+                seleccion = {"id_seleccion":id_seleccion, "fecha_seleccion":fecha_seleccion, "hora_seleccion":hora_seleccion}
+                url = reverse('modificar_cita_seleccionada') + '?id_seleccion={}&fecha_seleccion={}&hora_seleccion={}'.format(id_seleccion,fecha_seleccion,hora_seleccion)
+                print(type(id_seleccion))
+                print(type(fecha_seleccion))
+                print(type(hora_seleccion))
+                print('ESTOY AQUI')
+                return redirect(url)
+            else:
+                print('DENTRO DEL ELSE AQUI')
+                cita_seleccionada = CitaSinUsuario.objects.filter(ID_Cita = ID_Cita)
+                id_seleccion = ID_Cita
+                print(f'VALOR DE ID_SELECCION {id_seleccion}')
+                fecha_seleccion = cita_seleccionada[0].Fecha_Cita
+                hora_seleccion = cita_seleccionada[0].Hora_Cita
+                seleccion = {"id_seleccion":id_seleccion, "fecha_seleccion":fecha_seleccion, "hora_seleccion":hora_seleccion}
+                print(type(id_seleccion))
+                print(type(fecha_seleccion))
+                print(type(hora_seleccion))
+                url = reverse('modificar_cita_seleccionada') + '?id_seleccion={}&fecha_seleccion={}&hora_seleccion={}'.format(id_seleccion,fecha_seleccion,hora_seleccion)
+                return redirect(url)
+                
+        valor = request.POST.get('rut')
+
+        if Paciente.objects.filter(Rut = valor).exists():
+            pacientes = Paciente.objects.get(Rut = valor)
+            citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P)
+            print(f'Citas con usuario  {citas_usuarios} ')
+            if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
+                citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
+                print(f'Citas con usuario y sin {citas_usuarios} {citas_sin_usuario}')
+            if Paciente.objects.filter(Rut = valor).exists() and len(citas_usuarios) == 0:
+                messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
+                return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+
+        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
+            citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
+            print(f'Citas sin usuario {citas_sin_usuario}')
+
+        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists() and Paciente.objects.filter(Rut = valor).exists() and citas_usuarios is None and citas_sin_usuario is None:
+
+            messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
+            return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+        else:
+            messages.error(request, "El rut ingresado no figura en el sistema.")
+            return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+
+        context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
 
         return render (request, 'Operador/Modificar_Cita/operador_modificar_lista.html',context)
         
-    return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+    return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html',context)
 
 def operador_modificar_lista(request):
     return render(request, 'Operador/Modificar_Cita/operador_modificar_lista.html')
     
+def operador_modificar_seleccion(request):
+    id_seleccions = request.GET.get('id_seleccion')
+    fecha_seleccion = request.GET.get('fecha_seleccion')
+    hora_seleccion = request.GET.get('hora_seleccion')
+
+    #DIA
+    fecha_seleccion = datetime.strptime(fecha_seleccion,'%Y-%m-%d')
+    fecha_seleccion = fecha_seleccion.strftime('%A')
+    fecha_seleccion = fecha_seleccion.replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+
+    #DIAS ESPECIALISTA
+    if Cita.objects.filter(ID_Cita=id_seleccions).exists():
+        esp_cit = Cita.objects.filter(ID_Cita=id_seleccions)
+    else:
+        esp_cit = CitaSinUsuario.objects.filter(ID_Cita=id_seleccions)
+
+    esp = Especialista.objects.filter(ID_Especialista = esp_cit[0].ID_Especialista.ID_Especialista)
+
+    if fecha_seleccion in list(esp[0].Dia_Esp_P):
+        semana = list(esp[0].Dia_Esp_P)
+    else:
+        semana = list(esp[0].Dia_Esp_S)
+
+    dias_es = ','.join(semana).replace('lun','Lunes').replace('mar','Martes').replace('mie','Miercoles').replace('jue','Jueves').replace('vie','Viernes').replace('sab','Sabado').replace('dom','Domingo')
+
+    dias_en = ','.join(semana).replace('lun','Monday').replace('mar','Tuesday').replace('mie','Wednesday').replace('jue','Thursday').replace('vie','Friday').replace('sab','Saturday').replace('dom','Sunday')
+
+    fechas_trab = dias_trabaja_especialista(dias_en)
+    calendario_especialista ={
+        'formDate': DateForm(),
+        'fechas': fechas_trab,
+        "fecha_seleccion": fecha_seleccion,
+        "hora_seleccion":hora_seleccion
+    }
+    #ESPECIALISTA 
+    esp_filter = Especialista.objects.filter(ID_Especialista = esp_cit[0].ID_Especialista.ID_Especialista)
+
+    #FECHA HABILITADAS
+    
+    if request.method =='POST':
+        print(f'HOLAA {fechas_trab}')
+        print(f'HOLAA {esp[0].ID_Especialista}')
+        fecha = DateForm(request.POST)
+        if fecha.is_valid():
+            fecha = fecha.cleaned_data['date']
+            if fecha in fechas_trab:
+                dias_str_p = ','.join(esp_filter[0].Dia_Esp_P)
+                lista, lista_reserva, especialidad = dias_minutos_especialidad(fecha_seleccion,dias_str_p,esp_filter,fecha,esp[0].ID_Especialista)
+                print(f'Dentro del post {lista}')
+                print(f'Dentro del post {lista_reserva}')
+                print(f'Dentro del post {especialidad}')
+
+                url = reverse('modificar_fecha')+'?lista={}&lista_reserva={}&esp={}&especialidad={}&fecha={}&id_seleccions={}'.format(lista, lista_reserva, esp, especialidad,fecha,id_seleccions)
+                return redirect(url)
+            
+            messages.error(request, "Ingrese una fecha en los dias: "+dias_es+".")
+            return render(request, 'Operador/Modificar_Cita/operador_modificar_seleccion.html',calendario_especialista)
+        print(esp)
+        print(esp_cit)
+        print(fecha_seleccion)
+
+    return render(request, 'Operador/Modificar_Cita/operador_modificar_seleccion.html',calendario_especialista)
+
+def operador_modificar_fecha(request):
+    
+    lista = request.GET.get('lista').replace("'","").replace("[","").replace("]","").split(', ')
+    lista_reserva = request.GET.get('lista_reserva').replace("'","").replace("[","").replace("]","").split(', ')
+    esp = request.GET.get('esp')
+    especialidad = request.GET.get('especialidad')
+    fecha = request.GET.get('fecha')
+    id_seleccions = request.GET.get('id_seleccions')
+    listareservas = {"lista":lista, "lista_reserva":lista_reserva,
+    "especialidad":especialidad}
+    
+    if Cita.objects.filter(ID_Cita=id_seleccions).exists():
+        esp_cit = Cita.objects.get(ID_Cita=id_seleccions)
+    else:
+        esp_cit = CitaSinUsuario.objects.get(ID_Cita=id_seleccions)
+    
+
+    if request.method == 'POST':
+        valor = request.POST.get('hora_agendar')
+        esp_cit.Fecha_Cita = fecha
+        esp_cit.Hora_Cita = valor
+        esp_cit.save()
+
+        context = {'valor':valor , 'fecha':fecha}
+        messages.success(request,"Cita cambiada exitosamente.")
+        return render(request, 'clientes/cliente_Hora_creada.html', context)
+        # url = reverse('index')
+        # return redirect(url)
+
+    return render(request, 'Operador/Modificar_Cita/operador_modificar_fecha.html',listareservas)
 
 def operador_confirmacion(request):
-    return render(request, 'Operador/operador_modificar_cita.html')
+    consulta_rut  = ConsultarRut()
+    context = {"consulta_rut":consulta_rut}
+    citas_usuarios = None
+    citas_sin_usuario = None
+    especialidad_ = None
+    especialidad_sin = None
+
+    hoy = date.today()
+    dia_escrito = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
     
+    #TODO MEJORAR FILTRO DE ESPECIALIDAD
+    if request.method == 'POST':
+        print(dia_escrito)
+        valor = request.POST.get('rut')
+        # api_response = respuesta_api(request, valor)
+
+        if Paciente.objects.filter(Rut = valor).exists():
+            pacientes = Paciente.objects.get(Rut = valor)
+            citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P, Fecha_Cita = hoy)
+            especialista_con = Especialista.objects.get(ID_Especialista = citas_usuarios[0].ID_Especialista.ID_Especialista)
+            print(especialista_con)
+
+            if dia_escrito in especialista_con.Dia_Esp_P:
+                especialidad_ = especialista_con.Especialidad_P
+            else:
+                especialidad_ = especialista_con.Especialidad_S
+    
+            print(f'Citas con usuario  {citas_usuarios} ')
+            print(f'Especialidad con usuario: {especialidad_}')
+
+            if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
+                citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
+                especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
+            
+                print(especialista)
+                if dia_escrito in especialista.Dia_Esp_P:
+                    especialidad_sin = especialista.Especialidad_P
+                else:
+                    especialidad_sin = especialista.Especialidad_S
+
+                print(f'Citas con usuario y sin {citas_usuarios} {citas_sin_usuario}')
+                print(f'Especialidad sin usuario dentro del if con usuario: {especialidad_sin}')
+
+            if Paciente.objects.filter(Rut = valor).exists() and len(citas_usuarios) == 0:
+                messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
+                return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+
+        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
+            citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
+            especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
+            
+            print(especialista)
+
+            if dia_escrito in especialista.Dia_Esp_P:
+                especialidad_sin = especialista.Especialidad_P
+            else:
+                especialidad_sin = especialista.Especialidad_S
+
+            print(f'Citas sin usuario {citas_sin_usuario}')
+            print(f'Especialidad con usuario: {especialidad_sin}')
+
+        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists() and Paciente.objects.filter(Rut = valor).exists() and citas_usuarios is None and citas_sin_usuario is None:
+            messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
+            return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
+        
+        else:
+            messages.error(request, "El rut ingresado no figura en el sistema.")
+
+        # context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
+        # url = reverse('confirmacion_citas') + '?cita={}&citas_sin_usuario={}&valor={}'.format(citas_usuarios, citas_sin_usuario, valor)
+        # return redirect(url)
+        context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario, 'especialidad_sin':especialidad_sin, 'especialidad_':especialidad_}
+
+        return render(request, 'Operador/Confirmacion/operador_citas_paciente.html', context)
+
+    return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
+    
+
+    #TODO Solicitar a cristian una api chilena que me permita traer los datos de chile
+# def respuesta_api(request,rut):
+#     url = f'https://api.libreapi.cl/rut/activities/?rut={rut}'
+#     print(url)
+    
+#     response = requests.get(url)
+    
+#     print(response)
+#     print(f"La respuesta tiene el código de estado {response.status_code}")
+#     print(f"La respuesta tiene el siguiente contenido: {response.text}")
+#     if response.ok:
+#         print('Dentro del if')
+#         data = response.json()
+#         print(f'respuesta de json {data}')
+#         return JsonResponse(data)
+#     else:
+#         print('Dentro del else')
+#         return JsonResponse({'error': 'An error occurred while processing your request.'})
+
+def operador_confirmacion_citas(request):
+    # citas_usuarios = request.GET.get('citas_usuarios')
+    # if citas_usuarios is None:
+    #     citas_sin_usuario = request.GET.get('citas_sin_usuario').replace("'","").replace("[","").replace("]","").split(', ')
+    # else:
+    #     citas_usuarios = citas_usuarios.replace("'","").replace("[","").replace("]","").split(', ')
+    #     citas_sin_usuario = request.GET.get('citas_sin_usuario').replace("'","").replace("[","").replace("]","").split(', ')
+    
+    # print(citas_usuarios)
+    # print(citas_sin_usuario)
+    # valor = request.GET.get('valor')
+
+    # context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
+    
+    return render(request, 'Operador/Confirmacion/operador_citas_paciente.html')
+
 def operador_pago(request):
     return render(request, 'Operador/operador_pago.html')

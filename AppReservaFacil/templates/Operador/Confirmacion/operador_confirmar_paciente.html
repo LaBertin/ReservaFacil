@@ -1,6 +1,6 @@
 {% extends "../../Clientes/index.html" %}
 {% block footer %}
-<title>Modificar cita</title>
+<title>Confirmación cita</title>
 <div id="main-content-centro">
 
     <div class="div-pequeño">
@@ -12,12 +12,12 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
+        <h2 id="titulo-inicio-sesion">Confirmación cita</h2>
             <div class="row">
                 <form method="POST">
                     {% csrf_token %}
                     <input type="text" name="rut" >
-
+                    
                     <button class="btn-naranja-mediano" type="submit" name="agendar_operador">Consultar Citas</button>
                 </form>
             </div>      

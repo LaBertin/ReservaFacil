@@ -37,18 +37,18 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
+        <h2 id="titulo-inicio-sesion">Citas del paciente</h2>
             <div class="row">
                 <table>
 
                         {% for x in citas %}
                         <tr>
-                            <td>Cita: {{x.Hora_Cita}}</td>
+                            <td>Cita: {{x.Fecha_Cita}} {{x.Hora_Cita}}</td>
                             <td>
                                 <form method="POST">
                                     {% csrf_token %}
-                                    <button class="btn-naranja-mediano" value="{{x.ID_Especialista}}"
-                                    type="submit" name="modificar">Modificar agenda</button>
+                                    <button class="btn-naranja-mediano" value="{{x.ID_Cita}}"
+                                    type="submit" id="seleccion" name="seleccion">Modificar agenda</button>
                                 
                             </td>
                             <td>
@@ -67,12 +67,12 @@
 
                         {% for y in citas_sin_usuario %}
                             <tr>
-                                <td>Cita: {{y.Hora_Cita}}</td>
+                                <td>Cita: {{y.Fecha_Cita}} {{y.Hora_Cita}}</td>
                                 <td>
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <button class="btn-naranja-mediano" value="{{y.ID_Especialista}}"
-                                        type="submit" name="modificar">Modificar agenda</button>
+                                        <button class="btn-naranja-mediano" value="{{y.ID_Cita}}"
+                                        type="submit" id="seleccion" name="seleccion">Modificar agenda</button>
                                     </form>
                                 </td>
                                 <td>
@@ -91,6 +91,8 @@
 
                 </table>
             </div>      
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'index' %}">Cancelar</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'modificar_cita' %}">Atras</a></button>
         </div>
 </div>
 {% endblock %}

@@ -71,7 +71,6 @@ class FormPacienteSinUser(forms.Form):
     email_pac = forms.EmailField(label='email')
     telefono_pac = forms.IntegerField()
 
-
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
@@ -108,7 +107,6 @@ class FormRegistrarUsuario(forms.Form):
             self.cleaned_data['password1']  
         )  
         return user  
-
     
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -120,7 +118,10 @@ class DateForm(forms.Form):
     date = forms.DateField(
     widget=DateInput(attrs={"name":"somdate", "value":today, "min": today, "max":max})
     )
-    
+
+class ConsultarRut(forms.Form):
+    rut_consulta = forms.CharField(max_length=9)    
+
 class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
     especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())

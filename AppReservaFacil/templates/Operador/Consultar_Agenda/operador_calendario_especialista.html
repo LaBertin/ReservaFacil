@@ -21,14 +21,16 @@
                     <div>
                         {{formDate.date}}
                     </div>
-
+                    <br>
                     <button class="btn-naranja-mediano" type="submit"
                             name="horas">
                             Seleccionar Hora
                     </button>
-                    <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
                 </form>
-            </div>      
+            </div>  
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'agenda_citas' %}">Atras</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>    
         </div>
+        
 </div>
 {% endblock %}
