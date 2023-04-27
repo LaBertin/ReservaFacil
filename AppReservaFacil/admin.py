@@ -19,3 +19,6 @@ admin.site.register(Mensaje)
 
 admin.site.register(CitaSinUsuario)
 
+admin.site.register(Ficha_Medica)
+
+admin.site.register(Ficha_Cita)

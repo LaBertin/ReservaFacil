@@ -1,0 +1,136 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Crear Ficha Médica</title>
+    <div class="div-grande">
+        <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
+        <form method="post">
+        {% csrf_token %}    
+            <div class="row row-margin">
+                <div class="col-md-2">
+                        <h5>
+                            RUT
+                        </h5>
+                        {{formFichaMedica.RUT_Pac}}
+                </div>
+
+                <div class="col-md-4">
+                        <h5>
+                            Nombre Completo Paciente
+                        </h5>
+                        {{formFichaMedica.Nombre_Com_Pac}}
+                </div>
+                <div class="col-4">
+                    <h5>
+                        Dirección
+                    </h5>
+                        {{formFichaMedica.Direccion_Pac}}
+                    </div>
+
+                    <div class="col-2">
+                            <h5>
+                                Teléfono
+                            </h5>
+                            {{formFichaMedica.Telefono_Pac}}
+                    </div>
+            </div>
+
+            <div class="row row-margin">
+                <div class="col">
+                        <h5>
+                            Sistema de Salud
+                        </h5>
+                        {{formFichaMedica.Sis_Sal_Pac}}
+                </div>
+
+                <div class="col">
+                            <h5>
+                                Grupo Sanguíneo
+                            </h5>
+                            {{formFichaMedica.Grupo_Sanguineo}}
+                </div>
+            </div>
+            <div>
+                <h3>Alergias</h3>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex align-items-center">
+                    <h5>
+                        Antibioticos:
+                    </h5>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                        {{formFichaMedica.Al_Antibioticos}}
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                        {{formFichaMedica.Antibioticos_TI}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex align-items-center">
+                    <h5>
+                        Medicamentos:
+                    </h5>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                        {{formFichaMedica.Al_Medicamentos}}
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                        {{formFichaMedica.Medicamentos_TI}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex align-items-center">
+                    <h5>
+                        Alimentos:
+                    </h5>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                        {{formFichaMedica.Al_Alimentos}}
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                        {{formFichaMedica.Alimentos_TI}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex align-items-center">
+                    <h5>
+                        Animales/Insectos:
+                    </h5>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                        {{formFichaMedica.Al_Ani_Ins}}
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                        {{formFichaMedica.Ani_Ins_TI}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex align-items-center">
+                    <h5>
+                        ¿Padece de alguna enfermedad crónica?
+                    </h5>
+                </div>
+                <div class="col-md-1 d-flex align-items-center">
+                        {{formFichaMedica.Enf_Cronic}}
+                </div>
+                <div class="col-md-9 d-flex align-items-center">
+                        {{formFichaMedica.Enf_Cronic_TI}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-3 d-flex align-items-center">
+                    <h5>
+                        Observaciones de la ficha:
+                    </h5>
+                </div>
+                <div class="col-md-10' d-flex align-items-center">
+                        {{formFichaMedica.Observaciones_Ficha}}
+                </div>
+            </div>
+            <br>
+        <button type="submit" class="btn-naranja-mediano row-margin">Crear ficha médica</button>
+        <button type="button" class="btn-naranja-mediano row-margin"><a href="/">Inicio</a></button>
+        </form>
+    </div>  
+</div>
+{% endblock %}
