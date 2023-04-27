@@ -1253,8 +1253,12 @@ def operador_agendar_cita(request):
     return render(request, 'Operador/Consultar_Agenda/operador_agendar_cita.html', context)
 
 def operador_modificar_cita(request):
+    
+    
+    
     if request.method == "POST":
         citas_usuarios = None
+        citas_sin_usuario = None
         valor = request.POST.get('rut')
 
         if Paciente.objects.filter(Rut = valor).exists():
@@ -1273,25 +1277,30 @@ def operador_modificar_cita(request):
 
         context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
         print(context)
+
+        if 'conf_delet_cit' in request.POST:
+            ID_Cita = request.POST.get('conf_delet_cit').split(' ')
+            print(ID_Cita)
+            Ndia = ID_Cita[0]
+            print(type(Ndia))
+            print(f'Wena:{Ndia}')
+            #ID_Cita = ' '.join(ID_Cita)
+            Mes = ID_Cita[2].replace('Enero','01').replace('Febrero','02').replace('Marzo','03').replace('Abril','04').replace('Mayo','05').replace('Junio','06').replace('Julio','07').replace('Agosto','08').replace('Septiembre','09').replace('Octubre','10').replace('Noviembre','11').replace('Diciembre','12')
+            Anno = ID_Cita[4]
+            Hora = ID_Cita[7]
+            ID_Cita = Ndia+'/'+Mes+'/'+Anno+' '+Hora
+            ID_Cita = datetime.strptime(ID_Cita,'%d/%m/%Y %H:%M')
+            print(type(ID_Cita))
+            print(f'{ID_Cita}')
+            if Cita.objects.filter(ID_Cita = ID_Cita).exists():
+                Cita.objects.filter(ID_Cita = ID_Cita).delete()
+                messages.success(request, "Cita eliminada con exito")
+            else:
+                holaaa = CitaSinUsuario.objects.filter(ID_Cita = ID_Cita)
+                holaaa.delete()
+                messages.success(request, "Cita eliminada con exito")
+
         return render (request, 'Operador/Modificar_Cita/operador_modificar_lista.html',context)
-    
-    # citas = None
-    # citasSinUser = None
-
-    # if pacientes.exists():
-    #     paciente = pacientes[0].Usuario_P
-    #     citas = Cita.objects.filter(ID_Cliente = paciente)
-    #     citasSinUser = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
-
-    # else:
-    #     paciente = pacientes[0].Usuario_P
-    #     citas = Cita.objects.filter(ID_Cliente = paciente)
-    #     citasSinUser = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
-
-    # print(f'Citas agendadas actualmente citas: {citas}' )
-    # print(f'Citas agendadas actualmente citas: {citasSinUser}')
-
-    # if request.method == "POST":
         
     return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
 
