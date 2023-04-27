@@ -22,7 +22,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('inicio/', views.inicio),
     path('inicioSesion/', views.iniciarsesionusuario, name='inicioSesion'),
     path('registro/', views.registrousuario),
     path('perfil/', views.perfil_cliente, name = 'perfil'),
@@ -52,6 +51,8 @@ urlpatterns = [
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),
     path('ficha_medica/', views.list_ficha_medica, name='ficha_medica'),
+    path('crear_ficha_medica/', views.form_ficha_medica, name='crear_ficha_medica'),
+    path('agregar_cita_medica/', views.agregar_cita_medica, name='agregar_cita_medica'),
 
     path('agenda_especialista/',views.especialista_Agenda, name='agenda_especialista'),
     path('agenda_dia/', views.especialista_list_citas, name='agenda_dia'),

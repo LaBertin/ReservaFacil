@@ -11,8 +11,8 @@ from multiselectfield import MultiSelectField
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
 MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
 SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
-SISTEMA_SALUD=[('SegCom','Seguro Complementario'), ('ISAPRE','ISAPRE'), ('FONASA','FONASA'),('FFAA','Fuerzas Armadas')]
-GRUPO_SANGUINEO=[('Amas','A+'),('Omas','O+'),('Bmas','B+'),('ABmas','AB+'),('Amenos','A-'),('Omenos','O-'),('Bmenos','B-'),('ABmenos','AB-')]
+SISTEMA_SALUD=[('Ninguno','Ninguno'),('Seguro Complementario','Seguro Complementario'), ('ISAPRE','ISAPRE'), ('FONASA','FONASA'),('Fuerzas Armadas','Fuerzas Armadas')]
+GRUPO_SANGUINEO=[('Ninguno','Ninguno'),('A+','A+'),('O+','O+'),('B+','B+'),('AB+','AB+'),('A-','A-'),('O-','O-'),('B-','B-'),('AB-','AB-')]
 
 
 class Area_Medica(models.Model):
@@ -75,8 +75,7 @@ class Especialista(models.Model):
     Usuario_E = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        ID_Especialista = str(self.ID_Especialista)
-        return f'{self.Nombre_completo_E} {ID_Especialista}'
+        return f'{self.Nombre_completo_E}'
     
 class Operador(models.Model):
     ID_Operador = models.IntegerField(primary_key=True, unique=True)
@@ -116,7 +115,7 @@ class Paciente(models.Model):
     
     class Meta:
         verbose_name = 'Paciente'
-        verbose_name_plural = 'Pracientes'
+        verbose_name_plural = 'Pacientes'
 
 class Cita(models.Model):
     ID_Cita = models.DateTimeField(primary_key=True, unique=True)
@@ -158,7 +157,7 @@ class Mensaje(models.Model):
 
 class Ficha_Medica(models.Model):
     ID_Ficha_Medica = models.IntegerField(primary_key=True, unique=True)
-    RUT_Pac = models.CharField(max_length=9, null = True)
+    RUT_Pac = models.CharField(max_length=9)
     Nombre_Com_Pac = models.CharField(max_length = 256)
     Direccion_Pac = models.CharField(max_length=256, null = True)
     Telefono_Pac = models.CharField(max_length=9, null = True)
@@ -166,21 +165,21 @@ class Ficha_Medica(models.Model):
     Grupo_Sanguineo = models.CharField(choices=GRUPO_SANGUINEO, max_length=7, null=True)
 
     Al_Antibioticos = models.BooleanField(null=True)
-    Antibioticos_TI = models.CharField(max_length = 256)
+    Antibioticos_TI = models.CharField(max_length = 256, null=True)
 
     Al_Medicamentos = models.BooleanField(null=True)
-    Medicamentos_TI = models.CharField(max_length = 256)
+    Medicamentos_TI = models.CharField(max_length = 256, null=True)
 
     Al_Alimentos = models.BooleanField(null=True)
-    Alimentos_TI = models.CharField(max_length = 256)
+    Alimentos_TI = models.CharField(max_length = 256, null=True)
 
     Al_Ani_Ins = models.BooleanField(null=True)
-    Ani_Ins_TI = models.CharField(max_length = 256)
+    Ani_Ins_TI = models.CharField(max_length = 256, null=True)
 
     Enf_Cronic = models.BooleanField(null=True)
-    Enf_Cronic_TI = models.CharField(max_length = 256)
+    Enf_Cronic_TI = models.CharField(max_length = 256, null=True)
 
-    Med_Tom_Actu = models.TextField(max_length=256)
+    Observaciones_Ficha = models.TextField(max_length=1000, null=True)
 
     def __str__(self):
         ID_Ficha_Medica = str(self.ID_Ficha_Medica)
@@ -192,9 +191,11 @@ class Ficha_Medica(models.Model):
 
 class Ficha_Cita(models.Model):
     ID_Ficha_Cita = models.IntegerField(primary_key=True, unique=True)
-    Ficha_Medica_Pac = models.ForeignKey(Ficha_Medica,null=True, on_delete=models.RESTRICT)
-    RUT_Pac = models.ForeignKey(Paciente,null=True, on_delete=models.RESTRICT)
-    Nombre_Com_Esp = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
+    Fecha_Cita = models.DateField(null=False)
+    Ficha_Medica_Pac = models.ForeignKey(Ficha_Medica,null=False, on_delete=models.RESTRICT)
+    RUT_Pac = models.CharField(max_length=9)
+    Nombre_Com_Pac = models.ForeignKey(Paciente,null=False, on_delete=models.RESTRICT)
+    Nombre_Com_Esp = models.ForeignKey(Especialista,null=False, on_delete=models.RESTRICT)
     Diagnostico_Cita = models.TextField(max_length=256)
 
     def __str__(self):

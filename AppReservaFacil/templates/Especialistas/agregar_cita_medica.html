@@ -1,0 +1,54 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Crear Ficha Médica</title>
+    <div class="div-mediano">
+        <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
+        <form method="post">
+        {% csrf_token %}    
+            <div class="row row-margin justify-content-center">
+                <div class="col-md-2">
+                    <h5>
+                        N° Ficha Médica
+                    </h5>
+                    {{FormCitaMedica.Ficha_Medica_Pac}}
+                </div>
+                <div class="col-md-2">
+                    <h5>
+                        RUT Paciente
+                    </h5>
+                    {{FormCitaMedica.RUT_Pac}}
+                </div>
+                <div class="col-md-3">
+                    <h5>
+                        Nombre Completo Paciente
+                    </h5>
+                    {{FormCitaMedica.Nombre_Com_Pac}}
+                </div>
+                <div class="col-md-3">
+                    <h5>
+                        Nombre Completo Especialista
+                    </h5>
+                    {{FormCitaMedica.Nombre_Com_Esp}}
+                </div>
+                <div class="col-md-2">
+                    <h5>
+                        Fecha Cita
+                    </h5>
+                    {{FormCitaMedica.Fecha_Cita}}
+                </div>
+            </div>
+            <h5>
+                Diagnostico
+            </h5>
+            <div class="row row-margin justify-content-center">
+                <div class="col">
+                    {{FormCitaMedica.Diagnostico_Cita}}
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn-naranja-mediano row-margin" name="agregar_cita_medica">Agregar cita médica</button>
+            <button type="button" class="btn-naranja-mediano row-margin"><a href="/">Inicio</a></button>
+        </form>
+    </div>  
+</div>
+{% endblock %}

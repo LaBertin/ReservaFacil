@@ -127,3 +127,36 @@ class AgendarForm(forms.Form):
 
 class FormMensaje(forms.Form):
     texto = forms.CharField(max_length=256)
+
+class FormFichaMedica(forms.Form):
+    RUT_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=True)
+    Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length = 256, required=True)
+    Direccion_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=256, required=False)
+    Telefono_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=False)
+    Sis_Sal_Pac = forms.ChoiceField(choices = SISTEMA_SALUD, required=False, initial = 'SegCom')
+    Grupo_Sanguineo = forms.ChoiceField(choices=GRUPO_SANGUINEO, required=False, initial = 'Amas')
+
+    Al_Antibioticos = forms.BooleanField(required=False)
+    Antibioticos_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
+
+    Al_Medicamentos = forms.BooleanField(required=False)
+    Medicamentos_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
+
+    Al_Alimentos = forms.BooleanField(required=False)
+    Alimentos_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
+
+    Al_Ani_Ins = forms.BooleanField(required=False)
+    Ani_Ins_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
+
+    Enf_Cronic = forms.BooleanField(required=False)
+    Enf_Cronic_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
+
+    Observaciones_Ficha = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 150}), required=False)
+
+class FormCitaMedica(forms.Form):
+    Ficha_Medica_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length=9, required=True)
+    Fecha_Cita = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}), required=True)
+    RUT_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length=9, required=True)
+    Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
+    Nombre_Com_Esp = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
+    Diagnostico_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
