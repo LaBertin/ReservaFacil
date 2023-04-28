@@ -38,12 +38,22 @@
             {% endfor %}
         {% endif %}
         <h2 id="titulo-inicio-sesion">Citas del paciente</h2>
+        <!--Aqui ira el nombre del paciente en base al rut si es que no tiene registro-->
+        <div class="div-formulario">
+            
             <div class="row">
-                <table>
-
+                <div class="table-responsive-lg">
+                    <table class="table table-hover">
+                        <tr>
+                            <td>Cita</td>
+                            <td>Hora</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         {% for x in citas %}
                         <tr>
-                            <td>Cita: {{x.Fecha_Cita}} {{x.Hora_Cita}}</td>
+                            <td>{{x.Fecha_Cita}} </td>
+                            <td>{{x.Hora_Cita}}</td>
                             <td>
                                 <form method="POST">
                                     {% csrf_token %}
@@ -67,7 +77,8 @@
 
                         {% for y in citas_sin_usuario %}
                             <tr>
-                                <td>Cita: {{y.Fecha_Cita}} {{y.Hora_Cita}}</td>
+                                <td>{{y.Fecha_Cita}}</td>
+                                <td>{{y.Hora_Cita}}</td>
                                 <td>
                                     <form method="POST">
                                         {% csrf_token %}
@@ -90,9 +101,13 @@
                         {% endfor %}
 
                 </table>
+                </div>
+                
             </div>      
+        </div>
+        
             <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'index' %}">Cancelar</a></button>
-            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'modificar_cita' %}">Atras</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button>
         </div>
 </div>
 {% endblock %}

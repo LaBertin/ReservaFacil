@@ -475,7 +475,6 @@ def Cliente_consultar_hora(request):
         """
         messages.success(request,"Cita con fecha: "+Confirmar_Cita_str+ " confirmada con éxito")
 
-
     if 'consultar_hora' in request.POST:
         print("Pulsaste consultar Hora")
         Consultar_Hora_Principal = request.POST.get('consultar_hora')
@@ -758,6 +757,8 @@ def agregar_empleado(request):
             q_dict = QueryDict('', mutable=True)
             q_dict.update(Reg)
             formulario = FormRegistrarUsuario(data=q_dict)
+            
+
             if formulario.is_valid():
                 formulario.save()
                 user = User.objects.get(username = usuario)
@@ -772,6 +773,17 @@ def agregar_empleado(request):
                                             Minutes_Esp_P_Mie = Minutes_Esp_P_Mie, Minutes_Esp_P_Jue = Minutes_Esp_P_Jue, Minutes_Esp_P_Sab = Minutes_Esp_P_Sab, Minutes_Esp_P_Dom = Minutes_Esp_P_Dom,
                                             Minutes_Esp_S_Lun = Minutes_Esp_S_Lun, Minutes_Esp_S_Mar = Minutes_Esp_S_Mar, Minutes_Esp_S_Mie = Minutes_Esp_S_Mie, Minutes_Esp_S_Jue = Minutes_Esp_S_Jue,
                                             Minutes_Esp_S_Vie = Minutes_Esp_S_Vie, Minutes_Esp_S_Sab = Minutes_Esp_S_Sab, Minutes_Esp_S_Dom = Minutes_Esp_S_Dom)
+                
+                esp = Especialista.objects.get(ID_Especialista=id_especialista)
+                print(esp)
+                Reg2 = {'id_especialista':esp}
+                q_dict2 = QueryDict('', mutable=True)
+                q_dict2.update(Reg2)
+                formulario2 = FormRegistrarCobros(data=q_dict2)
+                if formulario2.is_valid():
+                    print('Estoy dentro del formulario2 ')
+                    formulario2.save()
+                
                 messages.success(request, "Te has registrado con éxito")
                 return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
             else:
@@ -1526,13 +1538,33 @@ def operador_confirmacion(request):
         
         else:
             messages.error(request, "El rut ingresado no figura en el sistema.")
+            return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
 
         # context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
         # url = reverse('confirmacion_citas') + '?cita={}&citas_sin_usuario={}&valor={}'.format(citas_usuarios, citas_sin_usuario, valor)
         # return redirect(url)
         context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario, 'especialidad_sin':especialidad_sin, 'especialidad_':especialidad_}
+        if 'seleccion' in request.POST:
+            print('Estoy en el post de seleccion')
+            cita = request.POST.get('seleccion')
+            print(type(cita))
+            cita = cita.replace("de ","").replace("a las ","")
+            cita = cita.replace('Enero','January').replace('Febrero','February').replace('Marzo','March').replace('Abril','April').replace('Mayo','May').replace('Junio','June').replace('Julio','July').replace('Agosto','August').replace('Septiembre','September').replace('Octubre','October').replace('Noviembre','November').replace('Diciembre','December')
+            cita = datetime.strptime(cita, '%d %B %Y %H:%M')
+            print(f'Cita replace {cita}')
 
+            if Cita.objects.filter(ID_Cita = cita).exists():
+                cita_confirmada = Cita.objects.get(ID_Cita = cita)
+                cita_confirmada.Confirmacion_Cita_Operador = True
+                cita_confirmada.save()
+            else:
+                cita_confirmada = CitaSinUsuario.objects.get(ID_Cita = cita)
+                cita_confirmada.Confirmacion_Cita_Operador = True
+                cita_confirmada.save()
+
+            return redirect('confirmacion')
         return render(request, 'Operador/Confirmacion/operador_citas_paciente.html', context)
+
 
     return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
     

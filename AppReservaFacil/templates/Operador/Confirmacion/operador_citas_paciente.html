@@ -12,6 +12,7 @@
                 </div>
             {% endfor %}
         {% endif %}
+        
         <h2 id="titulo-inicio-sesion">Paciente:</h2>
         {% if especialidad_ == None %}
             <h3 id="titulo-inicio-sesion">Especialidad: {{especialidad_sin}}</h3>
@@ -19,6 +20,7 @@
             <h3 id="titulo-inicio-sesion">Especialidad: {{especialidad_}}</h3>
         {% endif %}
         <h3 id="titulo-inicio-sesion">Citas de hoy</h3>
+        <div class="div-formulario">
             <div class="row">
                 <table>
                     <tr>
@@ -39,7 +41,7 @@
                                 <td>
                                 <form method="POST">
                                     {% csrf_token %}
-                                    <button class="btn-naranja-mediano" value="{{x.ID_Cita}}"
+                                    <button class="btn-naranja-mediano" value="{{x.Fecha_Cita}} {{x.Hora_Cita}}"
                                     type="submit" id="seleccion" name="seleccion">Confirmar</button>
                             </td>
                         </tr>
@@ -64,7 +66,8 @@
                         {% endfor %}
 
                 </table>
-            </div>      
+            </div>    
+        </div>
             <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'index' %}">Cancelar</a></button>
             <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'confirmacion' %}">Atras</a></button>
         </div>

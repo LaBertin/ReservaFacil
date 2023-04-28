@@ -12,10 +12,11 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
+        <div class="div-formulario">
+            <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
         <h3 id="titulo-inicio-sesion">Actual: {{fecha_seleccion}} {{hora_seleccion}}</h3>
             <div class="row">
-                <div class="col">
+                <div >
                     <br>
                     <form method="POST">
                         {% csrf_token %}
@@ -32,7 +33,9 @@
                 </div>
             </div>
             <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'index' %}">Cancelar</a></button>
-            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'modificar_lista' %}">Atras</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button>
+        </div>
+        
         </div>
 </div>
 {% endblock %}

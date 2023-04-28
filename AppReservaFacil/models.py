@@ -75,7 +75,7 @@ class Especialista(models.Model):
     Usuario_E = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.Nombre_completo_E}'
+        return f'{self.ID_Especialista}'
     
 class Operador(models.Model):
     ID_Operador = models.IntegerField(primary_key=True, unique=True)
@@ -206,4 +206,11 @@ class Ficha_Cita(models.Model):
         verbose_name = 'Ficha Cita'
         verbose_name_plural = 'Fichas Citas'
 
+class CobrosEspecialistas(models.Model):
 
+    Monto_Esp_P = models.IntegerField(null=True)
+    Monto_Esp_S = models.IntegerField(null=True)
+    ID_Especialista = models.ForeignKey(Especialista,  null=True, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        return f'{self.ID_Especialista}'

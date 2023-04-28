@@ -145,6 +145,36 @@ header {
         float: left;
     }
 
+    .div-botones{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin:7%
+    }
+    .btn-naranja-mediano-operador{
+        height: 50px;
+        width: 180px;
+        background-color: #FAA92F;
+        border-style: none;
+        border-radius: 5px;
+        margin: 2ex;
+    }
+        .btn-naranja-mediano-operador:hover{
+            text-decoration: none;
+            color: #000000;
+            background-color: #FAA92F;
+        }
+        /*Modifico el text dentro del btn para que no aparezca el underline*/
+        .btn-naranja-mediano-operador a{
+            text-decoration: none;
+            color: #000000;
+        }
+        /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+        .btn-naranja-mediano-operador a:hover{
+            text-decoration: none;
+            color: #000000;
+        }
+
     /*Div que mueve la lista de items a la derecha*/
     div#div-nav-right{
         float: right;
@@ -351,6 +381,15 @@ body{
         box-shadow: 0px 1px 1px;
 
     }
+
+    #titulo-Operador{
+        margin: 1.2rem;
+    }
+
+    .div-formulario{
+        margin-top: 75px ;
+    }
+
     .div-grande{
         height: 700px;
         width: 1300px;
@@ -361,6 +400,7 @@ body{
         overflow-y: scroll;
         overflow-x: hidden;
     }
+
     #titulo-seleccionar-area{
         margin-top: 20px;
     }

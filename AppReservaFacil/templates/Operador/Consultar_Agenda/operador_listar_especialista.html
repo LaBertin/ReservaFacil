@@ -3,7 +3,7 @@
 <title>Consultar Agenda</title>
 <div id="main-content-centro">
 
-    <div class="div-grande">
+    <div class="div-mediano">
         {% if messages %}
             {% for message in messages %}
                 <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
@@ -12,13 +12,23 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Seleccione Fecha</h2>
-            <div class="row">
-                <table>
+
+        <h2 id="titulo-Operador">Seleccione Fecha</h2>
+            <div class="table-responsive-lg">
+                <table class="table table-hover">
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Telefono</td>
+                        <td>Especialidades</td>
+                        <td>Dias de Atencion</td>
+                        <td></td>
+                    </tr>
                     {% for x in lista_especialista %}
                         <tr>
-                            <td>Nombre: {{x.Nombre_completo_E}}</td>
-                            <td>Telefono: {{x.Telefono_E}}</td>
+                            <td>{{x.Nombre_completo_E}}</td>
+                            <td>{{x.Telefono_E}}</td>
+                            <td>{{x.Especialidad_P}}<br>{{x.Especialidad_S}}</td>
+                            <td>{{x.Dia_Esp_P}}<br>{{x.Dia_Esp_S}}</td>
                             <td>
                                 <form method="POST">
                                     {% csrf_token %}
@@ -30,7 +40,7 @@
                     {% endfor %}
                 </table>
             </div>      
-            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'funciones_citas_operador' %}">Atras</a></button>    
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button> 
             <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
         </div>
     
