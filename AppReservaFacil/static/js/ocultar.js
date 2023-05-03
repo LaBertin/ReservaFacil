@@ -212,16 +212,16 @@ function grupoMultiSelect(){
     }
 
     Array.from(multi_p).forEach(checkbox => {
-        checkbox.addEventListener('change', actualizarCampos);
+        checkbox.addEventListener('click', actualizarCampos);
       });
 
     Array.from(multi_s).forEach(checkbox => {
-        checkbox.addEventListener('change', actualizarCampos);
+        checkbox.addEventListener('click', actualizarCampos);
       });
     Array.from(multi_t).forEach(checkbox => {
-        checkbox.addEventListener('change', actualizarCampos);
+        checkbox.addEventListener('click', actualizarCampos);
       });
     Array.from(multi_c).forEach(checkbox => {
-        checkbox.addEventListener('change', actualizarCampos);
+        checkbox.addEventListener('click', actualizarCampos);
     });
 }

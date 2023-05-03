@@ -17,6 +17,7 @@
                         <form method="post">
                             {% csrf_token %}
                                 {% if x in list_Citas_Reservadas %}
+                                    
                                     <button id="btn-selecc-hora" class="btn-rojo-mediano" value="{{x}}" type="submit"
                                             name="hora_agendar"> 
                                             {{x}}

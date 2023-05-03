@@ -7,7 +7,7 @@
         <h2 id="titulo-inicio-sesion">Seleccione Hora</h2>
             <h3 id="titulo-inicio-sesion">Especialidad : {{especialidad}}</h3>
             <div class="row">
-                <h4 class="text-align"><canvas class="cuadrado-verde"></canvas> Libre <canvas class="cuadrado-rojo"></canvas> Reservado</h4>
+                <h4 class="text-align"><canvas class="cuadrado-verde"></canvas> Libre <canvas class="cuadrado-rojo"></canvas> Reservado <canvas class="cuadrado-azul"></canvas> Hora actual de la cita</h4>
                 <table>
                     {% for x in lista %}
                     {% if forloop.counter0|divisibleby:5 %}
@@ -17,10 +17,17 @@
                         <form method="post">
                             {% csrf_token %}
                                 {% if x in lista_reserva %}
+                                    {% if x == hora_seleccion %}
+                                    <button id="btn-selecc-hora" class="btn-azul-mediano" value="{{x}}" type="submit"
+                                            name="hora_agendar"> 
+                                            {{x}}
+                                    </button>
+                                    {% else %}
                                     <button id="btn-selecc-hora" class="btn-rojo-mediano" value="{{x}}" type="submit"
                                             name="hora_agendar"> 
                                             {{x}}
                                     </button>
+                                    {% endif %}
                                 {% else %}
                                     <button id="btn-selecc-hora" class="btn-verde-mediano" value="{{x}}" type="submit"
                                             name="hora_agendar"> 

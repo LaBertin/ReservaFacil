@@ -113,11 +113,10 @@ class FormRegistrarCobros(forms.Form):
     monto_esp_p = forms.IntegerField(required=False)
     id_especialista = forms.CharField(max_length=256,required=True)
 
-
     def save(self):
-        print(f'ASDLKFNASDKLF {self}')
+
         cobroreg = CobrosEspecialistas.objects.create(
-            ID_Especialista = Especialista.objects.get(ID_Especialista = self.cleaned_data['id_especialista'])
+            ID_Especialista = Especialista.objects.get(ID_Especialista = Especialista.objects.get(Nombre_completo_E = self.cleaned_data['id_especialista']).ID_Especialista),
         )
         return cobroreg
 

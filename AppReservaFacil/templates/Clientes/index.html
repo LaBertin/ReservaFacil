@@ -36,7 +36,6 @@
                  {% elif request.user|has_group:"Operadores" %} 
                     <li><a href="/Agendar">Finanzas</a></li>
                     <li><a href="/select_Destinatario">Mensajería</a></li>
-                    <li><a href="/consultar_hora">Emitir Receta</a></li>
                     {% if user.is_authenticated %}
                         <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
                     {% else %}
@@ -98,12 +97,14 @@
                 {% endfor %}
             {% endif %}
         <div class="div-pequeño">
+            <br>
+            <br>
             <img src="{% static Operador_Cont.Foto_O.url %}" alt="Foto del Operador" class="img-redonda" width="150" height="150">
             <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_O}}</h1>
             <br>
-            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Finanzas</a></button>
+            <!-- <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Finanzas</a></button>
             <br>
-            <br>
+            <br> -->
             <br>
             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="select_Destinatario">Mensajería</a></button>
             <br>

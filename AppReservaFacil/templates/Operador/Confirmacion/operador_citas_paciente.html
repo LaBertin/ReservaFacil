@@ -43,6 +43,7 @@
                                     {% csrf_token %}
                                     <button class="btn-naranja-mediano" value="{{x.Fecha_Cita}} {{x.Hora_Cita}}"
                                     type="submit" id="seleccion" name="seleccion">Confirmar</button>
+                                </form>
                             </td>
                         </tr>
                         {% endfor %}
@@ -61,6 +62,7 @@
                                         {% csrf_token %}
                                         <button class="btn-naranja-mediano" value="{{y.ID_Cita}}"
                                         type="submit" id="seleccion" name="seleccion">Confirmar</button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
