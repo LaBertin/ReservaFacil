@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <script src="../../static/js/mostrarMensaje.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,14 +43,61 @@
                         <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/inicioSesion">Iniciar Sesión</a></button>
                     {% endif %}
                 {% else %}
-                    <li><a href="/agendar_hora">Agendar Cita</a></li>
-                    <li><a href="/consultar_hora">Consultar Cita</a></li>
-                    <li><a href="/anular_hora">Anular Cita</a></li>
-                    {% if user.is_authenticated %}
-                        <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
+                    {% if user.is_superuser %}
+                        <!--Bubble Mensaje Especialista-->
+                        <div class="bubble-text" id="mensajeEspecialista" style="display:none;">
+                            <div id="mensajeAdmin">
+                                <br>
+                                <h1 class="titulo-margin">¿Qué desea hacer?</h1>
+                                <div class="col">
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Agregar_Especialista">Agregar Especialista</a></button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Eliminar_Especialista">Eliminar Especialista</a></button>
+                                </div>
+                                <br>
+                                <div class="col">
+                                <button class="btn-naranja-mediano" onclick="ocultarMensajeEspecialista()">Cancelar</button>
+                                </div>      
+                                </div>
+                        </div>
+                        <!--Bubble Mensaje Operador-->
+                        <div class="bubble-text" id="mensajeOperador" style="display:none;">
+                            <div id="mensajeAdmin">
+                                <br>
+                                <h1 class="titulo-margin">¿Qué desea hacer?</h1>
+                                <div class="col">
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Agregar_Operador">Agregar Operador</a></button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Agregar_Operador">Eliminar Operador</a></button>
+                                </div>
+                                <br>
+                                <div class="col">
+                                <button class="btn-naranja-mediano" onclick="ocultarMensajeOperador()">Cancelar</button>
+                                </div>      
+                                </div>
+                        </div>
+
+                        <li onclick="mostrarMensajeEspecialista()" id="men_Especialistas"><a href="#" >Especialistas</a></li>
+                        <li onclick="mostrarMensajeOperador()" id="men_Operadores"><a href="#">Operadores</a></li>
+                        <li><a href="#">Especialidades</a></li>
+                        {% if user.is_authenticated %}
+                            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
+                        {% else %}
+                            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/inicioSesion">Iniciar Sesión</a></button>
+                        {% endif %}
                     {% else %}
-                        <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/inicioSesion">Iniciar Sesión</a></button>
+                        <li><a href="/agendar_hora">Agendar Cita</a></li>
+                        <li><a href="/consultar_hora">Consultar Cita</a></li>
+                        <li><a href="/anular_hora">Anular Cita</a></li>
+                        {% if user.is_authenticated %}
+                            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
+                        {% else %}
+                            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/inicioSesion">Iniciar Sesión</a></button>
+                        {% endif %}
                     {% endif %}
+                    
                 {% endif %}
             </ul>
             
@@ -111,19 +159,42 @@
             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="funciones_citas_operador">Citas</a></button>
         </div>
 {% else %}
+    {% if user.is_superuser %}
+        
+        <div id="main-content">
+            <title>ReservaFácil - Inicio</title>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert" id="message_box">
+                            {{ message }}
+                            <button  type="button" id="alerto" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="div-pequeño texto-centrado-verticalmente-hori">
+                    <h2 class="title">
+                        Seleccione una opción
+                    </h2>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano" onclick="mostrarMensajeEspecialista()" id="men_Especialistas">Especialistas</button>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano" onclick="mostrarMensajeOperador()" id="men_Operadores">Operadores</button>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Especialidades</a></button>
+                </div>
+        </div>
+    {% else %}
     <!--En caso de ser Paciente el inicio cambia-->
-    <div id="main-content">
-        <title>ReservaFácil - Inicio</title>
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert" id="message_box">
-                        {{ message }}
-                        <button  type="button" id="alerto" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-            <div id="div-body"><h1>Bienvenido a ReservaFácil</h1></div>
-    </div>
+        <div id="main-content">
+            <title>ReservaFácil - Inicio</title>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert" id="message_box">
+                            {{ message }}
+                            <button  type="button" id="alerto" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <div id="div-body"><h1>Bienvenido a ReservaFácil</h1></div>
+        </div>
+    {% endif %}
 {% endif %}
 
 

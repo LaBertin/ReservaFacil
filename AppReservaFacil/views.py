@@ -53,8 +53,6 @@ def index(request):
                 return render(request, "Clientes/index.html", {'Nombre_O':nombre_Operador,'Operador_Cont':Operador_Cont})
 
             else:
-                print("Otro")
-                Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Operadores']).exists()
                 return render(request, "Clientes/index.html")
         
     else:
@@ -82,12 +80,8 @@ def registrousuario(request):
             usuario = request.POST.get('username')
             print(usuario)
             formulario.save()
-            user = User.objects.get(username = usuario)
-            grupo_Pacientes = Group.objects.get(name='Pacientes') 
-            user.groups.add(grupo_Pacientes)
-            count_paciente = Paciente.objects.all().count()+1
-            Usuario_P = User.objects.filter(username=usuario)[0]
-            Paciente.objects.create(ID_Paciente=count_paciente, Usuario_P = Usuario_P)
+            formPac = FormPaciente()
+            formPac.save(usuario)
             messages.success(request, "Te has registrado con éxito")
             return redirect('inicioSesion')
         else:
@@ -515,7 +509,7 @@ def Cliente_consultar_hora(request):
         return render(request, 'clientes/cliente_Consultar_Cita.html', {'citas_cliente':citas_cliente})
     else:
         return render(request, 'clientes/cliente_Consultar_Cita.html')
-
+#Views Admin
 def agregar_empleado(request):
     nuevo_emp_form = {
         'formEspecialista': FormEspecialista()
@@ -737,7 +731,7 @@ def agregar_empleado(request):
             
             id_especialista = Especialista.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
-            uar = " ".join(nom_com_especialista.split()[-2:-1]).lower()
+            uar = " ".join(nom_com_especialista.split()[2:3]).lower()
             print(f'uar: {uar}')
             io = fecha_nac_especialista[:-6]
             print(io)
@@ -782,6 +776,22 @@ def agregar_empleado(request):
     
     return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
 
+def admin_Eliminar_Especialista(request):
+    print("MENUUUUUUUUUUUU")
+    if request.method == 'POST':
+        print("POOOOOOOOOOOOOOOOOOOOOOOOST")
+        if 'conf_delet_cit' in request.POST:
+            ID_Esp_del = request.POST.get('conf_delet_cit')
+            print("MANUEEEH")
+            print(ID_Esp_del)
+            print(type(ID_Esp_del))
+            Especialista_Del = Especialista.objects.get(ID_Especialista = ID_Esp_del)
+            User.objects.get(username = Especialista_Del.Usuario_E).delete()
+            Especialista_Del.delete()
+    Especialistas_All = Especialista.objects.all()
+    contexto = {'Especialistas_All':Especialistas_All}
+    return render(request, 'Admin/admin_Eliminar_Especialista.html', contexto)
+
 def agregar_operador(request):
     nuevo_o_form={'formOperador':FormOperador()}
     if request.method=='POST':
@@ -824,7 +834,6 @@ def agregar_operador(request):
             q_dict.update(Reg)
             formulario = FormRegistrarUsuario(data=q_dict)
             if formulario.is_valid():
-                formulario.save()
                 usuario_nom = User.objects.get(username=usuario)
                 print(usuario_nom)
                 grupo_o = Group.objects.get(name='Operadores')
@@ -856,8 +865,6 @@ def obtener_especialidades(request, area_medica_id):
 #Views Especialistas
 def especialista_Agenda(request):
     form_agenda = {'form_agenda': DateForm()}
-    user = User.objects.get(username=request.user.username)
-    datos_esp = Especialista.objects.get(Usuario_E=user)
 
     if request.method=='POST':
         form_enviado = DateForm(request.POST)
@@ -975,29 +982,29 @@ def dias_minutos_especialidad(dia_seleccionado, dias_str, dias_especialista, fec
     return list_horas, list_Citas_Reservadas, especialidad
 
 def especialista_list_citas(request):
+    # Si la solicitud es de tipo POST, verificar si se ha enviado una solicitud para eliminar una cita o para ver la ficha médica de un paciente
     if request.method == 'POST':
-        print("POST")
         if 'doc_pac' in request.POST:
+            # Si se ha solicitado la ficha médica de un paciente, obtener el nombre del paciente y redirigir a la página de ficha médica
             nom_pac = request.POST.get('doc_pac')
             url = reverse('ficha_medica') + '?nom_pac={}'.format(nom_pac)
-            print(f'nom_pac: {nom_pac}')
             return redirect(url)
         if 'conf_delet_cit' in request.POST:
+            # Si se ha solicitado eliminar una cita, obtener la fecha y hora de la cita y eliminarla de la base de datos
             ID_Cita_del = request.POST.get('conf_delet_cit').split(' ')
-            print(ID_Cita_del)
             Ndia = ID_Cita_del[0]
-            print(type(Ndia))
-            print(f'Wena:{Ndia}')
             Mes = ID_Cita_del[2].replace('Enero','01').replace('Febrero','02').replace('Marzo','03').replace('Abril','04').replace('Mayo','05').replace('Junio','06').replace('Julio','07').replace('Agosto','08').replace('Septiembre','09').replace('Octubre','10').replace('Noviembre','11').replace('Diciembre','12')
             Anno = ID_Cita_del[4]
             Hora = ID_Cita_del[7]
+            # Formatear la fecha y hora de la cita en un formato adecuado para eliminarla de la base de datos
             ID_Cita_del = Ndia+'/'+Mes+'/'+Anno+' '+Hora
             ID_Cita_del = datetime.strptime(ID_Cita_del,'%d/%m/%Y %H:%M')
-            print(type(ID_Cita_del))
-            print(f'{ID_Cita_del}')
+            # Eliminar la cita de la base de datos
             Cita.objects.get(ID_Cita = ID_Cita_del).delete()
+            # Mostrar un mensaje de éxito y redirigir a la página de agenda del especialista
             messages.success(request, "Hora anulada con éxito")
             return redirect('agenda_especialista')
+    # Si la solicitud no es de tipo POST, obtener la información de la agenda del especialista a partir de los parámetros de la solicitud
     list_horas = request.GET.get('list_horas').replace("'","").replace("[","").replace("]","").split(', ')
     list_Citas_Reservadas = request.GET.get('list_Citas_Reservadas').replace("'","").replace("[","").replace("]","").split(', ')
     fecha_Elegida = request.GET.get('fecha_Elegida')
@@ -1005,6 +1012,7 @@ def especialista_list_citas(request):
     list_Real_Horas = []
     nombre_Pacientes = []
     list_Citas_Agen = []
+    # Para cada cita reservada, obtener información como el nombre del paciente y la hora de la cita
     for i in range(len(list_Citas_Reservadas)):
         horas = list_Citas_Reservadas[i]
         ID_Cita = fecha_Elegida +' '+ horas
@@ -1017,56 +1025,64 @@ def especialista_list_citas(request):
         for j in range(len(esp_Del_Dia)):
             esp = esp_Del_Dia[j]
         list_Citas_Agen.append([fecha_El,nombre_Paciente,esp])
+    #Ordenar Citas obtenidas en orden de fecha.
     list_Citas_Agen = sorted(list_Citas_Agen, key=lambda cita: cita[0])
+    #Crear contexto para poder usarlo en template
     list_horas = {'list_Citas_Reservadas':list_Citas_Agen}
-
+    #Renderizar template con su contexto respectivo
     return render(request, "Especialistas/agenda_dia.html", list_horas)
 
 def list_ficha_medica(request):
-    if request.method == 'POST':
-        if 'red_form_ficha_med' in request.POST:
-            return redirect('crear_ficha_medica')
-        if 'agregar_cita_medica' in request.POST:
+    if request.method == 'POST':  # Si se recibe una solicitud POST
+        if 'red_form_ficha_med' in request.POST:  # Si el botón 'red_form_ficha_med' está presente en la solicitud POST
+            return redirect('crear_ficha_medica')  # Redirige al usuario a la página 'crear_ficha_medica'
+        if 'agregar_cita_medica' in request.POST:  # Si el botón 'agregar_cita_medica' está presente en la solicitud POST
+            # Obtiene los datos necesarios de la solicitud POST
             datos_list = request.POST.get('agregar_cita_medica').split(',')
             Ficha_Medica_Pac = datos_list[0]
             RUT_Pac = datos_list[1]
             Nombre_Com_Pac = datos_list[2]
+            # Crea la URL para agregar una cita médica y redirige al usuario a ella
             url = reverse('agregar_cita_medica') + '?Ficha_Medica_Pac={}&RUT_Pac={}&Nombre_Com_Pac={}'.format(
                 Ficha_Medica_Pac, RUT_Pac, Nombre_Com_Pac)
             return redirect(url)
+        if 'ver_cita_medica' in request.POST:
+            ID_Ficha_Cita = request.POST.get('ver_cita_medica')
+            print(ID_Ficha_Cita)
+            url = reverse('ver_cita_medica') + '?ID_Ficha_Cita={}'.format(ID_Ficha_Cita)
+            return redirect(url)
+        if 'ver_ficha_medica' in request.POST:
+            ID_Ficha_Medica = request.POST.get('ver_ficha_medica')
+            print(ID_Ficha_Medica)
+            url = reverse('ver_ficha_medica') + '?ID_Ficha_Medica={}'.format(ID_Ficha_Medica)
+            return redirect(url)
         
-    nom_pac = request.GET.get('nom_pac')
-    print(f'Nombre: {nom_pac}')
-    rut_pac = Paciente.objects.get(Nombre_Paciente = nom_pac).Rut
-    print(rut_pac)
-    if Ficha_Medica.objects.filter(RUT_Pac = rut_pac).exists():
-        Ficha_Med_Pac = Ficha_Medica.objects.get(RUT_Pac = rut_pac)
-        if Ficha_Cita.objects.filter(RUT_Pac = rut_pac).exists():
-            Citas_medicas = Ficha_Cita.objects.filter(RUT_Pac = rut_pac)
-            contexto = {'Ficha_Med_Pac':Ficha_Med_Pac, 'QSCitasMedicas':Citas_medicas}
-            return render(request,"Especialistas/ficha_medica.html", contexto)
+    else:   
+        nom_pac = request.GET.get('nom_pac')  # Obtiene el valor de la variable 'nom_pac' de la solicitud GET
+        rut_pac = Paciente.objects.get(Nombre_Paciente = nom_pac).Rut  # Obtiene el Rut del paciente correspondiente al nombre obtenido en la solicitud GET
+        # Si existe una ficha médica asociada al paciente
+        if Ficha_Medica.objects.filter(RUT_Pac = rut_pac).exists():
+            Ficha_Med_Pac = Ficha_Medica.objects.get(RUT_Pac = rut_pac)  # Obtiene la ficha médica asociada al paciente
+            # Si existen citas médicas asociadas al paciente
+            if Ficha_Cita.objects.filter(RUT_Pac = rut_pac).exists():
+                Citas_medicas = Ficha_Cita.objects.filter(RUT_Pac = rut_pac)  # Obtiene las citas médicas asociadas al paciente
+                contexto = {'Ficha_Med_Pac':Ficha_Med_Pac, 'QSCitasMedicas':Citas_medicas}  # Crea un diccionario con la información de la ficha médica y las citas médicas
+                return render(request,"Especialistas/ficha_medica.html", contexto)  # Renderiza la plantilla HTML 'ficha_medica.html' con el contexto creado
+            else:
+                print("Ficha Cita no existe")  # Si no existen citas médicas asociadas al paciente, imprime un mensaje de error en la consola
+                contexto = {'Ficha_Med_Pac':Ficha_Med_Pac,'texto_FMP':'No hay citas médicas registrada para '+nom_pac+'.'}  # Crea un diccionario con la información de la ficha médica y un mensaje de error
+                return render(request,"Especialistas/ficha_medica.html", contexto)  # Renderiza la plantilla HTML 'ficha_medica.html' con el contexto creado
         else:
-            print("Ficha Cita no existe")
-            contexto = {'Ficha_Med_Pac':Ficha_Med_Pac,'texto_FMP':'No hay citas médicas registrada para '+nom_pac+'.'}
-            return render(request,"Especialistas/ficha_medica.html", contexto)
-    else:
-        print("Ficha medica no existe")
-        contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
-        return render(request, "Especialistas/ficha_medica.html", contexto)
+            print("Ficha medica no existe")
+            contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
+            return render(request, "Especialistas/ficha_medica.html", contexto)
+
 
 def agregar_cita_medica(request):
     if request.method == 'POST':
         form_Post = FormCitaMedica(data=request.POST)
         if form_Post.is_valid():
-            ID_Ficha_Cita = Ficha_Cita.objects.all().count()+1
-            Fecha_Cita = form_Post.cleaned_data['Fecha_Cita']
-            Ficha_Medica_Pac = Ficha_Medica.objects.get(ID_Ficha_Medica=form_Post.cleaned_data['Ficha_Medica_Pac']) 
-            RUT_Pac = form_Post.cleaned_data['RUT_Pac']
-            Nombre_Com_Pac = Paciente.objects.get(Nombre_Paciente=form_Post.cleaned_data['Nombre_Com_Pac']) 
-            Nombre_Com_Esp = Especialista.objects.get(Nombre_completo_E=form_Post.cleaned_data['Nombre_Com_Esp'])
-            Diagnostico_Cita = form_Post.cleaned_data['Diagnostico_Cita']
-            Ficha_Cita.objects.create(ID_Ficha_Cita=ID_Ficha_Cita, Fecha_Cita=Fecha_Cita, Ficha_Medica_Pac=Ficha_Medica_Pac, RUT_Pac=RUT_Pac,
-                                      Nombre_Com_Pac=Nombre_Com_Pac, Nombre_Com_Esp=Nombre_Com_Esp, Diagnostico_Cita=Diagnostico_Cita)
+            form_Post.save()
             messages.success(request, "Cita médica agregada con éxito")
             url = reverse('ficha_medica') + '?nom_pac={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'])
             return redirect(url)
@@ -1081,6 +1097,21 @@ def agregar_cita_medica(request):
     formulario = FormCitaMedica(initial=datos_form)
     contexto = {'FormCitaMedica':formulario}
     return render(request, "Especialistas/agregar_cita_medica.html", contexto)
+
+def ver_cita_medica(request):
+    ID_Ficha_Cita = request.GET.get('ID_Ficha_Cita')
+    Cita_Medica = Ficha_Cita.objects.get(ID_Ficha_Cita=ID_Ficha_Cita)
+    Ficha_Medica_Pac = Cita_Medica.Ficha_Medica_Pac
+    RUT_Pac = Cita_Medica.RUT_Pac
+    Nombre_Com_Pac = Cita_Medica.Nombre_Com_Pac
+    Nombre_Com_Esp = Cita_Medica.Nombre_Com_Esp
+    Fecha_Cita = Cita_Medica.Fecha_Cita
+    Diagnostico_Cita = Cita_Medica.Diagnostico_Cita
+    datos_form = {'Ficha_Medica_Pac':Ficha_Medica_Pac,'Ficha_Medica_Pac':Ficha_Medica_Pac, 'RUT_Pac':RUT_Pac, 'Nombre_Com_Pac':Nombre_Com_Pac, 'Fecha_Cita':Fecha_Cita, 'Nombre_Com_Esp':Nombre_Com_Esp, 'Diagnostico_Cita':Diagnostico_Cita}
+    formulario = FormCitaMedica(initial=datos_form)
+    formulario.fields['Diagnostico_Cita'].widget.attrs['readonly'] = True
+    contexto = {'FormCitaMedica':formulario}
+    return render(request, 'Especialistas/ver_cita_medica.html', contexto)
 
 def form_ficha_medica(request):
     print("Si, soy yo")
@@ -1110,11 +1141,75 @@ def form_ficha_medica(request):
             Ficha_Medica.objects.create(ID_Ficha_Medica=ID_Ficha_Medica, RUT_Pac=RUT_Pac ,Nombre_Com_Pac=Nombre_Com_Pac, Direccion_Pac=Direccion_Pac,Telefono_Pac=Telefono_Pac,
                                         Sis_Sal_Pac=Sis_Sal_Pac, Grupo_Sanguineo=Grupo_Sanguineo, Al_Antibioticos=Al_Antibioticos, Antibioticos_TI=Antibioticos_TI, Al_Medicamentos=Al_Medicamentos,
                                         Medicamentos_TI=Medicamentos_TI, Al_Alimentos=Al_Alimentos, Alimentos_TI=Alimentos_TI, Al_Ani_Ins=Al_Ani_Ins, Ani_Ins_TI=Ani_Ins_TI,
-                                        Enf_Cronic=Enf_Cronic, Enf_Cronic_TI=Enf_Cronic_TI, Observaciones_Ficha=Observaciones_Ficha)
+                                        Enf_Cronic=Enf_Cronic,  Enf_Cronic_TI=Enf_Cronic_TI, Observaciones_Ficha=Observaciones_Ficha)
             messages.success(request, "Ficha Médica creada con éxito")
+            url = reverse('ficha_medica') + '?nom_pac={}'.format(formulario_post.cleaned_data['Nombre_Com_Pac'])
+            return redirect(url)
         else:
             print("No es valido")
     return render(request, 'Especialistas/form_Ficha_Medica.html', formulario)
+
+def ver_ficha_medica(request):
+    ID_Ficha_Medica = request.GET.get('ID_Ficha_Medica')
+    Ficha_Med = Ficha_Medica.objects.get(ID_Ficha_Medica=ID_Ficha_Medica)
+    RUT_Pac = Ficha_Med.RUT_Pac
+    Nombre_Com_Pac = Ficha_Med.Nombre_Com_Pac
+    Direccion_Pac = Ficha_Med.Direccion_Pac
+    Telefono_Pac = Ficha_Med.Telefono_Pac
+    Sis_Sal_Pac = Ficha_Med.Sis_Sal_Pac
+    Grupo_Sanguineo = Ficha_Med.Grupo_Sanguineo
+    Al_Antibioticos = Ficha_Med.Al_Antibioticos
+    Antibioticos_TI = Ficha_Med.Antibioticos_TI
+    Al_Medicamentos = Ficha_Med.Al_Medicamentos
+    Medicamentos_TI = Ficha_Med.Medicamentos_TI
+    Al_Alimentos = Ficha_Med.Al_Alimentos
+    Alimentos_TI = Ficha_Med.Alimentos_TI
+    Al_Ani_Ins = Ficha_Med.Al_Ani_Ins
+    Ani_Ins_TI = Ficha_Med.Ani_Ins_TI
+    Enf_Cronic = Ficha_Med.Enf_Cronic
+    Enf_Cronic_TI = Ficha_Med.Enf_Cronic_TI
+    Observaciones_Ficha = Ficha_Med.Observaciones_Ficha
+    datos_form =  {
+        'RUT_Pac': RUT_Pac,
+        'Nombre_Com_Pac': Nombre_Com_Pac,
+        'Direccion_Pac': Direccion_Pac,
+        'Telefono_Pac': Telefono_Pac,
+        'Sis_Sal_Pac': Sis_Sal_Pac,
+        'Grupo_Sanguineo': Grupo_Sanguineo,
+        'Al_Antibioticos': Al_Antibioticos,
+        'Antibioticos_TI': Antibioticos_TI,
+        'Al_Medicamentos': Al_Medicamentos,
+        'Medicamentos_TI': Medicamentos_TI,
+        'Al_Alimentos': Al_Alimentos,
+        'Alimentos_TI': Alimentos_TI,
+        'Al_Ani_Ins': Al_Ani_Ins,
+        'Ani_Ins_TI': Ani_Ins_TI,
+        'Enf_Cronic': Enf_Cronic,
+        'Enf_Cronic_TI': Enf_Cronic_TI,
+        'Observaciones_Ficha' : Observaciones_Ficha,
+        }
+    formulario = FormFichaMedica(initial=datos_form)
+    formulario.fields['RUT_Pac'].widget.attrs['readonly'] = True
+    formulario.fields['Nombre_Com_Pac'].widget.attrs['readonly'] = True
+    formulario.fields['Direccion_Pac'].widget.attrs['readonly'] = True
+    formulario.fields['Telefono_Pac'].widget.attrs['readonly'] = True
+    formulario.fields['Sis_Sal_Pac'].widget.attrs['disabled'] = True
+    formulario.fields['Grupo_Sanguineo'].widget.attrs['disabled'] = True
+    formulario.fields['Al_Antibioticos'].widget.attrs['disabled'] = True
+    formulario.fields['Antibioticos_TI'].widget.attrs['readonly'] = True
+    formulario.fields['Al_Medicamentos'].widget.attrs['disabled'] = True
+    formulario.fields['Medicamentos_TI'].widget.attrs['readonly'] = True
+    formulario.fields['Al_Alimentos'].widget.attrs['disabled'] = True
+    formulario.fields['Alimentos_TI'].widget.attrs['readonly'] = True
+    formulario.fields['Al_Ani_Ins'].widget.attrs['disabled'] = True
+    formulario.fields['Ani_Ins_TI'].widget.attrs['readonly'] = True
+    formulario.fields['Enf_Cronic'].widget.attrs['disabled'] = True
+    formulario.fields['Enf_Cronic_TI'].widget.attrs['readonly'] = True
+    formulario.fields['Observaciones_Ficha'].widget.attrs['readonly'] = True
+    contexto = {'formFichaMedica':formulario}
+
+    return render(request, 'Especialistas/ver_ficha_medica.html', contexto)
+
 
 #Views Operadores
 def select_destinatario(request):

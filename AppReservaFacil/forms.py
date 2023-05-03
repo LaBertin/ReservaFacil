@@ -66,6 +66,18 @@ class FormPaciente(forms.Form):
     direccion_pac = forms.CharField(max_length=256)
     telefono_pac = forms.CharField(max_length=9)
 
+    def save(self, usuario):  
+        user = User.objects.get(username = usuario)
+        grupo_Pacientes = Group.objects.get(name='Pacientes') 
+        user.groups.add(grupo_Pacientes)
+        Usuario_P = User.objects.get(username = usuario).username
+        CitaMedica = Ficha_Cita.objects.create(  
+            ID_Paciente = Paciente.objects.all().count()+1,
+            Usuario_P = Usuario_P
+            
+        )
+        return CitaMedica  
+
 class FormPacienteSinUser(forms.Form):
     rut_pac = forms.CharField(max_length=9)
     email_pac = forms.EmailField(label='email')
@@ -129,28 +141,22 @@ class FormMensaje(forms.Form):
     texto = forms.CharField(max_length=256)
 
 class FormFichaMedica(forms.Form):
-    RUT_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=True)
+    RUT_Pac =  forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=True)
     Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length = 256, required=True)
     Direccion_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=256, required=False)
     Telefono_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=False)
     Sis_Sal_Pac = forms.ChoiceField(choices = SISTEMA_SALUD, required=False, initial = 'SegCom')
     Grupo_Sanguineo = forms.ChoiceField(choices=GRUPO_SANGUINEO, required=False, initial = 'Amas')
-
     Al_Antibioticos = forms.BooleanField(required=False)
     Antibioticos_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
-
     Al_Medicamentos = forms.BooleanField(required=False)
     Medicamentos_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
-
     Al_Alimentos = forms.BooleanField(required=False)
     Alimentos_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
-
     Al_Ani_Ins = forms.BooleanField(required=False)
     Ani_Ins_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
-
     Enf_Cronic = forms.BooleanField(required=False)
     Enf_Cronic_TI = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}), max_length = 256, required=False)
-
     Observaciones_Ficha = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 150}), required=False)
 
 class FormCitaMedica(forms.Form):
@@ -160,3 +166,15 @@ class FormCitaMedica(forms.Form):
     Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
     Nombre_Com_Esp = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
     Diagnostico_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
+
+    def save(self):  
+        CitaMedica = Ficha_Cita.objects.create(  
+            ID_Ficha_Cita = Ficha_Cita.objects.all().count()+1,
+            Fecha_Cita = self.cleaned_data['Fecha_Cita'],
+            Ficha_Medica_Pac = Ficha_Medica.objects.get(ID_Ficha_Medica=self.cleaned_data['Ficha_Medica_Pac']) ,
+            RUT_Pac = self.cleaned_data['RUT_Pac'],
+            Nombre_Com_Pac = Paciente.objects.get(Nombre_Paciente=self.cleaned_data['Nombre_Com_Pac']),
+            Nombre_Com_Esp = Especialista.objects.get(Nombre_completo_E=self.cleaned_data['Nombre_Com_Esp']),
+            Diagnostico_Cita = self.cleaned_data['Diagnostico_Cita'],
+        )
+        return CitaMedica  

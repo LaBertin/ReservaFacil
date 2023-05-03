@@ -41,9 +41,7 @@
                     <br>
                     <div class="row">
                         <div class="col">
-                            <button class="btn-naranja-mediano">
-                                <a href="/consultar_hora">Atras</a>
-                            </button>
+                            <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
                         </div>
                     </div>
                 {% endif %}

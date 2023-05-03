@@ -2,9 +2,7 @@
 {% block footer %}
 <title>Crear Ficha Médica</title>
     <div class="div-mediano">
-        <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
-        <form method="post">
-        {% csrf_token %}    
+        <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>  
             <div class="row row-margin justify-content-center">
                 <div class="col-md-2">
                     <h5>
@@ -46,10 +44,8 @@
                 </div>
             </div>
             <br>
-            <button type="submit" class="btn-naranja-mediano row-margin" name="agregar_cita_medica">Agregar cita médica</button>
             <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
 
-        </form>
     </div>  
 </div>
 {% endblock %}

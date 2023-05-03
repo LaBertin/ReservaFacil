@@ -208,6 +208,11 @@ body{
     .body-margin-top{
         margin-top: 100px;
     }
+    .btn-margin{
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
     #container-fila-agendar-hora{
         padding: 50px 0px;
     }
@@ -245,11 +250,29 @@ body{
         border-radius: 50%;
         margin-top: 20px;
       }
+    .titulo-margin{
+        margin-bottom: 50px;
+    }
     .td-pequeno{
         width: 50px;
     }
+    #mensajeAdmin {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 65%;
+    }
     .texto-centrado-verticalmente {
         display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50%;
+      }
+    .texto-centrado-verticalmente-hori {
+        display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 50%;

@@ -1,5 +1,11 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<script src="../../static/js/paginacion.js"></script>
 <title>Ficha Médica</title>
 {% if messages %}
     {% for message in messages %}
@@ -39,7 +45,10 @@
                         <td>{{Ficha_Med_Pac.RUT_Pac}}</td>
                         <td>{{Ficha_Med_Pac.Nombre_Com_Pac}}</td>
                         <td>{{Ficha_Med_Pac.Grupo_Sanguineo}}</td>
-                        <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano">Ver Ficha Médica</button></td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">Ver Ficha Médica</button></td>
+                        </form>
                     </tr>
                 </table>
             </div>
@@ -74,7 +83,10 @@
                         <td>{{Ficha_Med_Pac.RUT_Pac}}</td>
                         <td>{{Ficha_Med_Pac.Nombre_Com_Pac}}</td>
                         <td>{{Ficha_Med_Pac.Grupo_Sanguineo}}</td>
-                        <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano">Ver Ficha Médica</button></td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">Ver Ficha Médica</button></td>
+                        </form>
                     </tr>
                 </table>
             </div>
@@ -96,11 +108,14 @@
                                 <th>{{citas.ID_Ficha_Cita}}</th>
                                 <th>{{citas.Fecha_Cita}}</th>
                                 <th>{{citas.Nombre_Com_Esp}}</th>
-                                <th><button type="submit" name="ver_cita_medica" class="btn-naranja-mediano">Ver Cita Médica</button></th>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <th><button type="submit" name="ver_cita_medica" value="{{citas.ID_Ficha_Cita}}" class="btn-naranja-mediano">Ver Cita Médica</button></th>
+                                </form>
                             </tr>
                             {% endfor %}
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
                     <div>
                         <form method="post">
                             {% csrf_token %}
@@ -111,12 +126,13 @@
                             </button>
                         </form>
                     </div>
+                    <ul class="pagination"></ul>
                 </div>
                 
         {% endif %}
             
         {% endif %}   
-        <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+        <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
     </div>  
 </div>
 {% endblock %}

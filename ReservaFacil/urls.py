@@ -31,8 +31,11 @@ urlpatterns = [
     path('consultar_hora/', views.Cliente_consultar_hora),
     path('obtener_especialidades/<int:area_medica_id>/', views. obtener_especialidades, name='obtener_especialidades'),
 
-    path('admin_Agregar_Especialista/', views.agregar_empleado),    
-    path('admin_Agregar_Operador/', views.agregar_operador),
+
+    #Admin
+    path('admin_Agregar_Especialista/', views.agregar_empleado, name='admin_Agregar_Especialista'),    
+    path('admin_Eliminar_Especialista/', views.admin_Eliminar_Especialista, name='admin_Eliminar_Especialista'),
+    path('admin_Agregar_Operador/', views.agregar_operador, name='admin_Agregar_Operador'),
 
     path('funciones_citas_operador/', views.operador_funciones, name='funciones_citas_operador'),
     #Consultar_Agenda
@@ -53,6 +56,9 @@ urlpatterns = [
     path('ficha_medica/', views.list_ficha_medica, name='ficha_medica'),
     path('crear_ficha_medica/', views.form_ficha_medica, name='crear_ficha_medica'),
     path('agregar_cita_medica/', views.agregar_cita_medica, name='agregar_cita_medica'),
+    path('ver_cita_medica/', views.ver_cita_medica, name='ver_cita_medica'),
+    path('ver_ficha_medica/', views.ver_ficha_medica, name='ver_ficha_medica'),
+
 
     path('agenda_especialista/',views.especialista_Agenda, name='agenda_especialista'),
     path('agenda_dia/', views.especialista_list_citas, name='agenda_dia'),
