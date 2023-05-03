@@ -12,8 +12,10 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
-            <div class="row">
+        
+        <div class="div-formulario">
+            <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
+            <div class="div-formulario">
                 <form method="POST">
                     {% csrf_token %}
                     <input type="text" name="rut" >
@@ -21,6 +23,9 @@
                     <button class="btn-naranja-mediano" type="submit" name="agendar_operador">Consultar Citas</button>
                 </form>
             </div>      
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'funciones_citas_operador' %}">Atras</a></button>
+            </div>
         </div>
+        
 </div>
 {% endblock %}

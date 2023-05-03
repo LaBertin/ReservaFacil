@@ -117,6 +117,31 @@ header {
         margin-bottom: 2px;
     }
 
+    .btn-azul-mediano{
+        height: 40px;
+            width: 140px;
+            background-color: #4a78f6;
+            border-style: none;
+            border-radius: 5px;
+            margin: auto;
+        }
+            .btn-rojo-mediano:hover{
+                text-decoration: none;
+                color: #000000;
+                background-color: #4a78f6;
+            }
+            /*Modifico el text dentro del btn para que no aparezca el underline*/
+            .btn-rojo-mediano a{
+                text-decoration: none;
+                color: #000000;
+            }
+            /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+            .btn-rojo-mediano a:hover{
+                text-decoration: none;
+                color: #000000;
+            }
+
+
     .btn-rojo-mediano{
             height: 40px;
             width: 140px;
@@ -144,6 +169,36 @@ header {
     div#div-nav-left{
         float: left;
     }
+
+    .div-botones{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin:7%
+    }
+    .btn-naranja-mediano-operador{
+        height: 50px;
+        width: 180px;
+        background-color: #FAA92F;
+        border-style: none;
+        border-radius: 5px;
+        margin: 2ex;
+    }
+        .btn-naranja-mediano-operador:hover{
+            text-decoration: none;
+            color: #000000;
+            background-color: #FAA92F;
+        }
+        /*Modifico el text dentro del btn para que no aparezca el underline*/
+        .btn-naranja-mediano-operador a{
+            text-decoration: none;
+            color: #000000;
+        }
+        /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+        .btn-naranja-mediano-operador a:hover{
+            text-decoration: none;
+            color: #000000;
+        }
 
     /*Div que mueve la lista de items a la derecha*/
     div#div-nav-right{
@@ -315,11 +370,16 @@ body{
         background: none;
     }
 
-    .cuadrado-rojo {
+    .cuadrado-azul {
         width: 25px; 
         height: 25px; 
-        background: #c94b4b;
+        background: #4a78f6;
    }
+   .cuadrado-rojo {
+    width: 25px; 
+    height: 25px; 
+    background: #c94b4b;
+}
    .cuadrado-verde {
         width: 25px; 
         height: 25px; 
@@ -345,6 +405,11 @@ body{
         border-radius: 10px;
         box-shadow: 0px 1px 1px;
     }
+
+    #formUsuario{
+        align-content: center;
+    }
+
     .div-choicefield{
         height: 28px;
     }
@@ -374,6 +439,15 @@ body{
         box-shadow: 0px 1px 1px;
 
     }
+
+    #titulo-Operador{
+        margin: 1.2rem;
+    }
+
+    .div-formulario{
+        margin-top: 75px ;
+    }
+
     .div-grande{
         height: 700px;
         width: 1300px;
@@ -384,6 +458,7 @@ body{
         overflow-y: scroll;
         overflow-x: hidden;
     }
+
     #titulo-seleccionar-area{
         margin-top: 20px;
     }
@@ -1010,3 +1085,76 @@ select::-ms-expand{
         width: 100%;
     }
 }
+
+.col-esp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  /* INICIAR SESION FORMULARIO*/
+
+  .usuario_login{
+    margin-top: 2rem; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+  }
+  
+  .usuario_login .usuario_campo{
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    margin-bottom: 1rem;
+  }
+  .usuario_login .usuario_campo .icono_nombre_campo{
+    display: flex; 
+    flex-direction: row;
+  }
+  .usuario_login .usuario_campo #id_username{
+    border-radius: 12px;
+    padding-left: 8px;
+    background-color: rgb(227, 226, 226);
+    width: 400px;
+  }
+  .usuario_login .usuario_campo #id_username:focus{
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.5s ease;
+
+  }
+  .usuario_login .usuario_campo #id_password{
+    border-radius: 12px;
+    padding-left: 8px;
+    background-color: rgb(227, 226, 226);
+    width: 400px;
+  }
+
+  .usuario_login .usuario_campo #id_password:focus{
+    background-color: rgb(255, 255, 255);
+    transition: background-color 0.5s ease;
+  }
+
+  .boton_inicio_registro_usuario{
+    width: 400px;
+    height: 40px; 
+    background-color: #FAA92F;
+    border-style: none; 
+    border-radius: 5px; 
+    margin: auto;
+  }
+  .boton_inicio_registro_usuario:hover{
+    text-decoration: none;
+    color: #000000;
+    background-color: #FAA92F;
+    }
+    /*Modifico el text dentro del btn para que no aparezca el underline*/
+    .boton_inicio_registro_usuario a{
+        text-decoration: none;
+        color: #000000;
+    }
+    /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
+    .boton_inicio_registro_usuario a:hover{
+        text-decoration: none;
+        color: #000000;
+    }

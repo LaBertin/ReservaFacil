@@ -3,29 +3,33 @@
 <title>Modificar - Lista citas paciente</title>
 <script src="../../static/js/mostrarMensaje.js"></script>
 <div id="main-content-centro">
-    <div class="bubble-text" id="mensaje" style="display:none;">
+    <div class="bubble-text" id="mensaje" style="display:none; ">
         <br>
-        <div>
+        <br>
+        <div id="icono_center" style="display:flex; justify-content: center; align-items: center;">
             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
               <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
               <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
             </svg>
       </div>
-        <h1>¿Seguro que desea anular esta cita?</h1>
+        
         <br>
         <br>
+        <h2>¿Seguro que desea anular esta cita?</h2>
         <br>
+        
         <br>
         <div class="col btn-naranja-mediano">
+        <div class="col-esp" >
           <form method="post">
             {% csrf_token %}
             <button class="btn-naranja-mediano" onclick="eliminarCita(fechaID)" id="conf_delet_cit_button" type="submit" name="conf_delet_cit">Aceptar</button>
           </form>
-        </div>
-        <br>
-        <div class="col">
-          <button class="btn-naranja-mediano" onclick="ocultarMensaje()">Cancelar</button>
+          
+            <button class="btn-naranja-mediano" onclick="ocultarMensaje()">Cancelar</button>
         </div>      
+        </div>
+
       </div>
     <div class="div-pequeño">
         
@@ -37,18 +41,28 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Modificar Cita</h2>
+        <h2 id="titulo-inicio-sesion">Citas del paciente</h2>
+        <!--Aqui ira el nombre del paciente en base al rut si es que no tiene registro-->
+        <div class="div-formulario">
+            
             <div class="row">
-                <table>
-
+                <div class="table-responsive-lg">
+                    <table class="table table-hover">
+                        <tr>
+                            <td>Cita</td>
+                            <td>Hora</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         {% for x in citas %}
                         <tr>
-                            <td>Cita: {{x.Hora_Cita}}</td>
+                            <td>{{x.Fecha_Cita}} </td>
+                            <td>{{x.Hora_Cita}}</td>
                             <td>
                                 <form method="POST">
                                     {% csrf_token %}
-                                    <button class="btn-naranja-mediano" value="{{x.ID_Especialista}}"
-                                    type="submit" name="modificar">Modificar agenda</button>
+                                    <button class="btn-naranja-mediano" value="{{x.ID_Cita}}"
+                                    type="submit" id="seleccion" name="seleccion">Modificar agenda</button>
                                 
                             </td>
                             <td>
@@ -67,12 +81,13 @@
 
                         {% for y in citas_sin_usuario %}
                             <tr>
-                                <td>Cita: {{y.Hora_Cita}}</td>
+                                <td>{{y.Fecha_Cita}}</td>
+                                <td>{{y.Hora_Cita}}</td>
                                 <td>
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <button class="btn-naranja-mediano" value="{{y.ID_Especialista}}"
-                                        type="submit" name="modificar">Modificar agenda</button>
+                                        <button class="btn-naranja-mediano" value="{{y.ID_Cita}}"
+                                        type="submit" id="seleccion" name="seleccion">Modificar agenda</button>
                                     </form>
                                 </td>
                                 <td>
@@ -90,7 +105,13 @@
                         {% endfor %}
 
                 </table>
+                </div>
+                
             </div>      
+        </div>
+        
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'index' %}">Cancelar</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button>
         </div>
 </div>
 {% endblock %}

@@ -83,7 +83,6 @@ class FormPacienteSinUser(forms.Form):
     email_pac = forms.EmailField(label='email')
     telefono_pac = forms.IntegerField()
 
-
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
@@ -120,8 +119,19 @@ class FormRegistrarUsuario(forms.Form):
             self.cleaned_data['password1']  
         )  
         return user  
-
     
+class FormRegistrarCobros(forms.Form):
+    monto_esp_s = forms.IntegerField(required=False)
+    monto_esp_p = forms.IntegerField(required=False)
+    id_especialista = forms.CharField(max_length=256,required=True)
+
+    def save(self):
+
+        cobroreg = CobrosEspecialistas.objects.create(
+            ID_Especialista = Especialista.objects.get(ID_Especialista = Especialista.objects.get(Nombre_completo_E = self.cleaned_data['id_especialista']).ID_Especialista),
+        )
+        return cobroreg
+
 class DateInput(forms.DateInput):
     input_type = 'date'
 
@@ -132,7 +142,10 @@ class DateForm(forms.Form):
     date = forms.DateField(
     widget=DateInput(attrs={"name":"somdate", "value":today, "min": today, "max":max})
     )
-    
+
+class ConsultarRut(forms.Form):
+    rut_consulta = forms.CharField(max_length=9)    
+
 class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
     especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())

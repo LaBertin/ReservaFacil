@@ -97,7 +97,6 @@ class Operador(models.Model):
         verbose_name='Operador'
         verbose_name_plural='Operadores'
 
-
 class Paciente(models.Model):
     ID_Paciente = models.IntegerField(primary_key=True, unique=True)
     Nombre_Paciente = models.CharField(max_length = 256)
@@ -122,18 +121,19 @@ class Cita(models.Model):
     Fecha_Cita = models.CharField(max_length=20, null=True)
     Hora_Cita = models.CharField(max_length=20, null=True)
     Confirmacion_Cita = models.BooleanField(default=False)
+    Confirmacion_Cita_Operador = models.BooleanField(default=False)
     ID_Cliente = models.ForeignKey(User,null=True, on_delete=models.RESTRICT)
     ID_Especialista = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
 
     def __datetime__ (self):
-        return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
-    
+        return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'  
 
 class CitaSinUsuario(models.Model):
     ID_Cita = models.DateTimeField(primary_key=True, unique=True)
     Fecha_Cita = models.CharField(max_length=20, null=True)
     Hora_Cita = models.CharField(max_length=20, null=True)
     Confirmacion_Cita = models.BooleanField(default=False)
+    Confirmacion_Cita_Operador = models.BooleanField(default=False)
     Rut_Paciente = models.CharField(max_length=9, null=False)
     Email_Contacto = models.EmailField(null=True)
     Telefono_Contacto = models.IntegerField(null=True)
@@ -206,5 +206,13 @@ class Ficha_Cita(models.Model):
         verbose_name = 'Ficha Cita'
         verbose_name_plural = 'Fichas Citas'
 
+class CobrosEspecialistas(models.Model):
 
 
+    Monto_Esp_P = models.IntegerField(null=True)
+    Monto_Esp_S = models.IntegerField(null=True)
+    # Nombre_completo_E = models.CharField(max_length=256, null = True)
+    ID_Especialista = models.ForeignKey(Especialista,  null=True, on_delete=models.RESTRICT)
+
+    def __str__(self):
+        return f'{self.ID_Especialista}'

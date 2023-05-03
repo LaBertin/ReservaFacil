@@ -34,7 +34,11 @@ body{
         padding-top: 100px;
     }
 
-
+    .div-botones{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
 /*----------------container_agregar----------------------*/
 
@@ -368,6 +372,11 @@ body{
     }
 }
 
+
 /*-------------------------------------------------*/
+#buuble_buttons{
+    display:inline-block; 
+
+}
 /*-------------------------------------------------*/
 /*-------------------------------------------------*/

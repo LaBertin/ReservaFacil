@@ -38,16 +38,23 @@ urlpatterns = [
     path('admin_Agregar_Operador/', views.agregar_operador, name='admin_Agregar_Operador'),
 
     path('funciones_citas_operador/', views.operador_funciones, name='funciones_citas_operador'),
+
     #Consultar_Agenda
     path('agenda_citas/', views.operador_lista_agenda, name='agenda_citas'),
     path('agendar_citas_paciente/', views.operador_agendar_cita, name='agendar_citas_paciente'),
-    path('confirmacion/', views.operador_confirmacion, name='confirmacion'),
+    
     path('calendario_especialista/', views.operador_calendario_especialista, name='calendario_especialista'),
     path('operador_horas_esp/', views.operador_horas_especialista, name = 'operador_horas_esp'),
     
     #Modificar_Cita
     path('modificar_cita/', views.operador_modificar_cita, name='modificar_cita'),
     path('modificar_lista/', views.operador_modificar_lista, name='modificar_lista'),
+    path('modificar_cita_seleccionada/', views.operador_modificar_seleccion, name='modificar_cita_seleccionada'),
+    path('modificar_fecha/', views.operador_modificar_fecha, name='modificar_fecha'),
+    
+    #Confirmar Cita Operador
+    path('confirmacion/', views.operador_confirmacion, name='confirmacion'),
+    path('confirmacion_citas/', views.operador_confirmacion_citas, name='confirmacion_citas'),
 
     path('pago/', views.operador_pago, name='pago'),
 
@@ -63,4 +70,6 @@ urlpatterns = [
     path('agenda_especialista/',views.especialista_Agenda, name='agenda_especialista'),
     path('agenda_dia/', views.especialista_list_citas, name='agenda_dia'),
 
+    #API RUT
+    # path('api/rut/activities/<str:rut>/', views.respuesta_api, name='resultado_api'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

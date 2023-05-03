@@ -1,0 +1,77 @@
+{% extends "../../Clientes/index.html" %}
+{% block footer %}
+<title>Modificar - Lista citas paciente</title>
+<div id="main-content-centro">
+    <div class="div-pequeño">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <h2 id="titulo-inicio-sesion">Paciente:</h2>
+        {% if especialidad_ == None %}
+            <h3 id="titulo-inicio-sesion">Especialidad: {{especialidad_sin}}</h3>
+        {% else %}
+            <h3 id="titulo-inicio-sesion">Especialidad: {{especialidad_}}</h3>
+        {% endif %}
+        <h3 id="titulo-inicio-sesion">Citas de hoy</h3>
+        <div class="div-formulario">
+            <div class="row">
+                <table>
+                    <tr>
+                        <td>Fecha</td>
+                        <td>Hora</td>
+                        <td>Especialista</td>
+                        <td>Estado de la cita</td>
+                    </tr>
+                        {% for x in citas %}
+                        <tr>
+                            <td>{{x.Fecha_Cita}}</td>
+                            <td>{{x.Hora_Cita}}</td>
+                            {% if x.Confirmacion_Cita_Operador == False %}
+                                <td><a class="text-warning">Sin Confirmar</a></td>
+                            {% else %}
+                                <td><a class="text-success">Confirmado</a></td>
+                            {% endif %}
+                                <td>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn-naranja-mediano" value="{{x.Fecha_Cita}} {{x.Hora_Cita}}"
+                                    type="submit" id="seleccion" name="seleccion">Confirmar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                        {% for y in citas_sin_usuario %}
+                            <tr>
+                                <td>{{y.Fecha_Cita}}</td>
+                                <td>{{y.Hora_Cita}}</td>
+                                {% if y.Confirmacion_Cita_Operador == False %}
+                                    <td><a class="text-warning">Sin Confirmar</a></td>
+                                {% else %}
+                                    <td><a class="text-success">Confirmado</a></td>
+                                {% endif %}
+                                    <td>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <button class="btn-naranja-mediano" value="{{y.ID_Cita}}"
+                                        type="submit" id="seleccion" name="seleccion">Confirmar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                </table>
+            </div>    
+        </div>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'index' %}">Cancelar</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'confirmacion' %}">Atras</a></button>
+        </div>
+</div>
+{% endblock %}

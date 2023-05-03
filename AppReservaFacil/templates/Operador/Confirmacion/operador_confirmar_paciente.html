@@ -1,0 +1,31 @@
+{% extends "../../Clientes/index.html" %}
+{% block footer %}
+<title>Confirmación cita</title>
+<div id="main-content-centro">
+
+    <div class="div-pequeño">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <div class="div-formulario">
+            <h2 id="titulo-inicio-sesion">Confirmación cita</h2>
+                <div class="div-formulario">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="text" name="rut" >
+                        
+                        <button class="btn-naranja-mediano" type="submit" name="agendar_operador">Consultar Citas</button>
+                    </form>
+                </div>      
+                <br>
+                <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="{% url 'funciones_citas_operador' %}">Atras</a></button>
+            </div>
+        </div>
+
+</div>
+{% endblock %}

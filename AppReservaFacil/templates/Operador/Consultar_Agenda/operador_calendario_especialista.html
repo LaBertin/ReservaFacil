@@ -13,22 +13,27 @@
                 </div>
             {% endfor %}
         {% endif %}
-        <h2 id="titulo-inicio-sesion">Seleccione Fecha</h2>
-            <div class="row">
+        <div class="div-formulario">
+            <h2 id="titulo-Operador">Seleccione Fecha</h2>
+            <div class="div-formulario">
                 <form method="POST">
                     {% csrf_token %}
-
+                    
                     <div>
                         {{formDate.date}}
                     </div>
-
+                    <br>
                     <button class="btn-naranja-mediano" type="submit"
                             name="horas">
                             Seleccionar Hora
                     </button>
-                    <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
                 </form>
-            </div>      
+            </div>  
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button>
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano"><a href="/">Inicio</a></button>    
         </div>
+        </div>
+       
+        
 </div>
 {% endblock %}

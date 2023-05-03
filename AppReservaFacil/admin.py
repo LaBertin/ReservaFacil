@@ -22,3 +22,5 @@ admin.site.register(CitaSinUsuario)
 admin.site.register(Ficha_Medica)
 
 admin.site.register(Ficha_Cita)
+
+admin.site.register(CobrosEspecialistas)
