@@ -293,6 +293,7 @@ body{
         display: grid;
         place-content: center;
     }
+    
     body div form div#div-nav-left{
         margin-left: 20px;
     }
@@ -301,6 +302,7 @@ body{
         padding: 150px 200px;
         font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
+    
     .img-redonda {
         border-radius: 50%;
         margin-top: 20px;
@@ -395,6 +397,55 @@ body{
 
     form .btn_agendar_hora:hover{
         background-color:transparent ;
+    }
+
+    /* Div Escritorio Especialista */
+
+    #div-perfil{
+        height: 700px;
+        width: 500px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+
+    .div-calendario{
+        height: 150px;
+        width: 700px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        margin-left: 1.7rem;
+        margin-block-end: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+
+    .div-calendario .div-padding{
+        display: flex;
+        flex-direction: row;
+        padding-top: 20px;
+        padding-left: 40px;
+    }
+
+    .div-citas-hoy{
+        height: 530px;
+        width: 700px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        margin-left: 1.7rem;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+
+
+    div .div-calendario h1{
+        padding: 35px;
+        padding-left: 150px;
+        
     }
     /*Div Pequeño de Inicio Sesión*/
     .div-pequeño{
@@ -1158,3 +1209,54 @@ select::-ms-expand{
         text-decoration: none;
         color: #000000;
     }
+
+
+    /* CIRCULO DE INICIO E DIVS */
+
+    #inicio-izq{
+        display: flex; 
+        flex-direction: column; 
+        width: 55%; 
+        justify-content: center; 
+        padding-left: 5%;
+    }
+
+    #inicio-der{
+        display: flex; 
+        flex-direction: column; 
+        width: 45%; 
+        justify-content:center; 
+        align-items: center;
+    }
+    
+    .circulo {
+        width: 700px;
+        height: 700px;
+        position: relative; /* Establece la posición relativa */
+        border-radius: 50%; /* Establece la forma circular */
+        border: 3px solid #3b82fd86; /* Establece el color de fondo */
+      }
+    
+    .circulo .ciruclo-relleno{
+        width: 550px;
+        height: 550px;
+        top: 50%;
+        left: 50%;
+        position: absolute; /* Establece la posición absoluta */
+        transform: translate(-50%, -50%);
+        border-radius: 50%; /* Establece la forma circular */
+        border: 90px solid #2372fbb2; /* Establece el color de fondo */
+    }
+    
+    .image {
+        position: relative;
+        width: 375px;
+        height: 375px;
+    }
+    .image  img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+

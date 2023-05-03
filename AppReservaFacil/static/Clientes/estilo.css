@@ -40,6 +40,40 @@ body{
         align-items: center;
     }
 
+    /* Divs Escritorio Especialista */
+    #div-perfil{
+        height: 700px;
+        width: 500px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+
+    #div-calendario{
+        height: 150px;
+        width: 600px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        margin-left: 1.7rem;
+        margin-block-end: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+
+    #div-citas-hoy{
+        height: 530px;
+        width: 600px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        margin-left: 1.7rem;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+
 /*----------------container_agregar----------------------*/
 
 .container_agregar{
