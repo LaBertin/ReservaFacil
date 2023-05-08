@@ -56,7 +56,10 @@ urlpatterns = [
     path('confirmacion/', views.operador_confirmacion, name='confirmacion'),
     path('confirmacion_citas/', views.operador_confirmacion_citas, name='confirmacion_citas'),
 
+    #Pago
     path('pago/', views.operador_pago, name='pago'),
+    path('pago_particular/', views.operador_pago_particular, name='pago_particular'),
+    path('cobros_paciente/', views.operador_pago_cobros, name='cobros_paciente'),
 
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),

@@ -1670,7 +1670,7 @@ def operador_confirmacion(request):
             citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
             especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
             
-            print(especialista)
+            print(f'Especialista {especialista}')
 
             if dia_escrito in especialista.Dia_Esp_P:
                 especialidad_sin = especialista.Especialidad_P
@@ -1759,3 +1759,26 @@ def operador_confirmacion_citas(request):
 
 def operador_pago(request):
     return render(request,'Operador/Pago/operador_pago.html')
+
+def operador_pago_particular(request):
+    if request.method == "POST":
+        rut = request.POST.get('rut')
+        url = reverse('cobros_paciente')+"?rut={}".format(rut)
+        return redirect(url)
+    return render(request,'Operador/Pago/operador_pago_particular.html')
+
+def operador_pago_cobros(request):
+    rut = request.GET.get('rut')
+    cobro = Cobro.objects.filter(Rut_Pac_Cobro = rut)
+
+    print(rut)
+    print(cobro)
+    context = {"cobro":cobro}
+
+    if request.method == 'POST':
+        id_cobro = request.POST.get('id_cobro')
+        cobro = Cobro.objects.get(ID_Cobro =id_cobro)
+        print(f'Super Cobro{cobro}')
+    return render(request,'Operador/Pago/operador_pago_cobros.html',context)
+
+

@@ -1226,15 +1226,19 @@ select::-ms-expand{
         flex-direction: column; 
         width: 45%; 
         justify-content:center; 
+        position: relative;
         align-items: center;
     }
     
     .circulo {
         width: 700px;
         height: 700px;
-        position: relative; /* Establece la posición relativa */
+        position: absolute; /* Establece la posición relativa */
         border-radius: 50%; /* Establece la forma circular */
         border: 3px solid #3b82fd86; /* Establece el color de fondo */
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
       }
     
     .circulo .ciruclo-relleno{
@@ -1248,6 +1252,29 @@ select::-ms-expand{
         border: 90px solid #2372fbb2; /* Establece el color de fondo */
     }
     
+    .circulo-pequeno {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #2372fbb2;
+      }
+/*       
+      @keyframes rotar {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      } */
+      .uno {
+        top: 50%;
+        left: 50%;
+      }
+      
+
+
     .image {
         position: relative;
         width: 375px;
