@@ -8,12 +8,11 @@ function ocultarMensaje() {
 }
 function eliminarCita() {
   console.log(fechaID)
-  // Actualizar el valor del botón con fechaID
   document.getElementById("conf_delet_cit_button").value = fechaID;
-  // Enviar el formulario
   document.querySelector('form').submit
   ocultarMensaje();
 }
+
 //Eliminar Especialista
 function mostrarMensajeDeleteEsp(id) {
   fechaID = id;
@@ -26,11 +25,26 @@ function ocultarMensajeDeleteEsp() {
 function eliminarDeleteEsp() {
   console.log(fechaID)
   console.log("JOORRGEE")
-  // Actualizar el valor del botón con fechaID
   document.getElementById("conf_delet_cit_button").value = fechaID;
-  // Enviar el formulario
   document.querySelector('form').submit
   ocultarMensajeDeleteEsp();
+}
+
+//Eliminar Operador
+function mostrarMensajeDeleteOpe(id) {
+  fechaID = id;
+  console.log(fechaID)
+  document.getElementById("mensajeDeleteOpe").style.display = "block";
+}
+function ocultarMensajeDeleteOpe() {
+  document.getElementById("mensajeDeleteOpe").style.display = "none";
+}
+function eliminarDeleteOpe() {
+  console.log(fechaID)
+  console.log("JOORRGEE")
+  document.getElementById("conf_delet_cit_button").value = fechaID;
+  document.querySelector('form').submit
+  ocultarMensajeDeleteOpe();
 }
 
 //Especialista Bubble
@@ -48,4 +62,12 @@ function mostrarMensajeOperador() {
 }
 function ocultarMensajeOperador() {
   document.getElementById("mensajeOperador").style.display = "none";
+}
+
+//Especialidad Bubble
+function mostrarMensajeEspecialidad() {
+  document.getElementById("mensajeEspecialidad").style.display = "block";
+}
+function ocultarMensajeEspecialidad() {
+  document.getElementById("mensajeEspecialidad").style.display = "none";
 }

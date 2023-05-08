@@ -1,0 +1,74 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Agendar Cita</title>
+<script src="../../static/js/filtrarRut.js"></script>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+  <div class="div-mediano">
+        <h2 id="titulo-inicio-sesion">Seleccione Paciente</h2>
+        <div class="row row-margin table-responsive">
+            <table class="table table-hover table-pagination">
+                <thead>
+                    <tr>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" id="buscar-input" name="buscar-input" placeholder="Buscar por RUT">
+                                      </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary" id="buscar-btn" name="buscar-btn">Buscar</button>
+                                </form>
+                            </div>
+                        </div>
+                        <th>Nombre</th>    
+                        <th class="rut">RUT</th>
+                        <th>Sexo</th>
+                        <th>Información Médica</th>
+                    </tr>
+                </thead>
+                {% if Pacientes %}
+                <tbody>
+                        {% for Pac in Pacientes %}
+                        <tr>
+                            <th>{{Pac.Nombre_Paciente}}</th>
+                            <th class="rut">{{Pac.Rut}}</th>
+                            <th>{{Pac.Sexo}}</th>
+                            <th>
+                              <form method="post" >
+                                {% csrf_token %}
+                                <button class="btn-naranja-pequeño" type="submit" name="doc_pac" value="{{Pac.Nombre_Paciente}}" id="doc_pac" >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-medical-fill" viewBox="0 0 16 16">
+                                      <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM8.5 4.5v.634l.549-.317a.5.5 0 1 1 .5.866L9 6l.549.317a.5.5 0 1 1-.5.866L8.5 6.866V7.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L7 6l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V4.5a.5.5 0 1 1 1 0zM5.5 9h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zm0 2h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1z"/>
+                                    </svg>
+                                </button>
+                            </th>
+                        </tr>
+                        {% endfor %}
+                </tbody>
+                {%else%}
+                <tbody>
+                        <tr>
+                            <td colspan="5" style="text-align: center">No hay pacientes en el sistema</td>
+                        </tr>
+                    </tbody>
+                {% endif %}
+            </table>
+                <ul class="pagination"></ul>
+            </div>      
+            <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+        </div>
+        
+        
+        
+{% endblock %}

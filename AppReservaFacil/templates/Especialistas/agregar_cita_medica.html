@@ -1,6 +1,16 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
 <title>Crear Ficha Médica</title>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
     <div class="div-mediano">
         <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
         <form method="post">
