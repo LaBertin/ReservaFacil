@@ -206,3 +206,23 @@ class FormCitaMedica(forms.Form):
             Diagnostico_Cita = self.cleaned_data['Diagnostico_Cita'],
         )
         return CitaMedica  
+
+class FormBoleta(forms.Form):
+    Rut_boleta = forms.CharField(widget=forms.TextInput (attrs={'readonly': 'readonly','class': 'form-control'}))
+    Especialista_boleta = forms.CharField(widget=forms.TextInput (attrs={'readonly': 'readonly','class': 'form-control'}))
+    Especialidad_boleta = forms.CharField(widget=forms.TextInput (attrs={'readonly': 'readonly','class': 'form-control'}))
+    Monto_boleta_form = forms.IntegerField()
+    Fecha_emision_form = forms.DateField()
+    Metodo_pago_form = forms.ChoiceField(choices=METODO_PAGO)
+
+    def save(self):
+        BoletaServicio = Boleta.objects.create(
+            ID_Boleta = Boleta.objects.all().count()+1,
+            Rut_Pac_Boleta = self.cleaned_data['Rut_boleta'],
+            Especialista_boleta = Especialista.objects.get(ID_Especialista=self.cleaned_data['Especialista_boleta']),
+            Especialidad_boleta = Especialidad.objects.get(Codigo_especialidad=self.cleaned_data['Especialidad_boleta']),
+            Monto_boleta = self.cleaned_data['Monto_boleta_form'],
+            Fecha_Emision = self.cleaned_data['Fecha_emision_form'],
+            Metodo_Pago = self.cleaned_data['Metodo_pago_form']
+        )
+        return BoletaServicio

@@ -29,17 +29,66 @@ def has_group(user, group_name):
 
 # Dirección URL de vistas de Clientes
 def index(request):
+    fecha = date.today()
+    hoy = fecha
+    hoy = hoy.strftime("%d de %B").replace('Jan','Enero').replace('February','Febrero').replace('March','Marzo').replace('April','Abril').replace('May','Mayo').replace('June','Junio').replace('July','Julio').replace('August','Agosto').replace('September','Septiembre').replace('October','Octubre').replace('November','Noviembre').replace('December','Diciembre')
+
+    print(fecha)
     if request.user.is_authenticated==True:
         nombre_Usuario = User.objects.get(username=request.user.username)
         Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Especialistas']).exists()
         if Bool_Grupo == True:
+            
             print(nombre_Usuario)
-            nombre_Especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)[0].Nombre_completo_E
+            especialista = Especialista.objects.filter(Usuario_E=nombre_Usuario)
+
+        # if Cita.objects.filter(ID_Especialista = especialista[0].ID_Especialista, Fecha_Cita = hoy).exists():
+            
+            cita_con_usuario = Cita.objects.filter(ID_Especialista = especialista[0].ID_Especialista, Fecha_Cita=fecha)
+            cita_sin_usuario = CitaSinUsuario.objects.filter(ID_Especialista = especialista[0].ID_Especialista)
+            lista_agenda=[]
+            print('ANTES DEL IF')
+            if cita_con_usuario.exists():
+                print('DENTRO DEL IF')
+                paciente = Paciente.objects.filter(Usuario_P = cita_con_usuario[0].ID_Cliente)
+                for cita in cita_con_usuario:
+                    paciente = Paciente.objects.get(Usuario_P = cita.ID_Cliente)
+                    nombre = paciente.Nombre_Paciente.split()
+                    nombre_pac = nombre[0]
+                    apellido_pac =  " ".join(paciente.Nombre_Paciente.split()[-2:-1])
+                    rut_pac = paciente.Rut
+                    edad = paciente.Fecha_de_nacimiento_P
+                    edad = date.today().year - edad.year
+                    lista_agenda.append({'cita':cita, 'paciente':paciente,"nombre_pac":nombre_pac,"apellido_pac":apellido_pac, "rut_pac":rut_pac, "edad":edad})
+                    
+                    nombre_Especialista = especialista[0].Nombre_completo_E
+                    nombre_Especialista = nombre_Especialista.split(' ')
+                    nombre_Especialista = nombre_Especialista[0]+' '+nombre_Especialista[-2]
+                    Especialista_Cont = Especialista.objects.get(Usuario_E=nombre_Usuario)
+                
+                print(cita_con_usuario)
+                print(cita_sin_usuario)
+                context = {'Nombre_E':nombre_Especialista,'Especialista_Cont':Especialista_Cont, "hoy":hoy, "cita_con_usuario":cita_con_usuario, "cita_sin_usuario":cita_sin_usuario, "paciente":paciente, "lista_agenda":lista_agenda}
+            
+            
+            print('ESTOY AQUI AMIGO')
+            print(f'Citas con usuario: {cita_con_usuario}')
+            print(f'Citas sin usuario: {cita_sin_usuario}')
+            # lista_nom_paci=[]
+            # lista_rut_pac=[]
+            # lista_edad_pac=[]
+            # for x in cita_con_usuario:
+            #     lista_agenda.append(x.Hora_Cita.split(' ')[-1])
+            
+            # for x in range(len(lista_agenda)):
+
+            nombre_Especialista = especialista[0].Nombre_completo_E
             nombre_Especialista = nombre_Especialista.split(' ')
             nombre_Especialista = nombre_Especialista[0]+' '+nombre_Especialista[-2]
             Especialista_Cont = Especialista.objects.get(Usuario_E=nombre_Usuario)
             print(nombre_Especialista)
-            return render(request, "Clientes/index.html", {'Nombre_E':nombre_Especialista,'Especialista_Cont':Especialista_Cont})
+            context = {'Nombre_E':nombre_Especialista,'Especialista_Cont':Especialista_Cont, "hoy":hoy, "cita_con_usuario":cita_con_usuario, "cita_sin_usuario":cita_sin_usuario, "lista_agenda":lista_agenda}
+            return render(request, "Clientes/index.html", context)
 
         else:
             print("Otro")
@@ -1073,6 +1122,7 @@ def especialista_list_citas(request):
     list_Real_Horas = []
     nombre_Pacientes = []
     list_Citas_Agen = []
+
     # Para cada cita reservada, obtener información como el nombre del paciente y la hora de la cita
     for i in range(len(list_Citas_Reservadas)):
         horas = list_Citas_Reservadas[i]
@@ -1086,6 +1136,7 @@ def especialista_list_citas(request):
         for j in range(len(esp_Del_Dia)):
             esp = esp_Del_Dia[j]
         list_Citas_Agen.append([fecha_El,nombre_Paciente,esp])
+
     #Ordenar Citas obtenidas en orden de fecha.
     list_Citas_Agen = sorted(list_Citas_Agen, key=lambda cita: cita[0])
     #Crear contexto para poder usarlo en template
@@ -1680,7 +1731,7 @@ def operador_confirmacion(request):
             citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
             especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
             
-            print(especialista)
+            print(f'Especialista {especialista}')
 
             if dia_escrito in especialista.Dia_Esp_P:
                 especialidad_sin = especialista.Especialidad_P
@@ -1769,3 +1820,26 @@ def operador_confirmacion_citas(request):
 
 def operador_pago(request):
     return render(request,'Operador/Pago/operador_pago.html')
+
+def operador_pago_particular(request):
+    if request.method == "POST":
+        rut = request.POST.get('rut')
+        url = reverse('cobros_paciente')+"?rut={}".format(rut)
+        return redirect(url)
+    return render(request,'Operador/Pago/operador_pago_particular.html')
+
+def operador_pago_cobros(request):
+    rut = request.GET.get('rut')
+    cobro = Cobro.objects.filter(Rut_Pac_Cobro = rut)
+
+    print(rut)
+    print(cobro)
+    context = {"cobro":cobro}
+
+    if request.method == 'POST':
+        id_cobro = request.POST.get('id_cobro')
+        cobro = Cobro.objects.get(ID_Cobro =id_cobro)
+        print(f'Super Cobro{cobro}')
+    return render(request,'Operador/Pago/operador_pago_cobros.html',context)
+
+

@@ -19,7 +19,7 @@
 <header>
     <!--Div de Imagen-->
     <div id="div-nav-left">
-        <a href="/"><img src="../../static/img/logo.png" width="180px" height="60px"></a>
+        <a href="/"><img src="{static 'img/logocirc.png'}" width="28px" height="60px"></a>
     </div>
     <!--Div Opciones-->
     <div id="div-nav-right">
@@ -137,21 +137,93 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" id="alerto" aria-label="Close"></button>
                     </div>
                 {% endfor %}
-            {% endif %}
-        <div class="div-pequeño">
-            <img src="{% static Especialista_Cont.Foto_E.url %}" alt="Foto del especialista" class="img-redonda" width="150" height="150"> 
-            <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_E}}</h1>
-            <br>
-            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="agenda_especialista">Agenda</a></button>
-            <br>
-            <br>
-            <br>
-            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="pacientes_fichas_medicas">Ficha Médica</a></button>
-            <br>
-            <br>
-            <br>
-            <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Emitir Receta</a></button>
-        </div>
+            {% endif %}            
+            <div style="display: flex;">
+                <div id="div-perfil">
+                    <img src="{% static Especialista_Cont.Foto_E.url %}" alt="Foto del especialista" class="img-redonda" width="250" height="250"> 
+                    <h1 class="titulo-seleccionar-area">Bienvenid@<br>{{Nombre_E}}</h1>
+                    <br>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="agenda_especialista">Agenda</a></button>
+                    <br>
+                    <br>
+                    <br>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="pacientes_fichas_medicas">Ficha Médica</a></button>
+                    <br>
+                    <br>
+                    <br>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Emitir Receta</a></button>
+                </div>
+                <div>
+                    <div class="div-calendario">
+                        <div class="div-padding">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-calendar2-date" viewBox="0 0 16 16">
+                                <path d="M6.445 12.688V7.354h-.633A12.6 12.6 0 0 0 4.5 8.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z"/>
+                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                                <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+                              </svg>
+
+                             <h1>{{hoy}}</h1>
+                        </div>
+                       
+                    </div>
+                    <div class="table-responsive div-citas-hoy">
+                        <table class="table table-hover table-pagination">
+                            <tr>
+                                <td>Hora Cita</td>
+                                <td>Paciente</td>
+                                <td>Rut</td>
+                                <td>Edad</td>
+                                <td>Ficha</td>
+                            </tr>
+                            {% if cita_con_usuario.exists %}
+                                {% for x in lista_agenda %}
+                                <tr>
+                                    <td>{{x.cita.Hora_Cita}}</td>
+                                    <td>{{x.nombre_pac}} {{x.apellido_pac}}</td>
+                                    <td>{{x.rut_pac}}</td>
+                                    <td>{{x.edad}}</td>
+                                    <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-pequeño" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                        </svg>
+                                    </button></td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><h5>No dispones de citas para el dia de hoy</h5></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            
+
+                            
+                            <!-- {% for x in lista_agenda %}
+                                <tr>
+                                    <td>{{x.cita.Hora_Cita}}</td>
+                                    <td>{{x.nombre_pac}} {{x.apellido_pac}}</td>
+                                    <td>{{x.rut_pac}}</td>
+                                    <td>{{x.edad}}</td>
+                                    <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-pequeño" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                        </svg>
+                                    </button></td>
+                                </tr>
+                            {% endfor %} -->
+                            {% endif %}
+
+                        </table>
+                    </div>
+                </div>
+               
+            </div>
+            
+       
     </div>
 {% elif request.user|has_group:"Operadores" %} 
         <title>ReservaFácil - Inicio Operador</title>
@@ -163,6 +235,7 @@
                     </div>
                 {% endfor %}
             {% endif %}
+        
         <div class="div-pequeño">
             <br>
             <br>
@@ -203,7 +276,7 @@
         </div>
     {% else %}
     <!--En caso de ser Paciente el inicio cambia-->
-        <div id="main-content">
+        <div>
             <title>ReservaFácil - Inicio</title>
                 {% if messages %}
                     {% for message in messages %}
@@ -213,7 +286,48 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <div id="div-body"><h1>Bienvenido a ReservaFácil</h1></div>
+                <div class="col">
+                    <div class="row">
+                        <div id="inicio-izq">
+                            <h1>Bienvenido a ReservaFácil</h1>
+                            <h5> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit, 
+                                nibh vel rutrum egestas, lacus tortor tempus tortor, nec feugiat nulla nibh eu nisl.
+                                Sed vel urna augue. Nam scelerisque justo et orci condimentum suscipit id sed risus.
+                                Duis accumsan pulvinar lectus. Fusce vitae malesuada velit. Curabitur in dictum mi. Sed sodales gravida turpis a egestas. 
+                                Aliquam egestas pretium scelerisque. Curabitur a ante lacus. Maecenas eu porttitor mi. 
+                                Phasellus auctor nisl vitae lorem blandit, nec fringilla neque congue. Orci varius natoque penatibus et magnis dis parturient montes, 
+                                nascetur ridiculus mus.
+                             </h5>
+                        </div>
+                        <div id="inicio-der">
+                            <div class="circulo">
+                                <div class="circulo-pequeno uno"></div>
+                                <div class="circulo-pequeno dos"></div>
+                                <div class="circulo-pequeno tres"></div>
+                                <div class="ciruclo-relleno">
+                                    <div class="image">
+                                        <img src="../../static/img/logocirc.png" width="200px" height="200px">
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <!-- <h1>Bienvenido a ReservaFácil</h1>
+                            <h6> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi blandit, 
+                                nibh vel rutrum egestas, lacus tortor tempus tortor, nec feugiat nulla nibh eu nisl.
+                                Sed vel urna augue. Nam scelerisque justo et orci condimentum suscipit id sed risus.
+                                Duis accumsan pulvinar lectus. Fusce vitae malesuada velit. Curabitur in dictum mi. Sed sodales gravida turpis a egestas. 
+                                Aliquam egestas pretium scelerisque. Curabitur a ante lacus. Maecenas eu porttitor mi. 
+                                Phasellus auctor nisl vitae lorem blandit, nec fringilla neque congue. Orci varius natoque penatibus et magnis dis parturient montes, 
+                                nascetur ridiculus mus.
+                             </h6> -->
+                        </div>
+                    
+                
+                </div>
+                    
+                </div>
+                
         </div>
     {% endif %}
 {% endif %}

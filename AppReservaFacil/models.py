@@ -13,6 +13,8 @@ MINUTOS_CHOICES=[(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 M
 SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
 SISTEMA_SALUD=[('Ninguno','Ninguno'),('Seguro Complementario','Seguro Complementario'), ('ISAPRE','ISAPRE'), ('FONASA','FONASA'),('Fuerzas Armadas','Fuerzas Armadas')]
 GRUPO_SANGUINEO=[('Ninguno','Ninguno'),('A+','A+'),('O+','O+'),('B+','B+'),('AB+','AB+'),('A-','A-'),('O-','O-'),('B-','B-'),('AB-','AB-')]
+ESTADO_COBRO = [('Pagado','Pagado'),('Por pagar','Por pagar')]
+METODO_PAGO = [('Efectivo','Efectivo'),('Debito','Debito'),('Credito','Credito')]
 
 
 class Area_Medica(models.Model):
@@ -208,7 +210,6 @@ class Ficha_Cita(models.Model):
 
 class CobrosEspecialistas(models.Model):
 
-
     Monto_Esp_P = models.IntegerField(null=True)
     Monto_Esp_S = models.IntegerField(null=True)
     # Nombre_completo_E = models.CharField(max_length=256, null = True)
@@ -216,3 +217,25 @@ class CobrosEspecialistas(models.Model):
 
     def __str__(self):
         return f'{self.ID_Especialista}'
+    
+class Cobro (models.Model):
+    ID_Cobro = models.IntegerField()
+    Rut_Pac_Cobro = models.CharField(max_length=9, null = True)
+    Especialista_Cobro = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
+    Especialidad_Cobro = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+    Monto = models.IntegerField()
+    Estado_cobro = models.CharField(choices = ESTADO_COBRO, max_length=10, null=True)
+
+    def __str__(self):
+        return f'{self.ID_Cobro} {self.Rut_Pac_Cobro}'
+    
+class Boleta (models.Model):
+    ID_Boleta = models.IntegerField()
+    Rut_Pac_Boleta = models.CharField(max_length=9, null = True)
+    Especialista_Boleta = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
+    Especialidad_Boleta = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+    Monto_Boleta = models.IntegerField()
+    Fecha_Emision = models.DateField(null = False)
+    Metodo_Pago = models.CharField(choices=METODO_PAGO, max_length=15)
+    def __str__(self):
+        return f'{self.ID_Boleta} {self.Rut_Pac_Boleta}'
