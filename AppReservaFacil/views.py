@@ -191,17 +191,35 @@ def perfil_cliente(request):
     rut = request.GET.get('rut')
     id_fecha = request.GET.get('id_fecha')
     print(f'Rut desde ficha: {rut}')
-    
-    if rut:
-        print(f'dentro del if: {rut}')
-        datos_form = {'rut_pac':rut}
-        formulario_pac = {'formulario_pac': FormPaciente(initial = datos_form )}
+    datos_form = {'rut_pac':rut}
+    formulario_pac = {'formulario_pac': FormPaciente(initial = datos_form)}
+    if rut is None:
+        print('Estoy dentro del rut is None')
+        if request.method=='POST':
+            print('Metodo post del is None')
+            form_completo = FormPaciente(data = request.POST)
+            if form_completo.is_valid():
+                nombre_pac = form_completo.cleaned_data['nom_com_pac']
+                rut_pac = form_completo.cleaned_data['rut_pac']
+                sexo_pac = form_completo.cleaned_data['sexo_pac']
+                fecha_nac_pac = form_completo.cleaned_data['fecha_nac_pac']
+                direccion_pac = form_completo.cleaned_data['direccion_pac']
+                telefono_pac = form_completo.cleaned_data['telefono_pac']
+                first_login = False
+                usuario = User.objects.get(username=request.user.username)
+                Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente=nombre_pac,Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
+                messages.success(request, "Exito al actualizar")
+                return redirect('index')
+            else:
+                print('Else del POST sin rut')
+                formulario_pac = FormPaciente()
+                messages.error(request, "Error")
+    else:      
         if request.method=='POST':
             print(f'dentro del request post de rut')
             formulario_pac = FormPaciente(data = request.POST)
             csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
             if formulario_pac.is_valid():
-
                 nombre_pac = formulario_pac.cleaned_data['nom_com_pac']
                 rut_pac = formulario_pac.cleaned_data['rut_pac']
                 sexo_pac = formulario_pac.cleaned_data['sexo_pac']
@@ -224,7 +242,6 @@ def perfil_cliente(request):
                 sena= nombre_pac.split()[-1].lower()
                 print(sena)
                 contrasena=contra+sena
-
                 Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':'lazarino18@gmail.com'}
                 q_dict = QueryDict('', mutable=True)
                 q_dict.update(Reg)
@@ -241,31 +258,12 @@ def perfil_cliente(request):
                     messages.success(request, "Exito al actualizar")
                     url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}&rut={}'.format(nombre_pac,id_fecha,rut)
                     return redirect(url)
-
             else:
+                print('Else del POST con rut')
                 formulario_pac = FormPaciente(initial = datos_form)
                 messages.error(request, "Error")
-        else:
 
-            if request.method=='POST':
-                form_completo = FormPaciente(data = request.POST)
-                if form_completo.is_valid():
 
-                    nombre_pac = form_completo.cleaned_data['nom_com_pac']
-                    rut_pac = form_completo.cleaned_data['rut_pac']
-                    sexo_pac = form_completo.cleaned_data['sexo_pac']
-                    fecha_nac_pac = form_completo.cleaned_data['fecha_nac_pac']
-                    direccion_pac = form_completo.cleaned_data['direccion_pac']
-                    telefono_pac = form_completo.cleaned_data['telefono_pac']
-                    first_login = False
-
-                    usuario = User.objects.get(username=request.user.username)
-                    Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente=nombre_pac,Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
-                    messages.success(request, "Exito al actualizar")
-                    return redirect('index')
-                else:
-                    formulario_pac = FormPaciente()
-                    messages.error(request, "Error")
 
     return render(request, 'Clientes/perfil_cliente.html', formulario_pac)
 
@@ -1944,21 +1942,23 @@ def operador_confirmacion(request):
                 cita = cita.replace("de ","").replace("a las ","")
                 cita = cita.replace('Enero','January').replace('Febrero','February').replace('Marzo','March').replace('Abril','April').replace('Mayo','May').replace('Junio','June').replace('Julio','July').replace('Agosto','August').replace('Septiembre','September').replace('Octubre','October').replace('Noviembre','November').replace('Diciembre','December')
                 print(f'Cual es la cita {cita}')
-                cita = datetime.strptime(cita, "%Y-%m-%d %H:%M:%S")
+                cita = datetime.strptime(cita, "%d %B %Y %H:%M")
                 print(f'Cita replace {cita}')
 
                 if Cita.objects.filter(ID_Cita = cita).exists():
                     cita_confirmada = Cita.objects.get(ID_Cita = cita)
                     cita_confirmada.Confirmacion_Cita_Operador = True
                     cita_confirmada.save()
+                    messages.success(request, "Paciente confirmado.")
+                    return redirect('confirmacion')
                 else:
                     cita_confirmada = CitaSinUsuario.objects.get(ID_Cita = cita)
                     cita_confirmada.Confirmacion_Cita_Operador = True
                     cita_confirmada.save()
-
-            return redirect('confirmacion')
-        
-            messages.error(request, "El rut ingresado no figura en el sistema.")
+                    messages.success(request, "Paciente confirmado.")
+                    return redirect('confirmacion')
+                
+            messages.error(request, "No se encontraron citas con el rut ingresado.")  
             return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
 
         # context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
