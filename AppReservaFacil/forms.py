@@ -15,7 +15,7 @@ max = today.replace(today.year+ 1)
 DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueves'),('vie','Viernes'),('sab','Sabado'),('dom','Domingo')]
 MINUTOS_CHOICES=[(None,'--------'),(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
 SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
-
+TIPO_ATENCION = [('Particular','Particular'),('Fonasa','Fonasa'),('Isapre','Isapre'),('Convenio','Convenio'),('Otros','Otros')]
 
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
@@ -70,19 +70,21 @@ class FormPaciente(forms.Form):
         user = User.objects.get(username = usuario)
         grupo_Pacientes = Group.objects.get(name='Pacientes') 
         user.groups.add(grupo_Pacientes)
-        Usuario_P = User.objects.get(username = usuario).username
-        CitaMedica = Ficha_Cita.objects.create(  
+        Usuario_P = User.objects.get(username = usuario)
+        PacienteM = Paciente.objects.create(  
             ID_Paciente = Paciente.objects.all().count()+1,
             Usuario_P = Usuario_P
             
         )
-        return CitaMedica  
+        return PacienteM  
 
 class FormPacienteSinUser(forms.Form):
     rut_pac = forms.CharField(max_length=9)
     email_pac = forms.EmailField(label='email')
     telefono_pac = forms.IntegerField()
 
+
+#TODO AGREGAR NOMBRE PACIENTE
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
@@ -154,10 +156,10 @@ class FormMensaje(forms.Form):
     texto = forms.CharField(max_length=256)
 
 class FormFichaMedica(forms.Form):
-    RUT_Pac =  forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=True)
-    Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length = 256, required=True)
-    Direccion_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=256, required=False)
-    Telefono_Pac = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}),max_length=9, required=False)
+    RUT_Pac =  forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length=9, required=True)
+    Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
+    Direccion_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length=256, required=False)
+    Telefono_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length=9, required=False)
     Sis_Sal_Pac = forms.ChoiceField(choices = SISTEMA_SALUD, required=False, initial = 'SegCom')
     Grupo_Sanguineo = forms.ChoiceField(choices=GRUPO_SANGUINEO, required=False, initial = 'Amas')
     Al_Antibioticos = forms.BooleanField(required=False)
@@ -179,8 +181,34 @@ class FormCitaMedica(forms.Form):
     Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
     Nombre_Com_Esp = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
     Diagnostico_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
+    Receta_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
+    Examenes_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
+    
+    def save(self):
 
-    def save(self):  
+
+        #Asigno la receta creada
+        if self.cleaned_data['Receta_Cita'] =='':
+            Receta_Medica = None
+        else:
+            Receta_Medica = Receta.objects.create(
+                Numero_receta = Receta.objects.all().count()+1,
+                Descripcion_receta = self.cleaned_data['Receta_Cita']
+            )
+
+        #Asigno la orden de examnenes creada
+        if self.cleaned_data['Examenes_Cita'] =='':
+            Orden_Examen = None
+        else:
+            Orden_Examen = Examene.objects.create(
+            Numero_orden_examen = Examene.objects.all().count()+1,
+            Descripcion_examenes = self.cleaned_data['Examenes_Cita']
+            )
+
+
+
+       
+        
         CitaMedica = Ficha_Cita.objects.create(  
             ID_Ficha_Cita = Ficha_Cita.objects.all().count()+1,
             Fecha_Cita = self.cleaned_data['Fecha_Cita'],
@@ -189,25 +217,47 @@ class FormCitaMedica(forms.Form):
             Nombre_Com_Pac = Paciente.objects.get(Nombre_Paciente=self.cleaned_data['Nombre_Com_Pac']),
             Nombre_Com_Esp = Especialista.objects.get(Nombre_completo_E=self.cleaned_data['Nombre_Com_Esp']),
             Diagnostico_Cita = self.cleaned_data['Diagnostico_Cita'],
+            Receta = Receta_Medica,
+            Examene = Orden_Examen
         )
+
         return CitaMedica  
 
 class FormBoleta(forms.Form):
+    Id_boleta = forms.IntegerField(widget=forms.NumberInput (attrs={'readonly': 'readonly','class': 'form-control'}))
     Rut_boleta = forms.CharField(widget=forms.TextInput (attrs={'readonly': 'readonly','class': 'form-control'}))
     Especialista_boleta = forms.CharField(widget=forms.TextInput (attrs={'readonly': 'readonly','class': 'form-control'}))
     Especialidad_boleta = forms.CharField(widget=forms.TextInput (attrs={'readonly': 'readonly','class': 'form-control'}))
-    Monto_boleta_form = forms.IntegerField()
-    Fecha_emision_form = forms.DateField()
+    Monto_boleta_form = forms.IntegerField(widget=forms.NumberInput (attrs={'readonly': 'readonly','class': 'form-control'}))
+    Fecha_emision_form = forms.DateField(widget=forms.DateInput(attrs={'readonly': 'readonly', 'class': 'form-control'}))
     Metodo_pago_form = forms.ChoiceField(choices=METODO_PAGO)
+    Monto_efectivo = forms.IntegerField()
+    Tipo_atencion_form = forms.ChoiceField(choices=TIPO_ATENCION)
+    Arancel_form = forms.DecimalField()
+    Num_Doc = forms.IntegerField()
+    Vuelto_bol = forms.IntegerField()
 
     def save(self):
+        Nombre_especialista = self.cleaned_data['Especialista_boleta']
+        Especialista_N = Especialista.objects.get(Nombre_completo_E=Nombre_especialista).ID_Especialista
+        Nombre_especialidad = self.cleaned_data['Especialidad_boleta']
+        Especialidad_N = Especialidad.objects.get(Nombre_especialidad=Nombre_especialidad).Codigo_especialidad
+        print(f'dentro del save {Especialista_N}')
+        print(type(Especialista_N))
+        print(f'dentro del save {Especialidad_N}')
+        print(type(Especialidad_N))
         BoletaServicio = Boleta.objects.create(
-            ID_Boleta = Boleta.objects.all().count()+1,
+            ID_Boleta = self.cleaned_data['Id_boleta'],
             Rut_Pac_Boleta = self.cleaned_data['Rut_boleta'],
-            Especialista_boleta = Especialista.objects.get(ID_Especialista=self.cleaned_data['Especialista_boleta']),
-            Especialidad_boleta = Especialidad.objects.get(Codigo_especialidad=self.cleaned_data['Especialidad_boleta']),
-            Monto_boleta = self.cleaned_data['Monto_boleta_form'],
+            Especialista_Boleta = Especialista.objects.get(ID_Especialista=Especialista_N),
+            Especialidad_Boleta = Especialidad.objects.get(Codigo_especialidad=Especialidad_N),
+            Monto_Boleta = self.cleaned_data['Monto_boleta_form'],
             Fecha_Emision = self.cleaned_data['Fecha_emision_form'],
-            Metodo_Pago = self.cleaned_data['Metodo_pago_form']
+            Metodo_Pago = self.cleaned_data['Metodo_pago_form'],
+            Efectivo = self.cleaned_data['Monto_efectivo'],
+            Vuelto = self.cleaned_data['Vuelto_bol'],
+            Tipo_atencion = self.cleaned_data['Tipo_atencion_form'],
+            Arancel = self.cleaned_data['Arancel_form'],
+            Num_Documento = self.cleaned_data['Num_Doc']
         )
         return BoletaServicio

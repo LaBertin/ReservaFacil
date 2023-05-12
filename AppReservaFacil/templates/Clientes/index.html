@@ -164,14 +164,35 @@
                                     <td>{{x.nombre_pac}} {{x.apellido_pac}}</td>
                                     <td>{{x.rut_pac}}</td>
                                     <td>{{x.edad}}</td>
-                                    <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-pequeño" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_pac}},{{x.nombre_com}},{{x.cita.Fecha_Cita}} {{x.cita.Hora_Cita}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                            </svg>
+                                        </button></td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            {% elif cita_sin_usuario.exists %}
+                            {% for x in lista_agenda %}
+                            <tr>
+                                <td>{{x.cita_sin.Hora_Cita}}</td>
+                                <td>{{x.nombre_pac|default:"Nombre no disponible"}} {{x.apellido_pac}}</td>
+                                <td>{{x.rut_cita}}</td>
+                                <td>{{x.edad|default:"Edad no disponible"}}</td>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_cita}},{{x.nombre_com}},{{x.cita_sin.Fecha_Cita}} {{x.cita_sin.Hora_Cita}}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
                                             <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
                                             <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
                                         </svg>
                                     </button></td>
-                                </tr>
-                                {% endfor %}
+                                </form>
+                            </tr>
+                            {% endfor %}
                             {% else %}
                                 <tr>
                                     <td></td>
@@ -189,7 +210,7 @@
                                     <td>{{x.nombre_pac}} {{x.apellido_pac}}</td>
                                     <td>{{x.rut_pac}}</td>
                                     <td>{{x.edad}}</td>
-                                    <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-pequeño" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">
+                                    <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-pequeno" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
                                             <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
                                             <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
@@ -218,7 +239,7 @@
                 {% endfor %}
             {% endif %}
         
-        <div class="div-pequeño">
+        <div class="div-pequeno">
             <br>
             <br>
             <img src="{% static Operador_Cont.Foto_O.url %}" alt="Foto del Operador" class="img-redonda" width="150" height="150">
@@ -247,7 +268,7 @@
                         </div>
                     {% endfor %}
                 {% endif %}
-                <div class="div-pequeño texto-centrado-verticalmente-hori">
+                <div class="div-pequeno texto-centrado-verticalmente-hori">
                     <h2 class="title">
                         Seleccione una opción
                     </h2>

@@ -1,0 +1,104 @@
+{% extends "../../Clientes/index.html" %}
+{% block footer %}
+<title>Operador - Pago</title>
+<script src="../../../static/js/metodo_pago.js"></script>
+<link href="../../static/Admin/agregar.css" rel="stylesheet">
+<div id="main-content-centro">
+    <div class="div-pequeno">
+        {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        {% endif %}
+        <h2 id="titulo-inicio-sesion">Resumen y metodo de pago</h2>
+        <form method="post">
+            {% csrf_token %}    
+            <div class="row row-margin justify-content-center">
+                
+                <div>
+                    <div class="campo_boleta">
+                        <span>ID Boleta</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Id_boleta}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta">
+                        <span>RUT Paciente</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Rut_boleta}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta">
+                        <span>Nombre Especialista</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Especialista_boleta}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta">
+                        <span>Especialidad de atencion</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Especialidad_boleta}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta">
+                        <span>Monto a pagar</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Monto_boleta_form}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta">
+                        <span>Fecha Emision</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Fecha_emision_form}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta" id="efectivo">
+                        <span>Metodo de pago</span>
+                        <div class="col-md-6 form-control-sm" onclick="ocultarEfectivo()">
+                            {{form_pago.Metodo_pago_form}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta" id="efectivo_oculto">
+                        <span>Monto recibido</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Monto_efectivo}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta" id="tipo_atencion">
+                        <span>Tipo de Atencion</span>
+                        <div class="col-md-6 form-control-sm" onclick="ocultarEfectivo()">
+                            {{form_pago.Tipo_atencion_form}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta notDisplay" id="arancel_oculto">
+                        <span>Arancel</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Arancel_form}}
+                        </div>
+                    </div>
+                    <div class="campo_boleta notDisplay" id="documento_oculto">
+                        <span>Numero Documento</span>
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Num_Doc}}
+                        </div>
+                    </div>
+                    <div class="notDisplay">
+                        <div class="col-md-6 form-control-sm">
+                            {{form_pago.Vuelto_bol}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+            <button type="submit" class="btn-naranja-mediano row-margin" name="pagar">Pagar</button>
+        </form>
+        
+        
+    </div>
+    
+</div>
+{% endblock %}

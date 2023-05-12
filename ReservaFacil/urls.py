@@ -58,8 +58,10 @@ urlpatterns = [
 
     #Pago
     path('pago/', views.operador_pago, name='pago'),
-    path('pago_particular/', views.operador_pago_particular, name='pago_particular'),
     path('cobros_paciente/', views.operador_pago_cobros, name='cobros_paciente'),
+    
+    #Pago Particular
+    path('operador_pagar/', views.operador_pagar, name='operador_pagar'),
 
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),

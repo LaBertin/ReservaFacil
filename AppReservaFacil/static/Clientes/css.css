@@ -16,7 +16,7 @@ header {
     background-color: #42444E;
     
 }   
-    .btn-rojo-pequeño{
+    .btn-rojo-pequeno{
         height: 40px;
         width: 70px;
         background-color: #c94b4b;
@@ -24,23 +24,23 @@ header {
         border-radius: 5px;
         margin: auto;
     }
-        .btn-rojo-pequeño:hover{
+        .btn-rojo-pequeno:hover{
             text-decoration: none;
             color: #000000;
             background-color: #c94b4b;
         }
         /*Modifico el text dentro del btn para que no aparezca el underline*/
-        .btn-rojo-pequeño a{
+        .btn-rojo-pequeno a{
             text-decoration: none;
             color: #000000;
         }
         /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
-        .btn-rojo-pequeño a:hover{
+        .btn-rojo-pequeno a:hover{
             text-decoration: none;
             color: #000000;
         }
 
-    .btn-naranja-pequeño{
+    .btn-naranja-pequeno{
         height: 40px;
         width: 70px;
         background-color: #FAA92F;
@@ -48,18 +48,18 @@ header {
         border-radius: 5px;
         margin: auto;
     }
-        .btn-naranja-pequeño:hover{
+        .btn-naranja-pequeno:hover{
             text-decoration: none;
             color: #000000;
             background-color: #FAA92F;
         }
         /*Modifico el text dentro del btn para que no aparezca el underline*/
-        .btn-naranja-pequeño a{
+        .btn-naranja-pequeno a{
             text-decoration: none;
             color: #000000;
         }
         /*Modifico el efecto al momento de pasar el mouse por encima del btn*/
-        .btn-naranja-pequeño a:hover{
+        .btn-naranja-pequeno a:hover{
             text-decoration: none;
             color: #000000;
         }
@@ -447,9 +447,9 @@ body{
         padding-left: 150px;
         
     }
-    /*Div Pequeño de Inicio Sesión*/
-    .div-pequeño{
-        height: 600px;
+    /*Div pequeno de Inicio Sesión*/
+    .div-pequeno{
+        height: 620px;
         width: 500px;
         background-color: #ffffff;
         text-align: center;
@@ -514,7 +514,7 @@ body{
         margin-top: 20px;
     }
         /*Se modifica el texto del div para que tenga una fuente mas agradable a la vista del usuario*/
-        .div-pequeño h2{
+        .div-pequeno h2{
             font-family:Verdana, Geneva, Tahoma, sans-serif;
             text-align: center;
             padding-top: 30px;
@@ -1287,3 +1287,16 @@ select::-ms-expand{
         transform: translate(-50%, -50%);
     }
 
+    .notDisplay {
+      display: none;
+    }
+
+
+    /* FORMULARIO BOLETA */
+    .campo_boleta{
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+    }
+
+    

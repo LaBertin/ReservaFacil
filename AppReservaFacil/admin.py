@@ -26,3 +26,9 @@ admin.site.register(Ficha_Cita)
 admin.site.register(CobrosEspecialistas)
 
 admin.site.register(Cobro)
+
+admin.site.register(Boleta)
+
+admin.site.register(Receta)
+
+admin.site.register(Examene)

@@ -14,8 +14,8 @@ body{
         font-family:Verdana, Geneva, Tahoma, sans-serif;
     }
     
-    /*Div Pequeño de Inicio Sesión*/
-    .div-pequeño{
+    /*Div pequeno de Inicio Sesión*/
+    .div-pequeno{
         height: 500px;
         width: 500px;
         background-color: #ffffff;
@@ -25,7 +25,7 @@ body{
         box-shadow: 0px 1px 1px;
     }
         /*Se modifica el texto del div para que tenga una fuente mas agradable a la vista del usuario*/
-        .div-pequeño h2{
+        .div-pequeno h2{
             font-family:Verdana, Geneva, Tahoma, sans-serif;
             text-align: center;
             padding-top: 30px;
@@ -413,4 +413,21 @@ body{
 
 }
 /*-------------------------------------------------*/
+
+.form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .form-column {
+    flex-basis: calc(100% / 7);
+    margin-bottom: 10px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
 /*-------------------------------------------------*/

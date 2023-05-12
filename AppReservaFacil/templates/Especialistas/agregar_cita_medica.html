@@ -1,7 +1,9 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
 <title>Crear Ficha Médica</title>
-    <div class="div-mediano">
+
+    <div class="div-grande">
+
         <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
         <form method="post">
         {% csrf_token %}    
@@ -37,19 +39,46 @@
                     {{FormCitaMedica.Fecha_Cita}}
                 </div>
             </div>
-            <h5>
-                Diagnostico
-            </h5>
-            <div class="row row-margin justify-content-center">
-                <div class="col">
-                    {{FormCitaMedica.Diagnostico_Cita}}
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex ml-auto">
+                    <h5>
+                        Diagnostico:
+                    </h5>
+                </div>
+                <div class="col-md-10 d-flex align-items-center">
+                    {{FormCitaMedica.Diagnostico_Cita}} 
                 </div>
             </div>
+
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex ">
+                    <h5>
+                        <input type="checkbox" name="receta" id="receta" onclick="disabled_receta()">
+                        Receta Medica:
+                    </h5>
+                </div>
+                <div class="col-md-4 d-flex align-items-center" id="textoReceta">
+                    {{FormCitaMedica.Receta_Cita}} 
+                </div>
+                <div class="col-md-2 d-flex ">
+                    <h5>
+                        <input type="checkbox" name="examen" id="examen" onclick="disabled_examen()">
+                        Orden de examen:
+                    </h5>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    {{FormCitaMedica.Examenes_Cita}} 
+                </div>
+            </div>
+
+           
             <br>
             <button type="submit" class="btn-naranja-mediano row-margin" name="agregar_cita_medica">Agregar cita médica</button>
             <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
 
         </form>
     </div>  
+
 </div>
+<script src="../../static/js/receta_examen.js"></script>
 {% endblock %}

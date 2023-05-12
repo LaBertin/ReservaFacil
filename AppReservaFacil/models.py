@@ -15,6 +15,7 @@ SISTEMA_SALUD=[('Ninguno','Ninguno'),('Seguro Complementario','Seguro Complement
 GRUPO_SANGUINEO=[('Ninguno','Ninguno'),('A+','A+'),('O+','O+'),('B+','B+'),('AB+','AB+'),('A-','A-'),('O-','O-'),('B-','B-'),('AB-','AB-')]
 ESTADO_COBRO = [('Pagado','Pagado'),('Por pagar','Por pagar')]
 METODO_PAGO = [('Efectivo','Efectivo'),('Debito','Debito'),('Credito','Credito')]
+TIPO_ATENCION = [('Particular','Particular'),('Fonasa','Fonasa'),('Isapre','Isapre'),('Convenio','Convenio'),('Otros','Otros')]
 
 
 class Area_Medica(models.Model):
@@ -190,7 +191,23 @@ class Ficha_Medica(models.Model):
     class Meta:
         verbose_name = 'Ficha Médica'
         verbose_name_plural = 'Fichas Médicas'
+    
+class Receta (models.Model):
+    Numero_receta = models.IntegerField()
+    Descripcion_receta = models.TextField(max_length=256)
 
+    def __str__(self):
+        return f'{self.Numero_receta}'
+    
+class Examene (models.Model):
+    Numero_orden_examen = models.IntegerField()
+    Descripcion_examenes = models.TextField(max_length=256)
+    
+    def __str__(self):
+        return f'{self.Numero_orden_examen}'
+    
+
+#TODO REALIZAR EL MIGRATE PARA PROBARLO
 class Ficha_Cita(models.Model):
     ID_Ficha_Cita = models.IntegerField(primary_key=True, unique=True)
     Fecha_Cita = models.DateField(null=False)
@@ -199,6 +216,8 @@ class Ficha_Cita(models.Model):
     Nombre_Com_Pac = models.ForeignKey(Paciente,null=False, on_delete=models.RESTRICT)
     Nombre_Com_Esp = models.ForeignKey(Especialista,null=False, on_delete=models.RESTRICT)
     Diagnostico_Cita = models.TextField(max_length=256)
+    Receta = models.ForeignKey(Receta,null=True, on_delete=models.RESTRICT)
+    Examene = models.ForeignKey(Examene,null=True, on_delete=models.RESTRICT)
 
     def __str__(self):
         ID_Ficha_Cita = str(self.ID_Ficha_Cita)
@@ -237,5 +256,10 @@ class Boleta (models.Model):
     Monto_Boleta = models.IntegerField()
     Fecha_Emision = models.DateField(null = False)
     Metodo_Pago = models.CharField(choices=METODO_PAGO, max_length=15)
+    Efectivo = models.IntegerField(null = True)
+    Vuelto = models.IntegerField(null = True)
+    Tipo_atencion = models.CharField(choices=TIPO_ATENCION, max_length=15, null = True)
+    Arancel = models.DecimalField(max_digits=3, decimal_places=2,default=0.0,null = True)
+    Num_Documento =  models.IntegerField(null = True)
     def __str__(self):
         return f'{self.ID_Boleta} {self.Rut_Pac_Boleta}'
