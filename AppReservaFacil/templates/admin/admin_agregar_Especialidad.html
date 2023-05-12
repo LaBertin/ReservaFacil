@@ -1,0 +1,30 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<title>Agregar Operador</title>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert"  id="message_box">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="div-pequeño">
+        <h2 id="titulo-inicio-sesion">Agregar Especialidad</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="container">
+                {{FormEspecialidad.nombre_especialidad}}
+                {{FormEspecialidad.area_medica_f}}
+            </div>
+            <br>
+            <br>
+            <button type="submit" value="Agregar" class="btn-naranja-mediano">Agregar</button>
+        </form>
+    </div>
+{% endblock %}
+</html>

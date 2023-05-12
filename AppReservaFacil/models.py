@@ -232,7 +232,7 @@ class CobrosEspecialistas(models.Model):
     Monto_Esp_P = models.IntegerField(null=True)
     Monto_Esp_S = models.IntegerField(null=True)
     # Nombre_completo_E = models.CharField(max_length=256, null = True)
-    ID_Especialista = models.ForeignKey(Especialista,  null=True, on_delete=models.RESTRICT)
+    ID_Especialista = models.ForeignKey(Especialista, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return f'{self.ID_Especialista}'

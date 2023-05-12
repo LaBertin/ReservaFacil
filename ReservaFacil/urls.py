@@ -36,6 +36,9 @@ urlpatterns = [
     path('admin_Agregar_Especialista/', views.agregar_empleado, name='admin_Agregar_Especialista'),    
     path('admin_Eliminar_Especialista/', views.admin_Eliminar_Especialista, name='admin_Eliminar_Especialista'),
     path('admin_Agregar_Operador/', views.agregar_operador, name='admin_Agregar_Operador'),
+    path('admin_Eliminar_Operador/', views.admin_Eliminar_Operador, name='admin_Eliminar_Operador'),
+    path('admin_Agregar_Especialidad/', views.admin_Agregar_Especialidad, name='admin_Agregar_Especialidad'),
+    path('admin_Eliminar_Especialidad/', views.admin_Eliminar_Especialidad, name='admin_Eliminar_Especialidad'),
 
     path('funciones_citas_operador/', views.operador_funciones, name='funciones_citas_operador'),
 
@@ -45,6 +48,10 @@ urlpatterns = [
     
     path('calendario_especialista/', views.operador_calendario_especialista, name='calendario_especialista'),
     path('operador_horas_esp/', views.operador_horas_especialista, name = 'operador_horas_esp'),
+
+    #Especialista Fichas Médicas Pacientes
+
+    path('pacientes_fichas_medicas/', views.pacientes_fichas_medicas, name = 'pacientes_fichas_medicas'),
     
     #Modificar_Cita
     path('modificar_cita/', views.operador_modificar_cita, name='modificar_cita'),

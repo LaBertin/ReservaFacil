@@ -160,15 +160,7 @@ def index(request):
         
     else:
         return render(request, "Clientes/index.html")
-
-def inicioSesion(request):
-    return render(request, "Clientes/inicioSesion.html")
-# Dirección URL de vistas de Admin
-# admin es el nombre de la carper donde se almacena los html
-def admin_crearUsuario(request):
-    return render(request, 'admin/admin_crearUsuario.html')
-#Definiciones del 
-
+    
 def registrousuario(request):
     formulario1 = {
         'formRegistarUsuario': FormRegistrarUsuario()
@@ -896,7 +888,7 @@ def agregar_empleado(request):
             
             id_especialista = Especialista.objects.all().count()+1
             us = nom_com_especialista[:2].lower()
-            uar = " ".join(nom_com_especialista.split()[2:3]).lower()
+            uar = " ".join(nom_com_especialista.split()[-2:-1]).lower()
             print(f'uar: {uar}')
             io = fecha_nac_especialista[:-6]
             print(io)
@@ -955,17 +947,18 @@ def agregar_empleado(request):
     return render(request, 'admin/admin_Agregar.html', nuevo_emp_form)
 
 def admin_Eliminar_Especialista(request):
-    print("MENUUUUUUUUUUUU")
     if request.method == 'POST':
-        print("POOOOOOOOOOOOOOOOOOOOOOOOST")
         if 'conf_delet_cit' in request.POST:
             ID_Esp_del = request.POST.get('conf_delet_cit')
             print("MANUEEEH")
             print(ID_Esp_del)
             print(type(ID_Esp_del))
             Especialista_Del = Especialista.objects.get(ID_Especialista = ID_Esp_del)
-            User.objects.get(username = Especialista_Del.Usuario_E).delete()
+            Usuario_Del = User.objects.get(username = Especialista_Del.Usuario_E)
             Especialista_Del.delete()
+            Usuario_Del.delete()
+            messages.success(request,"¡Especialista eliminado con éxito!")
+            
     Especialistas_All = Especialista.objects.all()
     contexto = {'Especialistas_All':Especialistas_All}
     return render(request, 'Admin/admin_Eliminar_Especialista.html', contexto)
@@ -1011,9 +1004,9 @@ def agregar_operador(request):
             q_dict = QueryDict('', mutable=True)
             q_dict.update(Reg)
             formulario = FormRegistrarUsuario(data=q_dict)
-            if formulario.is_valid():
+            if formulario.is_valid(): 
                 formulario.save()
-                usuario_nom = User.objects.get(username=usuario)
+                usuario_nom = User.objects.get(username = usuario)
                 print(usuario_nom)
                 grupo_o = Group.objects.get(name='Operadores')
                 usuario_nom.groups.add(grupo_o)
@@ -1022,7 +1015,7 @@ def agregar_operador(request):
                                         Fecha_de_nacimiento_O=fecha_nac_operador_o, Direccion_O=direccion_operador_o,
                                         Telefono_O=contacto_operador_o, Fecha_de_contrato_O = fecha_ini_con_operador_o,
                                         Fecha_fin_de_contrato_O = fecha_fin_con_operador_o, Usuario_O=Usuario_O)
-                messages.success(request, "Operador registrado exitosamente!")
+                messages.success(request, "¡Operador registrado exitosamente!")
                 return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
             else:
                 formulario=FormOperador()
@@ -1036,11 +1029,54 @@ def agregar_operador(request):
     
     return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
 
+def admin_Eliminar_Operador(request):
+    if request.method == 'POST':
+        if 'conf_delet_cit' in request.POST:
+            ID_Ope_del = request.POST.get('conf_delet_cit')
+            print(ID_Ope_del)
+            print(type(ID_Ope_del))
+            Operador_Del = Operador.objects.get(ID_Operador = ID_Ope_del)
+            Usuario_Del = User.objects.get(username = Operador_Del.Usuario_O)
+            Operador_Del.delete()
+            Usuario_Del.delete()
+            messages.success(request,"¡Operador eliminado con éxito!")
+            
+    Operadores_All = Operador.objects.all()
+    contexto = {'Operadores_All':Operadores_All}
+    return render(request, 'Admin/admin_Eliminar_Operador.html', contexto)
+
 def obtener_especialidades(request, area_medica_id):
     especialidades = Especialidad.objects.filter(Area_Medica_F=area_medica_id)
     options = [(especialidad.pk, str(especialidad)) for especialidad in especialidades]
     return JsonResponse(options, safe=False)
 
+def admin_Agregar_Especialidad(request):
+    if request.method=='POST':
+        formulario=FormEspecialidad(data=request.POST)
+        print(formulario)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, "¡Especialidad creada con éxito!")
+            return redirect('index')
+
+    formulario = FormEspecialidad()
+    contexto = {'FormEspecialidad':formulario}
+    return render(request, 'Admin/admin_agregar_Especialidad.html', contexto)
+
+def admin_Eliminar_Especialidad(request):
+    if request.method == 'POST':
+        if 'conf_delet_cit' in request.POST:
+            ID_Esp_del = request.POST.get('conf_delet_cit')
+            print("MANUEEEH")
+            print(ID_Esp_del)
+            print(type(ID_Esp_del))
+            Esp_del = Especialidad.objects.get(Codigo_especialidad = ID_Esp_del)
+            Esp_del.delete()
+            messages.success(request,"¡Especialidad eliminada con éxito!")
+            
+    Especialidades_All = Especialidad.objects.all()
+    contexto = {'Especialidades_All':Especialidades_All}
+    return render(request, 'Admin/admin_Eliminar_Especialidad.html', contexto)
 #Views Especialistas
 def especialista_Agenda(request):
     form_agenda = {'form_agenda': DateForm()}
@@ -1312,7 +1348,6 @@ def list_ficha_medica(request):
             contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
             return render(request, "Especialistas/ficha_medica.html", contexto)
 
-
 def agregar_cita_medica(request):
     id_fecha = request.GET.get('id_fecha')
     if request.method == 'POST':
@@ -1473,6 +1508,24 @@ def ver_ficha_medica(request):
     contexto = {'formFichaMedica':formulario}
 
     return render(request, 'Especialistas/ver_ficha_medica.html', contexto)
+
+def pacientes_fichas_medicas(request):
+    if request.method == 'POST':
+        print("Manolo Print")
+        if 'doc_pac' in request.POST:
+            # Si se ha solicitado la ficha médica de un paciente, obtener el nombre del paciente y redirigir a la página de ficha médica
+            nom_pac = request.POST.get('doc_pac')
+            url = reverse('ficha_medica') + '?nom_pac={}'.format(nom_pac)
+            return redirect(url)
+        elif 'buscar-btn' in request.POST:
+            print("Manolo buscar-btn")
+            rut = request.POST.get('buscar-input')
+            Pacientes = Paciente.objects.filter(Rut__icontains=rut)
+    else:
+        print("Manolo Else")
+        Pacientes = Paciente.objects.all()
+    contexto = {'Pacientes':Pacientes}
+    return render(request, "Especialistas/pacientes_fichas_medicas.html", contexto)
 
 
 #Views Operadores

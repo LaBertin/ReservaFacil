@@ -6,6 +6,9 @@ from .models import *
 from django.core.exceptions import ValidationError
 from django.forms.widgets import *
 from datetime import date
+from django.utils.safestring import mark_safe
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 
 
 today = date.today()
@@ -16,6 +19,19 @@ DIAS_CHOICES=[('lun','Lunes'),('mar','Martes'),('mie','Miercoles'),('jue','Jueve
 MINUTOS_CHOICES=[(None,'--------'),(15,'15 Minutos'),(30,'30 Minutos'),(45,'45 Minutos'),(60,'60 Minutos')]
 SEXO_CHOICES=[('Femenino','Femenino'), ('Masculino','Masculino')]
 TIPO_ATENCION = [('Particular','Particular'),('Fonasa','Fonasa'),('Isapre','Isapre'),('Convenio','Convenio'),('Otros','Otros')]
+
+class FormEspecialidad(forms.Form):
+    nombre_especialidad = forms.CharField(max_length=256)
+    area_medica_f = forms.ModelChoiceField(queryset=Area_Medica.objects.all(), initial=0)
+
+    def save(self):
+
+        crearEsp = Especialidad.objects.create(
+            Nombre_especialidad = self.cleaned_data['nombre_especialidad'],
+            Area_Medica_F = self.cleaned_data['area_medica_f']
+        )
+        return crearEsp
+
 
 class FormEspecialista(forms.Form):
     nom_com_especialista = forms.CharField(max_length=256)
@@ -205,10 +221,6 @@ class FormCitaMedica(forms.Form):
             Descripcion_examenes = self.cleaned_data['Examenes_Cita']
             )
 
-
-
-       
-        
         CitaMedica = Ficha_Cita.objects.create(  
             ID_Ficha_Cita = Ficha_Cita.objects.all().count()+1,
             Fecha_Cita = self.cleaned_data['Fecha_Cita'],

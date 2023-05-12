@@ -27,7 +27,7 @@
             <ul>
                 {% if request.user|has_group:"Especialistas" %} 
                     <li><a href="/agenda_especialista">Agenda</a></li>
-                    <li><a href="/modificar_hora">Ficha Médica</a></li>
+                    <li><a href="/pacientes_fichas_medicas">Ficha Médica</a></li>
                     <li><a href="/consultar_hora">Emitir Receta</a></li>
                     {% if user.is_authenticated %}
                         <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
@@ -61,6 +61,7 @@
                                 </div>      
                                 </div>
                         </div>
+
                         <!--Bubble Mensaje Operador-->
                         <div class="bubble-text" id="mensajeOperador" style="display:none;">
                             <div id="mensajeAdmin">
@@ -70,7 +71,7 @@
                                     <button class="btn-naranja-mediano btn-margin"><a href="/admin_Agregar_Operador">Agregar Operador</a></button>
                                 </div>
                                 <div class="col">
-                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Agregar_Operador">Eliminar Operador</a></button>
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Eliminar_Operador">Eliminar Operador</a></button>
                                 </div>
                                 <br>
                                 <div class="col">
@@ -79,9 +80,27 @@
                                 </div>
                         </div>
 
+                        <!--Bubble Mensaje Especialidad-->
+                        <div class="bubble-text" id="mensajeEspecialidad" style="display:none;">
+                            <div id="mensajeAdmin">
+                                <br>
+                                <h1 class="titulo-margin">¿Qué desea hacer?</h1>
+                                <div class="col">
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Agregar_Especialidad">Agregar Especialidad</a></button>
+                                </div>
+                                <div class="col">
+                                    <button class="btn-naranja-mediano btn-margin"><a href="/admin_Eliminar_Especialidad">Borrar Especialidad</a></button>
+                                </div>
+                                <br>
+                                <div class="col">
+                                <button class="btn-naranja-mediano" onclick="ocultarMensajeEspecialidad()">Cancelar</button>
+                                </div>      
+                                </div>
+                        </div>
+
                         <li onclick="mostrarMensajeEspecialista()" id="men_Especialistas"><a href="#" >Especialistas</a></li>
                         <li onclick="mostrarMensajeOperador()" id="men_Operadores"><a href="#">Operadores</a></li>
-                        <li><a href="#">Especialidades</a></li>
+                        <li onclick="mostrarMensajeEspecialidad()" id="men_Especialidad"><a href="#">Especialidades</a></li>
                         {% if user.is_authenticated %}
                             <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="/cerrarSesion">Cerrar Sesión</a></button>
                         {% else %}
@@ -118,8 +137,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" id="alerto" aria-label="Close"></button>
                     </div>
                 {% endfor %}
-            {% endif %}
-            
+            {% endif %}            
             <div style="display: flex;">
                 <div id="div-perfil">
                     <img src="{% static Especialista_Cont.Foto_E.url %}" alt="Foto del especialista" class="img-redonda" width="250" height="250"> 
@@ -129,7 +147,7 @@
                     <br>
                     <br>
                     <br>
-                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Ficha Médica</a></button>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="pacientes_fichas_medicas">Ficha Médica</a></button>
                     <br>
                     <br>
                     <br>
@@ -274,7 +292,7 @@
                     </h2>
                     <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano" onclick="mostrarMensajeEspecialista()" id="men_Especialistas">Especialistas</button>
                     <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano" onclick="mostrarMensajeOperador()" id="men_Operadores">Operadores</button>
-                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano"><a href="">Especialidades</a></button>
+                    <button id="btn-inicio-sesion" type="button" class="btn-naranja-mediano" onclick="mostrarMensajeEspecialidad()" id="men_Especialidad">Especialidades</button>
                 </div>
         </div>
     {% else %}
@@ -341,7 +359,9 @@
 </div>
 <footer>
     <div class="col">© 2023 ReservaFácil, todos los derechos reservados.</div>
-    <div class="col">Logo</div>
+    <div class="col">
+        <a href="/"><img src="../../static/img/logo.png" width="190px" height="70px"></a>
+    </div>
     <div class="col">
         <div class="col">
             <a href="">
