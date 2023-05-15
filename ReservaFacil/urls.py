@@ -73,6 +73,7 @@ urlpatterns = [
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
     path('chat/', views.chatsito, name='chat'),
     path('ficha_medica/', views.list_ficha_medica, name='ficha_medica'),
+    path('filtro_ficha_medica/', views.filtro_ficha_medica, name='filtro_ficha_medica'),
     path('crear_ficha_medica/', views.form_ficha_medica, name='crear_ficha_medica'),
     path('agregar_cita_medica/', views.agregar_cita_medica, name='agregar_cita_medica'),
     path('ver_cita_medica/', views.ver_cita_medica, name='ver_cita_medica'),

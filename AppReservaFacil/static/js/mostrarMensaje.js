@@ -55,7 +55,6 @@ function ocultarMensajeEspecialista() {
   document.getElementById("mensajeEspecialista").style.display = "none";
 }
 
-
 //Operador Bubble
 function mostrarMensajeOperador() {
   document.getElementById("mensajeOperador").style.display = "block";
@@ -71,3 +70,16 @@ function mostrarMensajeEspecialidad() {
 function ocultarMensajeEspecialidad() {
   document.getElementById("mensajeEspecialidad").style.display = "none";
 }
+
+//Cita medica Bubble
+function mostrarMensajeCitaRecetaDos() {
+  document.getElementById("mensajeCita").style.display = "block";
+}
+
+function ocultarMensajeCitaRecetaDos() {
+
+  document.getElementById("mensajeCita").style.display = "none";
+
+  // document.getElementById("mensajeCita-dos").style.display = "block"
+}
+

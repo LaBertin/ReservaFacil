@@ -139,6 +139,7 @@ def index(request):
         else:
             print("Otro")
             Bool_Grupo = nombre_Usuario.groups.filter(name__in=['Operadores']).exists()
+            Bool_Grupo_pac = nombre_Usuario.groups.filter(name__in=['Pacientes']).exists()
             if Bool_Grupo == True:
                 print(nombre_Usuario)
                 nombre_Operador = Operador.objects.filter(Usuario_O=nombre_Usuario)[0].Nombre_completo_O
@@ -149,14 +150,16 @@ def index(request):
                 print(Operador_Cont)
                 return render(request, "Clientes/index.html", {'Nombre_O':nombre_Operador,'Operador_Cont':Operador_Cont})
 
-            else:
-
+            elif Bool_Grupo_pac == True:
                 paciente = Paciente.objects.get(Usuario_P=nombre_Usuario)
                 if paciente.Primer_Login:
                     print('Estoy aquii aloooo')
                     return redirect('perfil')
                 else:
                     return render(request, "Clientes/index.html")
+            
+            else:
+                return render(request, "Clientes/index.html")
         
     else:
         return render(request, "Clientes/index.html")
@@ -1324,7 +1327,7 @@ def list_ficha_medica(request):
         
     else:   
         nom_pac = request.GET.get('nom_pac')  # Obtiene el valor de la variable 'nom_pac' de la solicitud GET
-        print(nom_pac)
+        print(f'Nom paciente: {nom_pac}')
         if Paciente.objects.filter(Nombre_Paciente = nom_pac).exists():
             rut_pac = Paciente.objects.get(Nombre_Paciente = nom_pac).Rut  # Obtiene el Rut del paciente correspondiente al nombre obtenido en la solicitud GET
         else:
@@ -1346,6 +1349,44 @@ def list_ficha_medica(request):
             contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
             return render(request, "Especialistas/ficha_medica.html", contexto)
 
+def filtro_ficha_medica(request):
+    nom_pac = request.GET.get('nom_pac')  # Obtiene el valor de la variable 'nom_pac' de la solicitud GET
+    print(f'Nom paciente: {nom_pac}')
+    
+    if request.method =='POST':
+        if 'ver_cita_medica' in request.POST:
+            ID_Ficha_Cita = request.POST.get('ver_cita_medica')
+            print(ID_Ficha_Cita)
+            url = reverse('ver_cita_medica') + '?ID_Ficha_Cita={}&nombre_pac={}'.format(ID_Ficha_Cita,nom_pac)
+            return redirect(url)
+        if 'ver_ficha_medica' in request.POST:
+            ID_Ficha_Medica = request.POST.get('ver_ficha_medica')
+            print(ID_Ficha_Medica)
+            url = reverse('ver_ficha_medica') + '?ID_Ficha_Medica={}'.format(ID_Ficha_Medica)
+            return redirect(url)
+    
+    if Paciente.objects.filter(Nombre_Paciente = nom_pac).exists():
+        rut_pac = Paciente.objects.get(Nombre_Paciente = nom_pac).Rut  # Obtiene el Rut del paciente correspondiente al nombre obtenido en la solicitud GET
+    else:
+        rut_pac = request.GET.get('rut')
+    # Si existe una ficha médica asociada al paciente
+    if Ficha_Medica.objects.filter(RUT_Pac = rut_pac).exists():
+        Ficha_Med_Pac = Ficha_Medica.objects.get(RUT_Pac = rut_pac)  # Obtiene la ficha médica asociada al paciente
+        # Si existen citas médicas asociadas al paciente
+        if Ficha_Cita.objects.filter(RUT_Pac = rut_pac).exists():
+            Citas_medicas = Ficha_Cita.objects.filter(RUT_Pac = rut_pac)  # Obtiene las citas médicas asociadas al paciente
+            contexto = {'Ficha_Med_Pac':Ficha_Med_Pac, 'QSCitasMedicas':Citas_medicas}  # Crea un diccionario con la información de la ficha médica y las citas médicas
+            return render(request,"Especialistas/ver_ficha.html", contexto)  # Renderiza la plantilla HTML 'ver_ficha.html' con el contexto creado
+        else:
+            print("Ficha Cita no existe")  # Si no existen citas médicas asociadas al paciente, imprime un mensaje de error en la consola
+            contexto = {'Ficha_Med_Pac':Ficha_Med_Pac,'texto_FMP':'No hay citas médicas registrada para '+nom_pac+'.'}  # Crea un diccionario con la información de la ficha médica y un mensaje de error
+            return render(request,"Especialistas/ver_ficha.html", contexto)  # Renderiza la plantilla HTML 'ver_ficha.html' con el contexto creado
+    else:
+        print("Ficha medica no existe")
+        contexto = {'texto':'No hay ficha médica registrada para '+nom_pac+'.'}
+        return render(request, "Especialistas/ver_ficha.html", contexto)
+
+#TODO AGREGAR TRASPASAR VALORES A LA NUEVA VISTA DE RECETA MEDICA Y ORDENES EXAMENES
 def agregar_cita_medica(request):
     id_fecha = request.GET.get('id_fecha')
     if request.method == 'POST':
@@ -1382,9 +1423,17 @@ def ver_cita_medica(request):
     Nombre_Com_Esp = Cita_Medica.Nombre_Com_Esp
     Fecha_Cita = Cita_Medica.Fecha_Cita
     Diagnostico_Cita = Cita_Medica.Diagnostico_Cita
-    datos_form = {'Ficha_Medica_Pac':Ficha_Medica_Pac,'Ficha_Medica_Pac':Ficha_Medica_Pac, 'RUT_Pac':RUT_Pac, 'Nombre_Com_Pac':Nombre_Com_Pac, 'Fecha_Cita':Fecha_Cita, 'Nombre_Com_Esp':Nombre_Com_Esp, 'Diagnostico_Cita':Diagnostico_Cita}
+    Receta = Cita_Medica.Receta.Descripcion_receta
+    print(f'Receta medica: {Receta}')
+    Examenes = Cita_Medica.Examene.Descripcion_examenes
+    print(f'Examenes medica: {Examenes}')
+    datos_form = {'Ficha_Medica_Pac':Ficha_Medica_Pac,'Ficha_Medica_Pac':Ficha_Medica_Pac, 'RUT_Pac':RUT_Pac,
+                  'Nombre_Com_Pac':Nombre_Com_Pac, 'Fecha_Cita':Fecha_Cita, 'Nombre_Com_Esp':Nombre_Com_Esp,
+                  'Diagnostico_Cita':Diagnostico_Cita, 'Receta_Cita':Receta, 'Examenes_Cita':Examenes}
     formulario = FormCitaMedica(initial=datos_form)
     formulario.fields['Diagnostico_Cita'].widget.attrs['readonly'] = True
+    formulario.fields['Receta_Cita'].widget.attrs['readonly'] = True
+    formulario.fields['Examenes_Cita'].widget.attrs['readonly'] = True
     contexto = {'FormCitaMedica':formulario}
     return render(request, 'Especialistas/ver_cita_medica.html', contexto)
 
@@ -1513,7 +1562,7 @@ def pacientes_fichas_medicas(request):
         if 'doc_pac' in request.POST:
             # Si se ha solicitado la ficha médica de un paciente, obtener el nombre del paciente y redirigir a la página de ficha médica
             nom_pac = request.POST.get('doc_pac')
-            url = reverse('ficha_medica') + '?nom_pac={}'.format(nom_pac)
+            url = reverse('filtro_ficha_medica') + '?nom_pac={}'.format(nom_pac)
             return redirect(url)
         elif 'buscar-btn' in request.POST:
             print("Manolo buscar-btn")

@@ -1,7 +1,7 @@
 {% extends "../Clientes/index.html" %}
 {% block footer %}
 <title>Crear Ficha Médica</title>
-    <div class="div-mediano">
+    <div class="div-grande">
         <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>  
             <div class="row row-margin justify-content-center">
                 <div class="col-md-2">
@@ -35,12 +35,33 @@
                     {{FormCitaMedica.Fecha_Cita}}
                 </div>
             </div>
-            <h5>
-                Diagnostico
-            </h5>
-            <div class="row row-margin justify-content-center">
-                <div class="col">
-                    {{FormCitaMedica.Diagnostico_Cita}}
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex ml-auto">
+                    <h5>
+                        Diagnostico:
+                    </h5>
+                </div>
+                <div class="col-md-10 d-flex align-items-center">
+                    {{FormCitaMedica.Diagnostico_Cita}} 
+                </div>
+            </div>
+
+            <div class="row row-margin">
+                <div class="col-md-2 d-flex ">
+                    <h5>
+                        Receta Medica:
+                    </h5>
+                </div>
+                <div class="col-md-4 d-flex align-items-center" id="textoReceta">
+                    {{FormCitaMedica.Receta_Cita}} 
+                </div>
+                <div class="col-md-2 d-flex ">
+                    <h5>
+                        Orden de examen:
+                    </h5>
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    {{FormCitaMedica.Examenes_Cita}} 
                 </div>
             </div>
             <br>

@@ -1,0 +1,128 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<script src="../../static/js/paginacion.js"></script>
+<title>Ficha Médica</title>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" id="alerto" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+    <div class="div-grande">
+        <h2 id="titulo-inicio-sesion">Ficha Médica</h2>
+        {% if texto %}
+            <div class="texto-centrado-verticalmente">
+                <h3>{{texto}}</h3>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <h4>¿Deseas crear una ficha médica nueva?</h4>
+                <button type="submit" class="btn-naranja-mediano" name="red_form_ficha_med">
+                    Crear Ficha Médica
+                </button>
+            </form>
+            <br>
+        {% else %}
+        {% if texto_FMP %}
+            <div class="row row-margin">
+                <table>
+                    <tr>
+                        <td>ID Ficha Medica</td>
+                        <td>RUT Paciente</td>
+                        <td>Nombre Paciente</td>
+                        <td>Grupo Sanguíneo</td>
+                        <td>Ver Ficha</td>
+                    </tr>
+                    <tr>
+                        <td>{{Ficha_Med_Pac.ID_Ficha_Medica}}</td>
+                        <td>{{Ficha_Med_Pac.RUT_Pac}}</td>
+                        <td>{{Ficha_Med_Pac.Nombre_Com_Pac}}</td>
+                        <td>{{Ficha_Med_Pac.Grupo_Sanguineo}}</td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">Ver Ficha Médica</button></td>
+                        </form>
+                    </tr>
+                </table>
+            </div>
+            <h2 id="titulo-inicio-sesion">Citas Médicas</h2>
+            <div class="row row-margin">
+                <div class="texto-centrado-verticalmente">
+                    <h3>{{texto_FMP}}</h3>
+                </div>
+            </div>
+            <div>
+                <form method="post">
+                    {% csrf_token %}
+                    <button class="btn" type="submit" name="agregar_cita_medica"  value="{{Ficha_Med_Pac.ID_Ficha_Medica}},{{Ficha_Med_Pac.RUT_Pac}},{{Ficha_Med_Pac.Nombre_Com_Pac}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="orange" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <div class="row row-margin">
+                <table>
+                    <tr>
+                        <td>ID Ficha Medica</td>
+                        <td>RUT Paciente</td>
+                        <td>Nombre Paciente</td>
+                        <td>Grupo Sanguíneo</td>
+                        <td>Ver Ficha</td>
+                    </tr>
+                    <tr>
+                        <td>{{Ficha_Med_Pac.ID_Ficha_Medica}}</td>
+                        <td>{{Ficha_Med_Pac.RUT_Pac}}</td>
+                        <td>{{Ficha_Med_Pac.Nombre_Com_Pac}}</td>
+                        <td>{{Ficha_Med_Pac.Grupo_Sanguineo}}</td>
+                        <form method="post">
+                            {% csrf_token %}
+                            <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">Ver Ficha Médica</button></td>
+                        </form>
+                    </tr>
+                </table>
+            </div>
+
+            <h2 id="titulo-inicio-sesion">Citas Médicas</h2>
+            <div class="row row-margin table-responsive">
+                <table class="table table-hover table-pagination">
+                    <thead>
+                        <tr>
+                            <th>ID Cita Medica</th>
+                            <th>Fecha Cita</th>
+                            <th>Nombre Especialista</th>
+                            <th>Ver Ficha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            {% for citas in QSCitasMedicas %}
+                            <tr>
+                                <th>{{citas.ID_Ficha_Cita}}</th>
+                                <th>{{citas.Fecha_Cita}}</th>
+                                <th>{{citas.Nombre_Com_Esp}}</th>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <th><button type="submit" name="ver_cita_medica" value="{{citas.ID_Ficha_Cita}}" class="btn-naranja-mediano">Ver Cita Médica</button></th>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+                    <ul class="pagination"></ul>
+                </div>
+                
+        {% endif %}
+            
+        {% endif %}   
+        <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+    </div>  
+</div>
+{% endblock %}
