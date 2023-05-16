@@ -77,9 +77,18 @@ function mostrarMensajeCitaRecetaDos() {
 }
 
 function ocultarMensajeCitaRecetaDos() {
-
   document.getElementById("mensajeCita").style.display = "none";
-
-  // document.getElementById("mensajeCita-dos").style.display = "block"
+  document.getElementById("mensajeCitaExamen").style.display = "block"
 }
 
+function finalizarCitaMedica(redireccionar){
+  var form = document.getElementById('form_cita');
+  var redireccionar = document.getElementById('redireccionar_field')
+  console.log(`Fuera del if ${redireccionar.value}`)
+  if (redireccionar){
+    console.log(`Dentro del if ${redireccionar.value}`)
+    redireccionar.value = "1"
+    console.log(`Despues del if ${redireccionar.value}`)
+  }
+  form.submit()
+}

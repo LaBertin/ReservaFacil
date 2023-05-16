@@ -79,6 +79,12 @@ urlpatterns = [
     path('ver_cita_medica/', views.ver_cita_medica, name='ver_cita_medica'),
     path('ver_ficha_medica/', views.ver_ficha_medica, name='ver_ficha_medica'),
 
+    #Receta medica
+    path('receta_medica/', views.ver_receta_medica, name='receta_medica'),
+    
+    #Orden Examen
+    # path('orden_examen/', views.ver_orden_examen, name='orden_examen'),
+
 
     path('agenda_especialista/',views.especialista_Agenda, name='agenda_especialista'),
     path('agenda_dia/', views.especialista_list_citas, name='agenda_dia'),

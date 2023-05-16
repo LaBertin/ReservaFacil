@@ -1393,12 +1393,20 @@ def agregar_cita_medica(request):
         form_Post = FormCitaMedica(data=request.POST)
         print(form_Post)
         if form_Post.is_valid():
-            valor = form_Post.cleaned_data['Receta_Cita']
-            valor2 = form_Post.cleaned_data['Examenes_Cita']
-            print(f'valor de descripcion_receta: {valor}')
-            print(f'valor de Examenes_Cita: {valor2}')
+            redireccion_valor = request.POST.get('redireccionar')
+            print(redireccion_valor)
+
+            if redireccion_valor == "1":
+                form_Post.save()
+                messages.success(request, "Cita médica agregada con éxito")
+                url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha)
+                return redirect(url)
+
+            # valor = form_Post.cleaned_data['Receta_Cita']
+            # valor2 = form_Post.cleaned_data['Examenes_Cita']
+            # print(f'valor de descripcion_receta: {valor}')
+            # print(f'valor de Examenes_Cita: {valor2}')
             form_Post.save()
-            messages.success(request, "Cita médica agregada con éxito")
             url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha)
             return redirect(url)
 
@@ -1413,6 +1421,34 @@ def agregar_cita_medica(request):
     contexto = {'FormCitaMedica':formulario}
     
     return render(request, "Especialistas/agregar_cita_medica.html", contexto)
+
+def ver_receta_medica(request):
+    nom_pac = request.GET.get('nom_pac')
+    paciente = Paciente.objects.get(Nombre_Paciente= nom_pac)
+    rut_pac = paciente.Rut
+    hoy = date.today()
+    edad = hoy.year - paciente.Fecha_de_nacimiento_P.year
+    direccion = paciente.Direccion_P
+    user = request.user
+
+    especialista = Especialista.objects.get(Usuario_E= user)
+    rut_esp = especialista.Rut
+
+    #Espeacialidad
+    dia = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+    if dia in especialista.Dia_Esp_P:
+        esp = especialista.Especialidad_P
+    else:
+        esp = especialista.Especialidad_S
+
+
+    print(esp)
+    data = {"Especialista_receta":especialista, "Especialidad_receta":esp, "Rut_esp_receta":rut_esp, 
+            "Nompre_pac_receta":nom_pac, "Rut_pac_receta":rut_pac, "Edad_pac_receta":edad, "Direccion_pac_receta":direccion}    
+    form_receta = FormReceta(initial = data)
+    #TODO TERMINAR EL PROCESO DE RECETA MEDICA Y ORDEN EXAMEN
+    context = {'form_receta':form_receta}
+    return render(request, "Especialistas/receta_medica.html",context)
 
 def ver_cita_medica(request):
     ID_Ficha_Cita = request.GET.get('ID_Ficha_Cita')

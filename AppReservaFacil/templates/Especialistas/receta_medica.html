@@ -1,0 +1,90 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<script src="../../static/js/paginacion.js"></script>
+<title>Ficha Médica</title>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" id="alerto" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+    <div class="div-grande">
+        <h2 id="titulo-inicio-sesion">Receta Médica</h2>
+        <form method="POST" action="/orden_examen/">
+            {% csrf_token %}
+            <div class="row row-margin">
+                <div class="col-md-6">
+                    [IMAGEN CLINICA] 
+                </div>
+                <div class="col-md-3">
+                    <h4>Nombre Especialista:</h4>
+                    <h6>Nombre Especialidad:</h6>
+                    <h6>Rut:</h6>
+                </div>
+                <div class="col-md-3">
+                    {{form_receta.Especialista_receta}}
+                    {{form_receta.Especialidad_receta}}
+                    {{form_receta.Rut_esp_receta}}
+                </div>
+            </div>
+    
+            <div class="row row-margin">
+                <div class="col-md-1" >
+                    Nombre:
+                </div>
+                <div class="col-md-11" >
+                    {{form_receta.Nompre_pac_receta}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-1">
+                    RUT:
+                </div>
+                <div class="col-md-3">
+                    {{form_receta.Rut_pac_receta}}
+                </div>
+                <div class="col-md-1">
+                    Edad:
+                </div>
+                <div class="col-md-1">
+                    {{form_receta.Edad_pac_receta}}
+                </div>
+                <div class="col-md-1">
+                    Direccion:
+                </div>
+                <div class="col-md-5">
+                    {{form_receta.Direccion_pac_receta}}
+                </div>
+            </div>
+            <div class="row row-margin">
+                <div class="col-md-1">
+                    Diagnostico:
+                </div>
+                <div class="col-md-11">
+                    {{form_receta.Diagnostico_pac_receta}}
+                </div>
+            </div>
+            
+            <div class="row row-margin">
+                <div>
+                    <h4>Receta:</h4>
+                </div>
+                
+                {{form_receta.Descripcion_receta}}
+            </div>
+            <button class="btn-naranja-pequeno" type="submit" name="crear_ficha" id="crear_ficha" >
+               
+            </button>
+        </form>
+        
+        <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+    </div>  
+</div>
+{% endblock %}

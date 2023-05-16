@@ -194,6 +194,14 @@ class Ficha_Medica(models.Model):
     
 class Receta (models.Model):
     Numero_receta = models.IntegerField()
+    Especialista_receta = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
+    Rut_esp_receta = models.CharField(max_length = 9)
+    Especialidad_receta = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
+    Nompre_paciente_receta = models.CharField(max_length = 256)
+    Rut_pac_receta = models.CharField(max_length = 9)
+    Edad_pac_receta = models.IntegerField()
+    Direccion_pac_receta = models.CharField(max_length=256)
+    Diagnostico_rec = models.CharField(max_length=80)
     Descripcion_receta = models.TextField(max_length=256)
 
     def __str__(self):

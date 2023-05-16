@@ -11,7 +11,7 @@
     {% endfor %}
 {% endif %}
     
-    <div class="div-grande">
+    <div class="div-mediano">
         <div class="bubble-text" id="mensajeCita" style="display:none;">
             <br>
             <div>
@@ -26,6 +26,28 @@
             <br>
             <br>
             <div class="col btn-naranja-mediano">
+                <button class="btn-naranja-mediano" onclick="finalizarCitaMedica(true)" id="conf_create_receta" type="submit" name="conf_create_rec">Aceptar</button>
+            </div>
+            <br>
+            <div class="col">
+            <button class="btn-naranja-mediano" onclick="ocultarMensajeCitaRecetaDos()">No</button>
+            </div>      
+        </div>
+        
+        <!-- <div class="bubble-text" id="mensajeCitaExamen" style="display:none;">
+            <br>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                </svg>
+        </div>
+            <h1>Desea crear orden de examen?</h1>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="col btn-naranja-mediano">
             <form method="post">
                 {% csrf_token %}
                 <button class="btn-naranja-mediano" onclick="eliminarCita(fechaID)" id="conf_delet_cit_button" type="submit" name="conf_delet_cit">Aceptar</button>
@@ -33,11 +55,11 @@
             </div>
             <br>
             <div class="col">
-            <button class="btn-naranja-mediano" onclick="ocultarMensajeCitaRecetaDos()">Cancelar</button>
+                <button class="btn-naranja-mediano" type="submit" name="conf_cita_sin" onclick="finalizarCitaMedica()">Cancelar</button>
             </div>      
-        </div>
+        </div> -->
         <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
-        <form method="post">
+        <form method="post" id ="form_cita">
         {% csrf_token %}    
             <div class="row row-margin justify-content-center">
                 <div class="col-md-2">
@@ -81,11 +103,10 @@
                     {{FormCitaMedica.Diagnostico_Cita}} 
                 </div>
             </div>
-
-            <div class="row row-margin">
+            <input type="hidden" name="redireccionar" id="redireccionar_field" value="0">
+            <!-- <div class="row row-margin">
                 <div class="col-md-2 d-flex ">
                     <h5>
-                        <input type="checkbox" name="receta" id="receta" onclick="disabled_receta()">
                         Receta Medica:
                     </h5>
                 </div>
@@ -94,18 +115,15 @@
                 </div>
                 <div class="col-md-2 d-flex ">
                     <h5>
-                        <input type="checkbox" name="examen" id="examen" onclick="disabled_examen()">
                         Orden de examen:
                     </h5>
                 </div>
                 <div class="col-md-4 d-flex align-items-center">
                     {{FormCitaMedica.Examenes_Cita}} 
                 </div>
-            </div>
-
-           
+            </div> -->
             <br>
-            <!--  -->
+
             <button type="button" class="btn-naranja-mediano row-margin" name="agregar_cita_medica" onclick="mostrarMensajeCitaRecetaDos()">Agregar cita médica</button>
             <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
 
