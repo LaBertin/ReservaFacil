@@ -100,6 +100,8 @@
                             <th>Fecha Cita</th>
                             <th>Nombre Especialista</th>
                             <th>Ver Ficha</th>
+                            <th>Receta Medica</th>
+                            <th>Orden Examen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,6 +114,8 @@
                                     {% csrf_token %}
                                     <th><button type="submit" name="ver_cita_medica" value="{{citas.ID_Ficha_Cita}}" class="btn-naranja-mediano">Ver Cita Médica</button></th>
                                 </form>
+                                <th>d</th>
+                                <th></th>
                             </tr>
                             {% endfor %}
                     </tbody>

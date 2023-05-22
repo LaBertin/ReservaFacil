@@ -100,6 +100,8 @@
                             <th>Fecha Cita</th>
                             <th>Nombre Especialista</th>
                             <th>Ver Ficha</th>
+                            <th>Receta Medica</th>
+                            <th>Orden Examen</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -108,10 +110,27 @@
                                 <th>{{citas.ID_Ficha_Cita}}</th>
                                 <th>{{citas.Fecha_Cita}}</th>
                                 <th>{{citas.Nombre_Com_Esp}}</th>
+                                
                                 <form method="post">
                                     {% csrf_token %}
                                     <th><button type="submit" name="ver_cita_medica" value="{{citas.ID_Ficha_Cita}}" class="btn-naranja-mediano">Ver Cita Médica</button></th>
                                 </form>
+                                {% if citas.Receta %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <th><button type="submit" name="ver_receta" value="{{citas.Receta}}" class="btn-naranja-mediano">Ver Receta</button></th>
+                                </form>
+                                {% else %}
+                                <td>Sin receta</td>
+                                {% endif %}
+                                {% if citas.Examene %}
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <th><button type="submit" name="ver_examen" value="{{citas.Examene}}" class="btn-naranja-mediano">Ver Examenes</button></th>
+                                </form>
+                                {% else %}
+                                <td>Sin Examenes</td>
+                                {% endif %}
                             </tr>
                             {% endfor %}
                     </tbody>

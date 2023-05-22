@@ -16,7 +16,9 @@ GRUPO_SANGUINEO=[('Ninguno','Ninguno'),('A+','A+'),('O+','O+'),('B+','B+'),('AB+
 ESTADO_COBRO = [('Pagado','Pagado'),('Por pagar','Por pagar')]
 METODO_PAGO = [('Efectivo','Efectivo'),('Debito','Debito'),('Credito','Credito')]
 TIPO_ATENCION = [('Particular','Particular'),('Fonasa','Fonasa'),('Isapre','Isapre'),('Convenio','Convenio'),('Otros','Otros')]
-
+EXAMENES=[('Glucosa','Glucosa'),('Nitrogeno_Ureico','Nitrogeno Ureico'),('Urea','Urea'),('Colesterol_total','Colesterol Total'),('Acido_Urico','Acido Urico'),('Proteinas_totales','Proteinas Totales')
+          ,('Albuminca','Albúminca'),('Globulinas','Globulinas'),('Bilirrubina_total','Bilirrubina total'),('Transaminasa_GOT','Transaminasa GOT'),('Transaminada_GPT','Transaminada GPT'),
+          ('Gammaglutamil_transferasa',' Gammaglutamil transferasa'),('Deshidrogenasa_lactica','Deshidrogenasa láctica'),('Fosfatasas_alcalinas','Fosfatasas alcalinas'),('Calcio_total','Calcio total'),('Fosforo','Fósforo')]
 
 class Area_Medica(models.Model):
     ID_Area_Medica = models.IntegerField(primary_key=True, unique=True)
@@ -194,22 +196,31 @@ class Ficha_Medica(models.Model):
     
 class Receta (models.Model):
     Numero_receta = models.IntegerField()
-    Especialista_receta = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
-    Rut_esp_receta = models.CharField(max_length = 9)
+    Especialista_receta = models.ForeignKey(Especialista, on_delete=models.RESTRICT,null=True)
+    Rut_esp_receta = models.CharField(max_length = 9,null=True)
     Especialidad_receta = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
-    Nompre_paciente_receta = models.CharField(max_length = 256)
-    Rut_pac_receta = models.CharField(max_length = 9)
-    Edad_pac_receta = models.IntegerField()
-    Direccion_pac_receta = models.CharField(max_length=256)
-    Diagnostico_rec = models.CharField(max_length=80)
-    Descripcion_receta = models.TextField(max_length=256)
+    Nompre_paciente_receta = models.CharField(max_length = 256,null=True)
+    Rut_pac_receta = models.CharField(max_length = 9,null=True)
+    Edad_pac_receta = models.IntegerField(null=True)
+    Direccion_pac_receta = models.CharField(max_length=256, null=True)
+    Diagnostico_rec = models.CharField(max_length=80, null=True)
+    Descripcion_receta = models.TextField(max_length=256, null=True)
 
     def __str__(self):
         return f'{self.Numero_receta}'
     
 class Examene (models.Model):
     Numero_orden_examen = models.IntegerField()
-    Descripcion_examenes = models.TextField(max_length=256)
+    Nombre_pac_orden = models.CharField(max_length=256, null=True)
+    Rut_pac_orden = models.CharField(max_length = 9,null=True)
+    Edad_pac_orden = models.IntegerField(null=True)
+    Fecha_nac_pac_orden = models.DateField(null=True)
+    Prevision_pac_orden = models.CharField(choices=TIPO_ATENCION, max_length=15, null = True)
+    Servicio_pac_orden = models.CharField(max_length=80, null=True)
+    Diagnostico_orden = models.CharField(max_length=80, null=True)
+    Nombre_Medico_orden = models.CharField(max_length=256, null=True)
+    Rut_Medico_orden = models.CharField(max_length = 9,null=True)
+    Examenes = MultiSelectField(choices=EXAMENES,null=True)
     
     def __str__(self):
         return f'{self.Numero_orden_examen}'
@@ -223,7 +234,7 @@ class Ficha_Cita(models.Model):
     RUT_Pac = models.CharField(max_length=9)
     Nombre_Com_Pac = models.ForeignKey(Paciente,null=False, on_delete=models.RESTRICT)
     Nombre_Com_Esp = models.ForeignKey(Especialista,null=False, on_delete=models.RESTRICT)
-    Diagnostico_Cita = models.TextField(max_length=256)
+    Diagnostico_Cita = models.TextField(max_length=256, null=True)
     Receta = models.ForeignKey(Receta,null=True, on_delete=models.RESTRICT)
     Examene = models.ForeignKey(Examene,null=True, on_delete=models.RESTRICT)
 

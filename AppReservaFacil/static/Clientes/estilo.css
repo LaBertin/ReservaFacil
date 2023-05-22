@@ -431,3 +431,16 @@ body{
     font-weight: bold;
   }
 /*-------------------------------------------------*/
+
+/*-------------Formulario Orden Examenes-----------*/
+.form {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .form-row {
+     /* Ajusta el ancho máximo deseado */
+    display: flex;
+    align-items: center;
+     /* Ajusta el espaciado horizontal entre los elementos */
+  }

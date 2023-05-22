@@ -34,7 +34,7 @@
             </div>      
         </div>
         
-        <!-- <div class="bubble-text" id="mensajeCitaExamen" style="display:none;">
+        <div class="bubble-text" id="mensajeCitaExamen" style="display:none;">
             <br>
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
@@ -48,16 +48,15 @@
             <br>
             <br>
             <div class="col btn-naranja-mediano">
-            <form method="post">
-                {% csrf_token %}
-                <button class="btn-naranja-mediano" onclick="eliminarCita(fechaID)" id="conf_delet_cit_button" type="submit" name="conf_delet_cit">Aceptar</button>
-            </form>
+
+                <button class="btn-naranja-mediano" onclick="finalizarCitaMedicaOrden(true)" id="conf_create_receta" type="submit" name="conf_create_rec">Aceptar</button>
+
             </div>
             <br>
             <div class="col">
-                <button class="btn-naranja-mediano" type="submit" name="conf_cita_sin" onclick="finalizarCitaMedica()">Cancelar</button>
+                <button class="btn-naranja-mediano" type="submit" name="conf_cita_sin" onclick="finalizarCita()">Cancelar</button>
             </div>      
-        </div> -->
+        </div>
         <h3 id="titulo-inicio-sesion">Identificacion Personal</h3>
         <form method="post" id ="form_cita">
         {% csrf_token %}    
@@ -104,24 +103,7 @@
                 </div>
             </div>
             <input type="hidden" name="redireccionar" id="redireccionar_field" value="0">
-            <!-- <div class="row row-margin">
-                <div class="col-md-2 d-flex ">
-                    <h5>
-                        Receta Medica:
-                    </h5>
-                </div>
-                <div class="col-md-4 d-flex align-items-center" id="textoReceta">
-                    {{FormCitaMedica.Receta_Cita}} 
-                </div>
-                <div class="col-md-2 d-flex ">
-                    <h5>
-                        Orden de examen:
-                    </h5>
-                </div>
-                <div class="col-md-4 d-flex align-items-center">
-                    {{FormCitaMedica.Examenes_Cita}} 
-                </div>
-            </div> -->
+            <input type="hidden" name="redireccionar_o" id="redireccionar_o_field" value="0">
             <br>
 
             <button type="button" class="btn-naranja-mediano row-margin" name="agregar_cita_medica" onclick="mostrarMensajeCitaRecetaDos()">Agregar cita médica</button>

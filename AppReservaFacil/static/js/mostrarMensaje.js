@@ -84,11 +84,24 @@ function ocultarMensajeCitaRecetaDos() {
 function finalizarCitaMedica(redireccionar){
   var form = document.getElementById('form_cita');
   var redireccionar = document.getElementById('redireccionar_field')
-  console.log(`Fuera del if ${redireccionar.value}`)
   if (redireccionar){
-    console.log(`Dentro del if ${redireccionar.value}`)
     redireccionar.value = "1"
-    console.log(`Despues del if ${redireccionar.value}`)
   }
   form.submit()
 }
+
+function finalizarCitaMedicaOrden(redireccionar_o){
+  var form = document.getElementById('form_cita');
+  var redireccionar_o = document.getElementById('redireccionar_o_field')
+  if (redireccionar_o){
+    redireccionar_o.value = "1"
+  }
+  form.submit()
+}
+
+
+function finalizarCita(){
+  var form = document.getElementById('form_cita');
+  form.submit()
+}
+

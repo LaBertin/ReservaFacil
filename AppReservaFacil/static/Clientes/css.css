@@ -1300,4 +1300,27 @@ select::-ms-expand{
         align-items: center;
     }
 
-    
+    /*FORMULARIO ORDEN EXAMENES*/
+
+    .form {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      
+      .form-row {
+        flex: 1 1 200px; /* Ajusta el ancho máximo deseado */
+        display: flex;
+        align-items: center;
+        margin-right: 10px; /* Ajusta el espaciado horizontal entre los elementos */
+      }
+      .input {
+        flex: 1;
+        outline: none;
+      }
+      .form .form-row .col #label-orden{
+        margin-left: 5px;
+      }
+
+      .highlight {
+        background-color: yellow;
+      }

@@ -15,6 +15,10 @@ import calendar
 from django.urls import reverse
 import unicodedata
 import itertools
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import A4
+
 
 # Create your views here.
 
@@ -28,6 +32,45 @@ def has_group(user, group_name):
     return user.groups.filter(name=group_name).exists() 
 
 # Dirección URL de vistas de Clientes
+
+def hello(c):
+     # Configura el tamaño de página (A4)
+    width, height = A4
+
+    # Crea el objeto Canvas con el tamaño de página
+    c = canvas.Canvas("boleta.pdf", pagesize=A4)
+
+    print(height)
+    # Dibuja la línea separadora
+    line_y = height - 100
+    c.line(50, line_y, width - 50, line_y)
+
+    # Dibuja el texto "Boleta" centrado
+    c.setFont("Helvetica-Bold", 18)
+    text = "Boleta"
+    text_width = c.stringWidth(text, "Helvetica-Bold", 18)
+    text_x = (width - text_width) / 2
+    text_y = line_y - 30
+    c.drawString(text_x, text_y, text)
+
+    # Dibuja el cuadro de la boleta
+    # box_x1 = 50
+    # box_y1 = line_y - 150
+    # box_x2 = width - 50
+    # box_y2 = line_y - 300
+    # c.rect(box_x1, box_y1, box_x2 - box_x1, box_y2 - box_y1)
+
+    #Cuadrado propio
+    x1 = width - 250
+    y1 = line_y - 50
+    x2 = width - 50
+    y2 = line_y - 150
+    c.rect(x1, y1, x2 - x1, y2 - y1)
+
+    # Guarda el PDF y cierra el objeto Canvas
+    c.showPage()
+    c.save()
+
 def index(request):
     fecha = date.today()
     hoy = fecha
@@ -1277,6 +1320,16 @@ def list_ficha_medica(request):
             print(ID_Ficha_Cita)
             url = reverse('ver_cita_medica') + '?ID_Ficha_Cita={}&nombre_pac={}'.format(ID_Ficha_Cita,nombre_pac)
             return redirect(url)
+        if 'ver_receta' in request.POST:
+            receta = request.POST.get('ver_receta')
+            print(f'Numero de receta en ver receta: {receta}')
+            url = reverse('receta_medica') + '?receta={}'.format(receta)
+            return redirect(url)
+        if 'ver_examen' in request.POST:
+            orden = request.POST.get('ver_examen')
+            print(f'Numero de receta en ver orden: {orden}')
+            url = reverse('orden_examen') + '?orden={}'.format(orden)
+            return redirect(url)
         if 'ver_ficha_medica' in request.POST:
             ID_Ficha_Medica = request.POST.get('ver_ficha_medica')
             print(ID_Ficha_Medica)
@@ -1394,12 +1447,21 @@ def agregar_cita_medica(request):
         print(form_Post)
         if form_Post.is_valid():
             redireccion_valor = request.POST.get('redireccionar')
+            redireccion_valor_o = request.POST.get('redireccionar_o')
             print(redireccion_valor)
 
             if redireccion_valor == "1":
-                form_Post.save()
+                cita = form_Post.save()
                 messages.success(request, "Cita médica agregada con éxito")
-                url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha)
+                id_ficha = cita.ID_Ficha_Cita
+                url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha,id_ficha)
+                return redirect(url)
+            
+            if redireccion_valor_o == "1":
+                cita = form_Post.save()
+                messages.success(request, "Cita médica agregada con éxito")
+                id_ficha = cita.ID_Ficha_Cita
+                url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&id_ficha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha,id_ficha)
                 return redirect(url)
 
             # valor = form_Post.cleaned_data['Receta_Cita']
@@ -1407,6 +1469,7 @@ def agregar_cita_medica(request):
             # print(f'valor de descripcion_receta: {valor}')
             # print(f'valor de Examenes_Cita: {valor2}')
             form_Post.save()
+            messages.success(request, "Cita médica agregada con éxito")
             url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha)
             return redirect(url)
 
@@ -1423,32 +1486,126 @@ def agregar_cita_medica(request):
     return render(request, "Especialistas/agregar_cita_medica.html", contexto)
 
 def ver_receta_medica(request):
+    print('GET DE RECETA MEDICA')
     nom_pac = request.GET.get('nom_pac')
-    paciente = Paciente.objects.get(Nombre_Paciente= nom_pac)
-    rut_pac = paciente.Rut
-    hoy = date.today()
-    edad = hoy.year - paciente.Fecha_de_nacimiento_P.year
-    direccion = paciente.Direccion_P
-    user = request.user
-
-    especialista = Especialista.objects.get(Usuario_E= user)
-    rut_esp = especialista.Rut
-
-    #Espeacialidad
-    dia = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
-    if dia in especialista.Dia_Esp_P:
-        esp = especialista.Especialidad_P
+    id_fecha = request.GET.get('id_fecha')
+    id_ficha = request.GET.get('id_ficha')
+    receta = request.GET.get('receta')
+    if receta is not None:
+        print('ESTOY DENTROOOO')
+        rec = Receta.objects.get(Numero_receta = receta)
+        esp_rec = rec.Especialista_receta
+        rut_esp_rec = rec.Rut_esp_receta
+        espialidad_rec = rec.Especialidad_receta
+        nom_pac_rec = rec.Nompre_paciente_receta
+        rut_pac_rec = rec.Rut_pac_receta
+        edad_rec = rec.Edad_pac_receta
+        direccion_rec = rec.Direccion_pac_receta
+        diagnostico_rec = rec.Diagnostico_rec
+        descripcion_rec = rec.Descripcion_receta
+        data = {"Especialista_receta":esp_rec, "Especialidad_receta":espialidad_rec, "Rut_esp_receta":rut_esp_rec, 
+            "Nompre_pac_receta":nom_pac_rec, "Rut_pac_receta":rut_pac_rec, "Edad_pac_receta":edad_rec, "Direccion_pac_receta":direccion_rec,
+            "Diagnostico_pac_receta":diagnostico_rec,"Descripcion_receta":descripcion_rec}    
+        form_ver_receta = FormReceta(initial = data)
+        context = {'form_ver_receta':form_ver_receta}
+        return render(request, "Especialistas/receta_medica.html",context)
     else:
-        esp = especialista.Especialidad_S
+        paciente = Paciente.objects.get(Nombre_Paciente= nom_pac)
+        rut_pac = paciente.Rut
+        hoy = date.today()
+        edad = hoy.year - paciente.Fecha_de_nacimiento_P.year
+        direccion = paciente.Direccion_P
+        user = request.user
 
+        especialista = Especialista.objects.get(Usuario_E= user)
+        rut_esp = especialista.Rut
 
-    print(esp)
-    data = {"Especialista_receta":especialista, "Especialidad_receta":esp, "Rut_esp_receta":rut_esp, 
-            "Nompre_pac_receta":nom_pac, "Rut_pac_receta":rut_pac, "Edad_pac_receta":edad, "Direccion_pac_receta":direccion}    
-    form_receta = FormReceta(initial = data)
-    #TODO TERMINAR EL PROCESO DE RECETA MEDICA Y ORDEN EXAMEN
-    context = {'form_receta':form_receta}
+        #Espeacialidad
+        dia = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+        if dia in especialista.Dia_Esp_P:
+            esp = especialista.Especialidad_P
+        else:
+            esp = especialista.Especialidad_S
+
+        data = {"Especialista_receta":especialista, "Especialidad_receta":esp, "Rut_esp_receta":rut_esp, 
+                "Nompre_pac_receta":nom_pac, "Rut_pac_receta":rut_pac, "Edad_pac_receta":edad, "Direccion_pac_receta":direccion}    
+        
+        form_receta = FormReceta(initial = data)
+        context = {'form_receta':form_receta}
+        print('ESPERANDO EL POST')
+        if request.method == "POST":
+            form_rec_com = FormReceta(data = request.POST)
+            print('POST')
+            if form_rec_com.is_valid():
+                redireccion_valor_o = request.POST.get('redireccionar_o')
+
+                if redireccion_valor_o == "1":
+                    print('Estoy entrando aqui :D')
+                    receta = form_rec_com.save()
+                    Ficha_Cita.objects.filter(ID_Ficha_Cita = id_ficha).update(Receta = receta)
+                    messages.success(request, "Cita médica agregada con éxito")
+                    url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&diagnostico={}&id_ficha={}'.format(form_rec_com.cleaned_data['Nompre_pac_receta'],id_fecha,receta.Diagnostico_rec,id_ficha)
+                    return redirect(url)
+                
+                receta = form_rec_com.save()
+                Ficha_Cita.objects.filter(ID_Ficha_Cita = id_ficha).update(Receta = receta)
+                messages.success(request, "Cita médica agregada con éxito")
+                url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}'.format(form_rec_com.cleaned_data['Nompre_pac_receta'],id_fecha)
+                return redirect(url)
+            
     return render(request, "Especialistas/receta_medica.html",context)
+
+#TODO PROBAR CON UN BUBBLE QUE MUESTRE LOS EXAMENES
+def ver_orden_examen(request):
+    nom_pac = request.GET.get('nom_pac')
+    id_fecha = request.GET.get('id_fecha')
+    diagnostico = request.GET.get('diagnostico')
+    id_ficha = request.GET.get('id_ficha')
+    orden = request.GET.get('orden')
+    if orden is not None:
+        print(f'orden examen dentro del if {orden}')
+        examen = Examene.objects.get(Numero_orden_examen = orden)
+        nom_pac_orden = examen.Nombre_pac_orden
+        rut_pac_orden = examen.Rut_pac_orden
+        edad_pac_orden = examen.Edad_pac_orden
+        fecha_pac_orden = examen.Fecha_nac_pac_orden
+        prevision_orden = examen.Prevision_pac_orden
+        servicio_orden = examen.Servicio_pac_orden
+        diagnostico_orden = examen.Diagnostico_orden
+        nombre_med_orden = examen.Nombre_Medico_orden
+        rut_med_orden = examen.Rut_Medico_orden
+        examenes_orden = examen.Examenes
+        print(examenes_orden)
+        data = {'nombre_pac':nom_pac_orden, 'rut_pac':rut_pac_orden, 'edad_pac':edad_pac_orden, 'Fecha_Cita':fecha_pac_orden, 'nombre_medico':nombre_med_orden,
+            'rut_medico':rut_med_orden, 'diagnostico':diagnostico_orden, 'servicio': servicio_orden, 'prevision':prevision_orden}
+        form_ver_examenes = FormExamenes(initial=data)
+        context = {'form_ver_examenes':form_ver_examenes, 'examenes_orden':examenes_orden}
+    else:
+        pac = Paciente.objects.get(Nombre_Paciente=nom_pac)
+        rut_pac = pac.Rut
+        edad = date.today().year - pac.Fecha_de_nacimiento_P.year 
+        fecha_nac = pac.Fecha_de_nacimiento_P
+        user = request.user
+        especialista = Especialista.objects.get(Usuario_E= user)
+        rut_esp = especialista.Rut
+        data = {'nombre_pac':nom_pac, 'rut_pac':rut_pac, 'edad_pac':edad, 'Fecha_Cita':fecha_nac, 'nombre_medico':especialista,
+                'rut_medico':rut_esp, 'diagnostico':diagnostico}
+        formExamenes = FormExamenes(initial=data)
+        examenes_field = formExamenes['examenes']
+        examenes_widget = examenes_field.field.widget
+        context = {'formExamenes': formExamenes, 'examenes_field': examenes_field, 'examenes_widget': examenes_widget}
+    
+    if request.method =='POST':
+        form_com = FormExamenes(data = request.POST)
+        if form_com.is_valid():
+            examen = form_com.save()
+            Ficha_Cita.objects.filter(ID_Ficha_Cita = id_ficha).update(Examene = examen)
+            messages.success(request, "Orden de examenes registrada")
+            url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}'.format(nom_pac,id_fecha)
+            return redirect(url)
+    print(f'CONTEXTO: {context}')
+    return render(request, "Especialistas/orden_examen.html", context)
+
 
 def ver_cita_medica(request):
     ID_Ficha_Cita = request.GET.get('ID_Ficha_Cita')
@@ -1459,17 +1616,11 @@ def ver_cita_medica(request):
     Nombre_Com_Esp = Cita_Medica.Nombre_Com_Esp
     Fecha_Cita = Cita_Medica.Fecha_Cita
     Diagnostico_Cita = Cita_Medica.Diagnostico_Cita
-    Receta = Cita_Medica.Receta.Descripcion_receta
-    print(f'Receta medica: {Receta}')
-    Examenes = Cita_Medica.Examene.Descripcion_examenes
-    print(f'Examenes medica: {Examenes}')
     datos_form = {'Ficha_Medica_Pac':Ficha_Medica_Pac,'Ficha_Medica_Pac':Ficha_Medica_Pac, 'RUT_Pac':RUT_Pac,
                   'Nombre_Com_Pac':Nombre_Com_Pac, 'Fecha_Cita':Fecha_Cita, 'Nombre_Com_Esp':Nombre_Com_Esp,
-                  'Diagnostico_Cita':Diagnostico_Cita, 'Receta_Cita':Receta, 'Examenes_Cita':Examenes}
+                  'Diagnostico_Cita':Diagnostico_Cita}
     formulario = FormCitaMedica(initial=datos_form)
     formulario.fields['Diagnostico_Cita'].widget.attrs['readonly'] = True
-    formulario.fields['Receta_Cita'].widget.attrs['readonly'] = True
-    formulario.fields['Examenes_Cita'].widget.attrs['readonly'] = True
     contexto = {'FormCitaMedica':formulario}
     return render(request, 'Especialistas/ver_cita_medica.html', contexto)
 
@@ -1483,7 +1634,6 @@ def form_ficha_medica(request):
     if nombre_pac =='None':
         url = reverse('perfil') + '?rut={}&nombre_pac={}&id_fecha={}'.format(rut,nombre_pac,id_fecha)
         return redirect(url)
-        print('Entre al if')
     else:
         print('Estoy en el else')
     paciente = Paciente.objects.get(Nombre_Paciente = nombre_pac)
@@ -1609,7 +1759,6 @@ def pacientes_fichas_medicas(request):
         Pacientes = Paciente.objects.all()
     contexto = {'Pacientes':Pacientes}
     return render(request, "Especialistas/pacientes_fichas_medicas.html", contexto)
-
 
 #Views Operadores
 def select_destinatario(request):
@@ -2092,13 +2241,22 @@ def operador_confirmacion_citas(request):
     
     return render(request, 'Operador/Confirmacion/operador_citas_paciente.html')
 
+def operador_boleta(request):
+    return render(request,'Operador/Pago/operador_boleta.html')
+
 def operador_pago(request):
     if request.method == "POST":
         rut = request.POST.get('rut')
-        url = reverse('cobros_paciente')+"?rut={}".format(rut)
-        return redirect(url)
+        #utilizo flag para validar si existe algun cobro para redirigir en caso de exista o no un cobro
+        flag = Cobro.objects.filter(Rut_Pac_Cobro=rut)
+        if flag:
+            url = reverse('cobros_paciente')+"?rut={}".format(rut)
+            return redirect(url)
+        else:
+            messages.error(request,'El rut ingresado no figura con cobros')
+            return render(request,'Operador/Pago/operador_pago.html')
+        
     return render(request,'Operador/Pago/operador_pago.html')
-
 
 def operador_pago_cobros(request):
     rut = request.GET.get('rut')
@@ -2109,6 +2267,11 @@ def operador_pago_cobros(request):
     context = {"cobro":cobro}
     if request.method == 'POST':
         id_cobro = request.POST.get('id_cobro')
+        if 'redirect_boleta' in request.POST:
+            c = canvas.Canvas("prueba_boleta.pdf", pagesize=A4)
+            hello(c)
+            url = reverse('boleta')+"?id_cobro={}&rut={}".format(id_cobro,rut)
+            return redirect(url)
         print(f'post de operador pagos {id_cobro}')
         url = reverse('operador_pagar')+"?id_cobro={}&rut={}".format(id_cobro,rut)
         return redirect(url)

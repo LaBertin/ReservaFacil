@@ -66,8 +66,9 @@ urlpatterns = [
     #Pago
     path('pago/', views.operador_pago, name='pago'),
     path('cobros_paciente/', views.operador_pago_cobros, name='cobros_paciente'),
+    path('boleta/', views.operador_boleta, name='boleta'),
     
-    #Pago Particular
+    #Pago
     path('operador_pagar/', views.operador_pagar, name='operador_pagar'),
 
     path('select_Destinatario/', views.select_destinatario, name='select_Destinatario'),
@@ -83,7 +84,7 @@ urlpatterns = [
     path('receta_medica/', views.ver_receta_medica, name='receta_medica'),
     
     #Orden Examen
-    # path('orden_examen/', views.ver_orden_examen, name='orden_examen'),
+    path('orden_examen/', views.ver_orden_examen, name='orden_examen'),
 
 
     path('agenda_especialista/',views.especialista_Agenda, name='agenda_especialista'),

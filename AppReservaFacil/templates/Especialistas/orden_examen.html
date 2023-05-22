@@ -1,0 +1,470 @@
+{% extends "../Clientes/index.html" %}
+{% block footer %}
+<title>Crear Ficha Médica - Examenes</title>
+<script src="../../static/js/mostrarMensaje.js"></script>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+    
+    <div class="div-grande">
+        
+
+        <h2 id="titulo-inicio-sesion">Orden de Examenes</h2>
+        {% if form_ver_examenes %}
+        <div class="row row-margin">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="border border-info rounded-1">
+                    <div class="form">
+                        <div class="form-row col-md-5">
+                          <label style="margin-left: 5px;">Nombre:</label>
+                          {{form_ver_examenes.nombre_pac}}
+                          
+                        </div>
+                        <div class="form-row col-md-4">
+                          <label style="margin-left: 5px;">RUT:</label>
+                          {{form_ver_examenes.rut_pac}}
+                        </div>
+                        <div class="form-rowcol-md-1">
+                          <label style="margin-left: 5px;">Edad:</label>
+                          {{form_ver_examenes.edad_pac}}
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-row col">
+                          <label style="margin-left: 5px;">Fecha Nacimiento:</label>
+                          {{form_ver_examenes.Fecha_Cita}}
+                        </div>
+                        <div class="form-row col-xs-4">
+                          <label style="margin-left: 5px;">Prevision Paciente:</label>
+                          {{form_ver_examenes.prevision}}
+                        </div>
+                        <div class="form-rowcol-xs-1">
+                          <label style="margin-left: 5px;">Servicio:</label>
+                          {{form_ver_examenes.servicio}}
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-row col">
+                          <label style="margin-left: 5px;">Diagnostico:</label>
+                          {{form_ver_examenes.diagnostico}}
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-row col-md-7">
+                          <label style="margin-left: 5px;">Nombre Medico:</label>
+                          {{form_ver_examenes.nombre_medico}}
+                        </div>
+                        <div class="form-row col-md-4">
+                          <label style="margin-left: 5px;">RUT:</label>
+                          {{form_ver_examenes.rut_medico}}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row row-margin">
+                <div class="col-md-12 border border-info rounded-1">
+                    <div class="form">
+                        <div class="row row-margin table-responsive"> 
+                          
+                            <table id="tabladinamica" class="table table-hover">
+                                {% for x in examenes_orden %}
+                                {% if forloop.counter0|divisibleby:5 %}
+                                    <tr> <!-- Nueva fila cada 5 botones -->
+                                {% endif %}
+                                <td class="border border-info">
+                                    {{x}}
+                                </td> 
+                                {% if forloop.counter|divisibleby:5 or forloop.last %}
+                                    </tr> <!-- Cierre de la fila si se llegó al límite de 5 botones o es el último elemento -->
+                                {% endif %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+                <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+            </form>
+        {% else %}
+        <div class="row row-margin">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="border border-info rounded-1">
+                    <div class="form">
+                        <div class="form-row col-md-5">
+                          <label style="margin-left: 5px;">Nombre:</label>
+                          {{formExamenes.nombre_pac}}
+                          
+                        </div>
+                        <div class="form-row col-md-4">
+                          <label style="margin-left: 5px;">RUT:</label>
+                          {{formExamenes.rut_pac}}
+                        </div>
+                        <div class="form-rowcol-md-1">
+                          <label style="margin-left: 5px;">Edad:</label>
+                          {{formExamenes.edad_pac}}
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-row col">
+                          <label style="margin-left: 5px;">Fecha Nacimiento:</label>
+                          {{formExamenes.Fecha_Cita}}
+                        </div>
+                        <div class="form-row col-xs-4">
+                          <label style="margin-left: 5px;">Prevision Paciente:</label>
+                          {{formExamenes.prevision}}
+                        </div>
+                        <div class="form-rowcol-xs-1">
+                          <label style="margin-left: 5px;">Servicio:</label>
+                          {{formExamenes.servicio}}
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-row col">
+                          <label style="margin-left: 5px;">Diagnostico:</label>
+                          {{formExamenes.diagnostico}}
+                        </div>
+                    </div>
+                    <div class="form">
+                        <div class="form-row col-md-7">
+                          <label style="margin-left: 5px;">Nombre Medico:</label>
+                          {{formExamenes.nombre_medico}}
+                        </div>
+                        <div class="form-row col-md-4">
+                          <label style="margin-left: 5px;">RUT:</label>
+                          {{formExamenes.rut_medico}}
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row row-margin">
+                <div class="col-md-12 border border-info rounded-1">
+                    <div class="form">
+                        <div class="row row-margin table-responsive"> 
+                            <div class="col-md-6" style="display:flex; align-items: center;">
+                                <input style=" display: flex; width: 100%; " type="text" id="searchInput" placeholder="Buscar...">
+                            </div>
+                            <div class="col-md-6" style="display:flex; align-items: center;">
+                                <button style=' display: flex; width: 100%;' class="btn btn-primary" onclick="filterTable()">Filtrar</button>
+                            </div>
+                            <table id="tabladinamica" class="table table-hover">
+                                {% for x in formExamenes.examenes %}
+                                {% if forloop.counter0|divisibleby:5 %}
+                                    <tr> <!-- Nueva fila cada 5 botones -->
+                                {% endif %}
+                                <td class="border border-info">
+                                    {{x}}
+                                </td> 
+                                {% if forloop.counter|divisibleby:5 or forloop.last %}
+                                    </tr> <!-- Cierre de la fila si se llegó al límite de 5 botones o es el último elemento -->
+                                {% endif %}
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+                <button type="submit" class="btn-naranja-mediano">Agregar Orden</button>
+                <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+            </form>
+        {% endif %}
+
+        <script>
+            function filterTable() {
+                event.preventDefault();
+                var input, filter, table, tr, td, i, txtValue;
+                input = document.getElementById("searchInput");
+                filter = input.value.toUpperCase();
+                table = document.getElementById("tabladinamica");
+                tr = table.getElementsByTagName("tr");
+                
+          for (i = 0; i < tr.length; i++) {
+              for(j = 0; j < 5; j++){
+                td = tr[i].getElementsByTagName("td")[j];
+                console.log(`Inner ${td.innerText}`)
+                if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    td.style.display = "";
+                    td.classList.add("highlight");
+                } else {
+                    td.style.display = "none";
+                    td.classList.remove("highlight");
+                }
+              }
+            }
+          }
+        }
+        </script>
+        
+    </div>
+        <!-- <div class="row row-cols-2 row-margin">
+        
+            <div class="col-md-4 border border-info rounded-1">
+                <label style="margin-left: 5px;">Bioquimicos</label>
+            </div>
+            <div class="col-md-4 border border-info rounded-1">
+                <label style="margin-left: 5px;">Orina</label>
+            </div>
+            <div class="col-md-4 border border-info rounded-1">
+                <label style="margin-left: 5px;">Inmunologicos</label>
+            </div>
+            
+            <div class="col-md-4 ">
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="col border border-info rounded-1">
+                    <label style="margin-left: 5px;">Otra orden</label>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-md-4 ">
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+
+                <div class="col border border-info rounded-1">
+                    <label style="margin-left: 5px;">Inmunologicos</label>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox">
+                    </div>
+                    <div class="col-md-7 border" style="display: flex;">
+                        <label>Acido Utilico:</label>
+                    </div>
+                    <div class="col-md-4 border" style="display: flex;">
+                        <label>123456</label>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div> -->
+{% endblock %}

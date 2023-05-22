@@ -16,75 +16,166 @@
     {% endfor %}
 {% endif %}
     <div class="div-grande">
-        <h2 id="titulo-inicio-sesion">Receta Médica</h2>
-        <form method="POST" action="/orden_examen/">
-            {% csrf_token %}
-            <div class="row row-margin">
-                <div class="col-md-6">
-                    [IMAGEN CLINICA] 
-                </div>
-                <div class="col-md-3">
-                    <h4>Nombre Especialista:</h4>
-                    <h6>Nombre Especialidad:</h6>
-                    <h6>Rut:</h6>
-                </div>
-                <div class="col-md-3">
-                    {{form_receta.Especialista_receta}}
-                    {{form_receta.Especialidad_receta}}
-                    {{form_receta.Rut_esp_receta}}
-                </div>
+
+        <div class="bubble-text" id="mensajeCita" style="display:none;">
+            <br>
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                </svg>
+        </div>
+            <h1>Desea crear una receta medica?</h1>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="col btn-naranja-mediano">
+                <button class="btn-naranja-mediano" onclick="finalizarCitaMedicaOrden(true)" id="conf_create_receta" type="submit" name="conf_create_rec">Aceptar</button>
             </div>
-    
-            <div class="row row-margin">
-                <div class="col-md-1" >
-                    Nombre:
+            <br>
+            <div class="col">
+            <button class="btn-naranja-mediano" onclick="finalizarCita()">No</button>
+            </div>      
+        </div>
+
+        {% if form_ver_receta %}
+
+            <h2 id="titulo-inicio-sesion">Receta Médica</h2>
+            <form method="POST"  id ="form_cita">
+                {% csrf_token %}
+                <div class="row row-margin">
+                    <div class="col-md-6">
+                        [IMAGEN CLINICA] 
+                    </div>
+                    <div class="col-md-3">
+                        <h4>Nombre Especialista:</h4>
+                        <h6>Nombre Especialidad:</h6>
+                        <h6>Rut:</h6>
+                    </div>
+                    <div class="col-md-3">
+                        {{form_ver_receta.Especialista_receta}}
+                        {{form_ver_receta.Especialidad_receta}}
+                        {{form_ver_receta.Rut_esp_receta}}
+                    </div>
                 </div>
-                <div class="col-md-11" >
-                    {{form_receta.Nompre_pac_receta}}
+        
+                <div class="row row-margin">
+                    <div class="col-md-1" >
+                        Nombre:
+                    </div>
+                    <div class="col-md-11" >
+                        {{form_ver_receta.Nompre_pac_receta}}
+                    </div>
                 </div>
-            </div>
-            <div class="row row-margin">
-                <div class="col-md-1">
-                    RUT:
+                <div class="row row-margin">
+                    <div class="col-md-1">
+                        RUT:
+                    </div>
+                    <div class="col-md-3">
+                        {{form_ver_receta.Rut_pac_receta}}
+                    </div>
+                    <div class="col-md-1">
+                        Edad:
+                    </div>
+                    <div class="col-md-1">
+                        {{form_ver_receta.Edad_pac_receta}}
+                    </div>
+                    <div class="col-md-1">
+                        Direccion:
+                    </div>
+                    <div class="col-md-5">
+                        {{form_ver_receta.Direccion_pac_receta}}
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    {{form_receta.Rut_pac_receta}}
+                <div class="row row-margin">
+                    <div class="col-md-1">
+                        Diagnostico:
+                    </div>
+                    <div class="col-md-11">
+                        {{form_ver_receta.Diagnostico_pac_receta}}
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    Edad:
+                <div class="row row-margin">
+                    <div>
+                        <h4>Receta:</h4>
+                    </div>
+                    {{form_ver_receta.Descripcion_receta}}
                 </div>
-                <div class="col-md-1">
-                    {{form_receta.Edad_pac_receta}}
+                <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+            </form>
+        {% else %}
+            <h2 id="titulo-inicio-sesion">Receta Médica</h2>
+            <form method="POST"  id ="form_cita">
+                {% csrf_token %}
+                <div class="row row-margin">
+                    <div class="col-md-6">
+                        [IMAGEN CLINICA] 
+                    </div>
+                    <div class="col-md-3">
+                        <h4>Nombre Especialista:</h4>
+                        <h6>Nombre Especialidad:</h6>
+                        <h6>Rut:</h6>
+                    </div>
+                    <div class="col-md-3">
+                        {{form_receta.Especialista_receta}}
+                        {{form_receta.Especialidad_receta}}
+                        {{form_receta.Rut_esp_receta}}
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    Direccion:
+        
+                <div class="row row-margin">
+                    <div class="col-md-1" >
+                        Nombre:
+                    </div>
+                    <div class="col-md-11" >
+                        {{form_receta.Nompre_pac_receta}}
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    {{form_receta.Direccion_pac_receta}}
+                <div class="row row-margin">
+                    <div class="col-md-1">
+                        RUT:
+                    </div>
+                    <div class="col-md-3">
+                        {{form_receta.Rut_pac_receta}}
+                    </div>
+                    <div class="col-md-1">
+                        Edad:
+                    </div>
+                    <div class="col-md-1">
+                        {{form_receta.Edad_pac_receta}}
+                    </div>
+                    <div class="col-md-1">
+                        Direccion:
+                    </div>
+                    <div class="col-md-5">
+                        {{form_receta.Direccion_pac_receta}}
+                    </div>
                 </div>
-            </div>
-            <div class="row row-margin">
-                <div class="col-md-1">
-                    Diagnostico:
-                </div>
-                <div class="col-md-11">
-                    {{form_receta.Diagnostico_pac_receta}}
-                </div>
-            </div>
-            
-            <div class="row row-margin">
-                <div>
-                    <h4>Receta:</h4>
+                <div class="row row-margin">
+                    <div class="col-md-1">
+                        Diagnostico:
+                    </div>
+                    <div class="col-md-11">
+                        {{form_receta.Diagnostico_pac_receta}}
+                    </div>
                 </div>
                 
-                {{form_receta.Descripcion_receta}}
-            </div>
-            <button class="btn-naranja-pequeno" type="submit" name="crear_ficha" id="crear_ficha" >
-               
-            </button>
-        </form>
+                <div class="row row-margin">
+                    <div>
+                        <h4>Receta:</h4>
+                    </div>
+                    
+                    {{form_receta.Descripcion_receta}}
+                </div>
+                <input type="hidden" name="redireccionar_o" id="redireccionar_o_field" value="0">
+                <button class="btn-naranja-mediano" type="button" name="crear_ficha" id="crear_ficha" onclick="mostrarMensajeCitaRecetaDos()">
+                Agregar Receta
+                </button>
+                <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+            </form>
+        {% endif %}
         
-        <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
     </div>  
 </div>
 {% endblock %}

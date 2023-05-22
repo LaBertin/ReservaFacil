@@ -100,7 +100,7 @@ class FormPacienteSinUser(forms.Form):
     telefono_pac = forms.IntegerField()
 
 
-#TODO AGREGAR NOMBRE PACIENTE
+
 class FormRegistrarUsuario(forms.Form):
     username = forms.CharField(label='username', min_length=5, max_length=150)  
     email = forms.EmailField(label='email')  
@@ -212,17 +212,54 @@ class FormReceta(forms.Form):
 
 
     def save(self):
-        esp = Especialista.objects.get()
+        esp = Especialista.objects.get(Nombre_completo_E =  self.cleaned_data['Especialista_receta'])
+        
+        especi = Especialidad.objects.get(Nombre_especialidad = self.cleaned_data['Especialidad_receta'])
+        
         RecetaMedica = Receta.objects.create(
             Numero_receta = Receta.objects.all().count()+1,
-            Especialista_receta = self.cleaned_data['Especialista_receta'],
-            Especialidad_receta = self.cleaned_data['Especialidad_receta'],
+            Especialista_receta = esp,
+            Especialidad_receta = especi,
+            Rut_esp_receta = self.cleaned_data['Rut_esp_receta'],
             Nompre_paciente_receta = self.cleaned_data['Nompre_pac_receta'],
             Rut_pac_receta = self.cleaned_data['Rut_pac_receta'],
             Edad_pac_receta = self.cleaned_data['Edad_pac_receta'],
             Direccion_pac_receta = self.cleaned_data['Direccion_pac_receta'],
-
+            Diagnostico_rec = self.cleaned_data['Diagnostico_pac_receta'],
+            Descripcion_receta =self.cleaned_data['Descripcion_receta']
         )
+        return RecetaMedica
+    
+
+class FormExamenes(forms.Form):
+    nombre_pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}),max_length=256, required=True)
+    rut_pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}),max_length=9, required=True)
+    edad_pac = forms.IntegerField(widget=forms.NumberInput (attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}))
+    Fecha_Cita = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}), required=True)
+    prevision = forms.CharField(widget=forms.Select(choices=TIPO_ATENCION, attrs={'class': 'input border-0 border-bottom'}),max_length = 80, required=True)
+    servicio = forms.CharField(widget=forms.TextInput(attrs={'class': 'input border-0 border-bottom'}),max_length = 80, required=True)
+    diagnostico = forms.CharField(widget=forms.TextInput(attrs={'class': 'input border-0 border-bottom'}),max_length = 80, required=True)
+    nombre_medico = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}),max_length=256, required=True)
+    rut_medico = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}),max_length=9, required=True)
+    examenes = forms.CharField(widget=forms.CheckboxSelectMultiple(choices=EXAMENES, attrs={'class':'boton'}))
+
+    def save(self):
+        OrdenExamenes = Examene.objects.create(
+            Numero_orden_examen = Examene.objects.all().count()+1,
+            Nombre_pac_orden = self.cleaned_data['nombre_pac'],
+            Rut_pac_orden = self.cleaned_data['rut_pac'],
+            Edad_pac_orden = self.cleaned_data['edad_pac'],
+            Fecha_nac_pac_orden = self.cleaned_data['Fecha_Cita'],
+            Prevision_pac_orden = self.cleaned_data['prevision'],
+            Servicio_pac_orden = self.cleaned_data['servicio'],
+            Diagnostico_orden = self.cleaned_data['diagnostico'],
+            Nombre_Medico_orden = self.cleaned_data['nombre_medico'],
+            Rut_Medico_orden = self.cleaned_data['rut_medico'],
+            Examenes = self.cleaned_data['examenes'].replace("'","").strip('][').split(', ')
+        )
+        return OrdenExamenes
+
+
 
 class FormCitaMedica(forms.Form):
     Ficha_Medica_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length=9, required=True)
