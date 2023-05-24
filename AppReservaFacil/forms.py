@@ -269,30 +269,8 @@ class FormCitaMedica(forms.Form):
     Nombre_Com_Pac = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
     Nombre_Com_Esp = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'form-control'}),max_length = 256, required=True)
     Diagnostico_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
-    # Receta_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
-    # Examenes_Cita = forms.CharField(widget=forms.Textarea(attrs={'rows': 10  , 'cols': 120}), required=False)
-    
+
     def save(self):
-
-
-    #     #Asigno la receta creada
-    #     if self.cleaned_data['Receta_Cita'] =='':
-    #         Receta_Medica = None
-    #     else:
-    #         Receta_Medica = Receta.objects.create(
-    #             Numero_receta = Receta.objects.all().count()+1,
-    #             Descripcion_receta = self.cleaned_data['Receta_Cita']
-    #         )
-
-    #     #Asigno la orden de examnenes creada
-    #     if self.cleaned_data['Examenes_Cita'] =='':
-    #         Orden_Examen = None
-    #     else:
-    #         Orden_Examen = Examene.objects.create(
-    #         Numero_orden_examen = Examene.objects.all().count()+1,
-    #         Descripcion_examenes = self.cleaned_data['Examenes_Cita']
-    #         )
-
         CitaMedica = Ficha_Cita.objects.create(  
             ID_Ficha_Cita = Ficha_Cita.objects.all().count()+1,
             Fecha_Cita = self.cleaned_data['Fecha_Cita'],
@@ -301,11 +279,21 @@ class FormCitaMedica(forms.Form):
             Nombre_Com_Pac = Paciente.objects.get(Nombre_Paciente=self.cleaned_data['Nombre_Com_Pac']),
             Nombre_Com_Esp = Especialista.objects.get(Nombre_completo_E=self.cleaned_data['Nombre_Com_Esp']),
             Diagnostico_Cita = self.cleaned_data['Diagnostico_Cita'],
-            # Receta = Receta_Medica,
-            # Examene = Orden_Examen
         )
 
         return CitaMedica  
+    
+    def update(self, cita_id):
+        cita_medica = Ficha_Cita.objects.get(ID_Ficha_Cita = cita_id)
+        cita_medica.Fecha_Cita = self.cleaned_data['Fecha_Cita']
+        cita_medica.Ficha_Medica_Pac = Ficha_Medica.objects.get(ID_Ficha_Medica=self.cleaned_data['Ficha_Medica_Pac'])
+        cita_medica.RUT_Pac = self.cleaned_data['RUT_Pac']
+        cita_medica.Nombre_Com_Pac = Paciente.objects.get(Nombre_Paciente=self.cleaned_data['Nombre_Com_Pac'])
+        cita_medica.Nombre_Com_Esp = Especialista.objects.get(Nombre_completo_E=self.cleaned_data['Nombre_Com_Esp'])
+        cita_medica.Diagnostico_Cita = self.cleaned_data['Diagnostico_Cita']
+        cita_medica.save()
+        return cita_medica
+        
 
 class FormBoleta(forms.Form):
     Id_boleta = forms.IntegerField(widget=forms.NumberInput (attrs={'readonly': 'readonly','class': 'form-control'}))

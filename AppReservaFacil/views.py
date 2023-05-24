@@ -1477,7 +1477,9 @@ def filtro_ficha_medica(request):
 def agregar_cita_medica(request):
     id_fecha = request.GET.get('id_fecha')
     id_ficha = request.GET.get('id_ficha')
+    nom_pac = request.GET.get('nom_pac')
     Nombre_Com_Pac = request.GET.get('Nombre_Com_Pac')
+    diagnostico = request.GET.get('diagnostico')
     if id_ficha is not None:
         if 'ver_receta' in request.POST:
             receta = request.POST.get('ver_receta')
@@ -1486,6 +1488,17 @@ def agregar_cita_medica(request):
         if 'ver_examen' in request.POST:
             orden = request.POST.get('ver_examen')
             url = reverse('orden_examen') + '?orden={}'.format(orden)
+            return redirect(url)
+        if 'Receta' in request.POST:   
+            Nombre_Com_Pac = request.POST.get('Nombre_Com_Pac')
+            url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(Nombre_Com_Pac,id_fecha,id_ficha,diagnostico)
+            return redirect(url)
+        if 'Examen' in request.POST:
+            print('dentro del examen')
+            Nombre_Com_Pac = request.POST.get('Nombre_Com_Pac')
+            print(f'Nombre_Com_Pac{Nombre_Com_Pac}')
+            print(f'nom_pac{nom_pac}')
+            url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(nom_pac,id_fecha,id_ficha, diagnostico)
             return redirect(url)
 
             #     redireccion_valor = request.POST.get('redireccionar')
@@ -1542,10 +1555,9 @@ def agregar_cita_medica(request):
                 id_ficha = atencion.ID_Ficha_Cita
                 diagnostico = atencion.Diagnostico_Cita
             if 'Receta' in request.POST:   
-                url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}'.format(Nombre_Com_Pac,id_fecha,id_ficha)
+                url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(Nombre_Com_Pac,id_fecha,id_ficha,diagnostico)
                 return redirect(url)
             if 'Examen' in request.POST:
-                
                 print('dentro del examen')
                 url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(Nombre_Com_Pac,id_fecha,id_ficha, diagnostico)
                 return redirect(url)
@@ -1567,7 +1579,7 @@ def ver_receta_medica(request):
     id_fecha = request.GET.get('id_fecha')
     id_ficha = request.GET.get('id_ficha')
     receta = request.GET.get('receta')
-    Nombre_Com_Pac = request.GET.get('Nombre_Com_Pac')
+    diagnostico = request.GET.get('diagnostico')
     if receta is not None:
         print('ESTOY DENTROOOO')
         rec = Receta.objects.get(Numero_receta = receta)
@@ -1630,7 +1642,7 @@ def ver_receta_medica(request):
                 receta = form_rec_com.save()
                 Ficha_Cita.objects.filter(ID_Ficha_Cita = id_ficha).update(Receta = receta)
                 messages.success(request, "Cita médica agregada con éxito")
-                url = reverse('agregar_cita_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}'.format(Nombre_Com_Pac,id_fecha,id_ficha)
+                url = reverse('agregar_cita_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(nom_pac,id_fecha,id_ficha,diagnostico)
                 return redirect(url)
             
     return render(request, "Especialistas/receta_medica.html",context)
@@ -1681,7 +1693,7 @@ def ver_orden_examen(request):
             examen = form_com.save()
             Ficha_Cita.objects.filter(ID_Ficha_Cita = id_ficha).update(Examene = examen)
             messages.success(request, "Orden de examenes registrada")
-            url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}'.format(nom_pac,id_fecha)
+            url = reverse('agregar_cita_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(nom_pac,id_fecha,id_ficha,diagnostico)
             return redirect(url)
     print(f'CONTEXTO: {context}')
     return render(request, "Especialistas/orden_examen.html", context)
