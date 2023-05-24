@@ -52,7 +52,7 @@
                     </tr>
                 </table>
             </div>
-            <h2 id="titulo-inicio-sesion">Citas Médicas</h2>
+            <h2 id="titulo-inicio-sesion">Historial de atención</h2>
             <div class="row row-margin">
                 <div class="texto-centrado-verticalmente">
                     <h3>{{texto_FMP}}</h3>
@@ -91,7 +91,7 @@
                 </table>
             </div>
 
-            <h2 id="titulo-inicio-sesion">Citas Médicas</h2>
+            <h2 id="titulo-inicio-sesion">Historial de atención</h2>
             <div class="row row-margin table-responsive">
                 <table class="table table-hover table-pagination">
                     <thead>
@@ -99,7 +99,7 @@
                             <th>ID Cita Medica</th>
                             <th>Fecha Cita</th>
                             <th>Nombre Especialista</th>
-                            <th>Ver Ficha</th>
+                            <th>Diagnostico</th>
                             <th>Receta Medica</th>
                             <th>Orden Examen</th>
                         </tr>
@@ -113,7 +113,10 @@
                                 
                                 <form method="post">
                                     {% csrf_token %}
-                                    <th><button type="submit" name="ver_cita_medica" value="{{citas.ID_Ficha_Cita}}" class="btn-naranja-mediano">Ver Cita Médica</button></th>
+                                    <th><button type="submit" name="ver_cita_medica" value="{{citas.ID_Ficha_Cita}}" class="btn-naranja-pequeno"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                    </svg></button></th>
                                 </form>
                                 {% if citas.Receta %}
                                 <form method="post">
@@ -138,10 +141,8 @@
                     <div>
                         <form method="post">
                             {% csrf_token %}
-                            <button class="btn" type="submit" name="agregar_cita_medica"  value="{{Ficha_Med_Pac.ID_Ficha_Medica}},{{Ficha_Med_Pac.RUT_Pac}},{{Ficha_Med_Pac.Nombre_Com_Pac}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="orange" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
-                                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
-                                </svg>
+                            <button class="btn-naranja-mediano" type="submit" name="agregar_cita_medica"  value="{{Ficha_Med_Pac.ID_Ficha_Medica}},{{Ficha_Med_Pac.RUT_Pac}},{{Ficha_Med_Pac.Nombre_Com_Pac}}">
+                                Agregar Diagnostico
                             </button>
                         </form>
                         

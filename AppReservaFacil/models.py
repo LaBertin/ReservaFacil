@@ -129,6 +129,7 @@ class Cita(models.Model):
     Confirmacion_Cita_Operador = models.BooleanField(default=False)
     ID_Cliente = models.ForeignKey(User,null=True, on_delete=models.RESTRICT)
     ID_Especialista = models.ForeignKey(Especialista,null=True, on_delete=models.RESTRICT)
+    Metodo_Pago_Cita = models.CharField(choices = TIPO_ATENCION, max_length=10, null=True)
 
     def __datetime__ (self):
         return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'  

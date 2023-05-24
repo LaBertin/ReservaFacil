@@ -175,16 +175,17 @@
                                 <td>Edad</td>
                                 <td>Ficha</td>
                             </tr>
-                            {% if cita_con_usuario.exists %}
-                                {% for x in lista_agenda %}
+
+                            <!-- {% if hay_cita_sin_usuario %}
+                                {% for cita_con in lista_agenda %}
                                 <tr>
-                                    <td>{{x.cita.Hora_Cita}}</td>
-                                    <td>{{x.nombre_pac}} {{x.apellido_pac}}</td>
-                                    <td>{{x.rut_pac}}</td>
-                                    <td>{{x.edad}}</td>
+                                    <td>{{cita_con.cita.Hora_Cita}}</td>
+                                    <td>{{cita_con.nombre_com|default:"No disponible"}}</td>
+                                    <td>{{cita_con.rut_cita}}</td>
+                                    <td>{{cita_con.edad|default:"No disponible"}}</td>
                                     <form method="POST">
                                         {% csrf_token %}
-                                        <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_pac}},{{x.nombre_com}},{{x.cita.Fecha_Cita}} {{x.cita.Hora_Cita}}">
+                                        <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_cita}},{{x.nombre_com}},{{x.cita_sin.Fecha_Cita}} {{x.cita_sin.Hora_Cita}}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
                                                 <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
                                                 <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
@@ -193,49 +194,81 @@
                                     </form>
                                 </tr>
                                 {% endfor %}
-                            {% elif cita_sin_usuario.exists %}
-                            {% for x in lista_agenda %}
-                            <tr>
-                                <td>{{x.cita_sin.Hora_Cita}}</td>
-                                <td>{{x.nombre_pac|default:"Nombre no disponible"}} {{x.apellido_pac}}</td>
-                                <td>{{x.rut_cita}}</td>
-                                <td>{{x.edad|default:"Edad no disponible"}}</td>
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_cita}},{{x.nombre_com}},{{x.cita_sin.Fecha_Cita}} {{x.cita_sin.Hora_Cita}}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-                                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                                        </svg>
-                                    </button></td>
-                                </form>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
+                            {% endif %}
+                            {% if hay_cita_sin_usuario %}
+                                {% for cita_sin in lista_sin %}
+                                <tr>
+                                    <td>{{cita_sin.cita_sin.Hora_Cita}}</td>
+                                    <td>{{cita_sin.nombre_com|default:"No disponible"}}</td>
+                                    <td>{{cita_sin.rut_cita}}</td>
+                                    <td>{{cita_sin.edad|default:"No disponible"}}</td>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_cita}},{{x.nombre_com}},{{x.cita_sin.Fecha_Cita}} {{x.cita_sin.Hora_Cita}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                            </svg>
+                                        </button></td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                            {% if not cita_sin_usuario.exists and not cita_con_usuario.exists %}
                                 <tr>
                                     <td></td>
                                     <td></td>
-                                    <td><h5>No dispones de citas para el dia de hoy</h5></td>
+                                    <td><h5>No dispones de citas para el día de hoy</h5></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
-                            
-
-                            
-                            <!-- {% for x in lista_agenda %}
+                            {% endif %} -->
+                            {% if hay_cita_con_usuario %}
+                                {% for cita_con in lista_agenda %}
                                 <tr>
-                                    <td>{{x.cita.Hora_Cita}}</td>
-                                    <td>{{x.nombre_pac}} {{x.apellido_pac}}</td>
-                                    <td>{{x.rut_pac}}</td>
-                                    <td>{{x.edad}}</td>
-                                    <td><button type="submit" name="ver_ficha_medica" class="btn-naranja-pequeno" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
-                                            <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
-                                            <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
-                                        </svg>
-                                    </button></td>
+                                    <td>{{cita_con.cita.Hora_Cita}}</td>
+                                    <td>{{cita_con.nombre_com|default:"No disponible"}}</td>
+                                    <td>{{cita_con.rut_cita}}</td>
+                                    <td>{{cita_con.edad|default:"No disponible"}}</td>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{cita_con.rut_cita}},{{cita_con.nombre_com}},{{cita_con.cita.Fecha_Cita}} {{cita_con.cita.Hora_Cita}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                            </svg>
+                                        </button></td>
+                                    </form>
                                 </tr>
-                            {% endfor %} -->
+                                {% endfor %}
+                            {% endif %}
+                            {% if hay_cita_sin_usuario %}
+                                {% for cita_sin in lista_sin %}
+                                <tr>
+                                    <td>{{cita_sin.cita_sin.Hora_Cita}}</td>
+                                    <td>{{cita_sin.nombre_com|default:"No disponible"}}</td>
+                                    <td>{{cita_sin.rut_cita}}</td>
+                                    <td>{{cita_sin.edad|default:"No disponible"}}</td>
+                                    <form method="POST">
+                                        {% csrf_token %}
+                                        <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{cita_sin.rut_cita}},{{cita_sin.nombre_com}},{{cita_sin.cita_sin.Fecha_Cita}} {{cita_sin.cita_sin.Hora_Cita}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                                                <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                                                <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                                            </svg>
+                                        </button></td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+                            {% if not cita_sin_usuario.exists and not cita_con_usuario.exists %}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><h5>No dispones de citas para el día de hoy</h5></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                             {% endif %}
 
                         </table>
@@ -243,8 +276,16 @@
                 </div>
                
             </div>
-            
-       
+<!--             
+            <form method="POST">
+                {% csrf_token %}
+                <td><button type="submit" name="seleccion_ficha" class="btn-naranja-pequeno" value="{{x.rut_cita}},{{x.nombre_com}},{{x.cita_sin.Fecha_Cita}} {{x.cita_sin.Hora_Cita}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                    </svg>
+                </button></td>
+            </form> -->
     </div>
 {% elif request.user|has_group:"Operadores" %} 
         <title>ReservaFácil - Inicio Operador</title>

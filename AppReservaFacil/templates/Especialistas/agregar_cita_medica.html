@@ -106,7 +106,19 @@
             <input type="hidden" name="redireccionar_o" id="redireccionar_o_field" value="0">
             <br>
 
-            <button type="button" class="btn-naranja-mediano row-margin" name="agregar_cita_medica" onclick="mostrarMensajeCitaRecetaDos()">Agregar cita médica</button>
+            {% if validar_receta is not None %}
+                <button type="submit" class="btn-naranja-mediano row-margin" name="ver_receta" value="{{validar_receta}}">Ver Receta</button>
+            {% else %}
+                <button type="submit" class="btn-naranja-mediano row-margin" name="Receta">Agregar Receta</button>
+            {% endif %}
+
+            {% if validar_orden is not None %}
+            <button type="submit" class="btn-naranja-mediano row-margin" name="ver_examen" value="{{validar_orden}}">Ver Orden Examen</button>
+            {% else %}
+            <button type="submit" class="btn-naranja-mediano row-margin" name="Examen" >Agregar Orden Examen</button>
+            {% endif %}
+            
+            <button type="submit" class="btn-naranja-mediano row-margin" name="agregar_cita_medica">Finalizar Atencion</button>
             <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
 
         </form>

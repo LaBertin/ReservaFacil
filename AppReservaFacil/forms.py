@@ -167,6 +167,7 @@ class ConsultarRut(forms.Form):
 class AgendarForm(forms.Form):
     area_medica_a = forms.ModelChoiceField(queryset=Area_Medica.objects.all())
     especialidad_a = forms.ModelChoiceField(queryset=Especialidad.objects.none())
+    metodo_pago = forms.ChoiceField(choices=TIPO_ATENCION)
 
 class FormMensaje(forms.Form):
     texto = forms.CharField(max_length=256)
