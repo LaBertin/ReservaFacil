@@ -1,8 +1,22 @@
+document.addEventListener('DOMContentLoaded', function() {
+  var valorTipoAtencion = document.getElementById('id_Tipo_atencion_form').value;
+  console.log(valorTipoAtencion)
+  if (valorTipoAtencion === 'Particular') {
+    document.getElementById('arancel_oculto').classList.add('notDisplay');
+    document.getElementById('documento_oculto').classList.add('notDisplay');
+  } else {
+
+      document.getElementById('arancel_oculto').classList.remove('notDisplay');
+      document.getElementById('documento_oculto').classList.remove('notDisplay');
+    }
+})
+
 function ocultarEfectivo(){
 
     var valorMetodo = document.getElementById('id_Metodo_pago_form');
     var valorTipoAtencion = document.getElementById('id_Tipo_atencion_form')
-    
+    console.log(valorTipoAtencion)
+
     // Obtengo el valor del metodo de pago para desplegar el campo del monto en efectivo
     const actualizar_metodo = () => {
       console.log("Dentro del actualizar")
@@ -22,8 +36,8 @@ function ocultarEfectivo(){
     // Misma idea pero con el tipo de atencion
     const actualizar_atencion = () => {
       console.log("Dentro del actualizar")
-      var valorTipoAtencion = document.getElementById('id_Tipo_atencion_form').value;
-      console.log(`Valor metodo: ${valorTipoAtencion}`)
+      var valor = document.getElementById('id_Tipo_atencion_form').value;
+      console.log(`Valor metodo: ${valor}`)
 
       var arancel = document.getElementById('arancel_oculto');
       console.log(`Valor arancel: ${arancel}`)
@@ -32,7 +46,7 @@ function ocultarEfectivo(){
       console.log(`Valor arancel: ${numDoc}`)
 
 
-      if (valorTipoAtencion !== "Particular") {
+      if (valor !== "Particular") {
       console.log(`Dentro del if Actualizar_atencion`)
         arancel.classList.remove('notDisplay')
         numDoc.classList.remove('notDisplay')

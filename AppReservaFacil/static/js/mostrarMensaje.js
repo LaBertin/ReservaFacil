@@ -106,7 +106,7 @@ function finalizarCita(){
 }
 
 function ConfirmarAgenda() {
-  var form = event.target.closest('form_confirmar_cita');
+  var form = document.getElementById('form_confirmar_cita');
   form.submit();
 }
 

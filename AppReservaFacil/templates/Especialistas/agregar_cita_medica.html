@@ -105,7 +105,7 @@
             <input type="hidden" name="redireccionar" id="redireccionar_field" value="0">
             <input type="hidden" name="redireccionar_o" id="redireccionar_o_field" value="0">
             <br>
-
+            <button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano row-margin" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">Ver Ficha Médica</button>
             {% if validar_receta is not None %}
                 <button type="submit" class="btn-naranja-mediano row-margin" name="ver_receta" value="{{validar_receta}}">Ver Receta</button>
             {% else %}
@@ -119,9 +119,12 @@
             {% endif %}
             
             <button type="submit" class="btn-naranja-mediano row-margin" name="finalizar_atencion">Finalizar Atencion</button>
-            <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
 
-        </form>
+
+                
+            </form>
+            <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
+        
     </div>  
 
 </div>

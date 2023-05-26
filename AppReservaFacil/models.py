@@ -133,7 +133,7 @@ class Cita(models.Model):
 
     def __datetime__ (self):
         return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'  
-
+#TODO AGREGAR EL METODO EN CITASINUSUARIO
 class CitaSinUsuario(models.Model):
     ID_Cita = models.DateTimeField(primary_key=True, unique=True)
     Fecha_Cita = models.CharField(max_length=20, null=True)
@@ -263,6 +263,7 @@ class Cobro (models.Model):
     Especialista_Cobro = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
     Especialidad_Cobro = models.ForeignKey(Especialidad,null=True, on_delete=models.RESTRICT)
     Monto = models.IntegerField()
+    Metodo = models.CharField(choices=TIPO_ATENCION, max_length=15, null=True)
     Estado_cobro = models.CharField(choices = ESTADO_COBRO, max_length=10, null=True)
 
     def __str__(self):
