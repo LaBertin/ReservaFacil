@@ -216,7 +216,7 @@ def index(request):
                 nombre_Operador = Operador.objects.filter(Usuario_O=nombre_Usuario)[0].Nombre_completo_O
                 Operador_Cont = Operador.objects.get(Usuario_O=nombre_Usuario)
                 nombre_Operador = nombre_Operador.split(' ')
-                nombre_Operador = nombre_Operador[0]+' '+nombre_Operador[3]
+                nombre_Operador = nombre_Operador[0]+' '+nombre_Operador[-2]
                 print(nombre_Operador)
                 print(Operador_Cont)
                 return render(request, "Clientes/index.html", {'Nombre_O':nombre_Operador,'Operador_Cont':Operador_Cont})
@@ -261,12 +261,12 @@ def registrousuario(request):
     return render(request, 'Clientes/registro.html', formulario1)
 
 def perfil_cliente(request):
-
+    id_cita =request.GET.get('id_cita')
     rut = request.GET.get('rut')
     id_fecha = request.GET.get('id_fecha')
     print(f'Rut desde ficha: {rut}')
     datos_form = {'rut_pac':rut}
-    formulario_pac = {'formulario_pac': FormPaciente(initial = datos_form)}
+    formulario_pac = {'formulario_pac': FormPaciente(initial = datos_form), 'id_cita':id_cita}
     if rut is None:
         print('Estoy dentro del rut is None')
         if request.method=='POST':
@@ -291,53 +291,99 @@ def perfil_cliente(request):
     else:      
         if request.method=='POST':
             print(f'dentro del request post de rut')
-            formulario_pac = FormPaciente(data = request.POST)
-            csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
-            if formulario_pac.is_valid():
-                nombre_pac = formulario_pac.cleaned_data['nom_com_pac']
-                rut_pac = formulario_pac.cleaned_data['rut_pac']
-                sexo_pac = formulario_pac.cleaned_data['sexo_pac']
-                fecha_nac_pac = formulario_pac.cleaned_data['fecha_nac_pac']
-                direccion_pac = formulario_pac.cleaned_data['direccion_pac']
-                telefono_pac = formulario_pac.cleaned_data['telefono_pac']
-                first_login = False
-                
-                us = nombre_pac[:2].lower()
-                uar = " ".join(nombre_pac.split()[2:3]).lower()
-                print(f'uar: {uar}')
-                io = str(fecha_nac_pac.year)
-                print(io)
-                usuario=us+'.'+uar+io
-                usuario=unicodedata.normalize('NFKD', usuario)
-                usuario=''.join([c for c in usuario if not unicodedata.combining(c)])
-                print(f'Usuario: {usuario}')
-                contra=rut
-                print(contra)
-                sena= nombre_pac.split()[-1].lower()
-                print(sena)
-                contrasena=contra+sena
-                Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':'lazarino18@gmail.com'}
-                q_dict = QueryDict('', mutable=True)
-                q_dict.update(Reg)
-                formulario = FormRegistrarUsuario(data=q_dict)
-                if formulario.is_valid():
-                    formulario.save()
-                    user = User.objects.get(username = usuario)
-                    grupo_Pacientes = Group.objects.get(name='Pacientes')
-                    user.groups.add(grupo_Pacientes)
-                    usuario = User.objects.filter(username=usuario)[0]
-                    formPac = FormPaciente()
-                    formPac.save(usuario)
-                    Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente = nombre_pac, Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
-                    messages.success(request, "Exito al actualizar")
-                    url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}&rut={}'.format(nombre_pac,id_fecha,rut)
-                    return redirect(url)
+            
+            if id_cita is None:
+                formulario_pac = FormPaciente(data = request.POST)
+                csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
+                if formulario_pac.is_valid():
+                    nombre_pac = formulario_pac.cleaned_data['nom_com_pac']
+                    rut_pac = formulario_pac.cleaned_data['rut_pac']
+                    sexo_pac = formulario_pac.cleaned_data['sexo_pac']
+                    fecha_nac_pac = formulario_pac.cleaned_data['fecha_nac_pac']
+                    direccion_pac = formulario_pac.cleaned_data['direccion_pac']
+                    telefono_pac = formulario_pac.cleaned_data['telefono_pac']
+                    first_login = False
+                    
+                    us = nombre_pac[:2].lower()
+                    uar = " ".join(nombre_pac.split()[2:3]).lower()
+                    print(f'uar: {uar}')
+                    io = str(fecha_nac_pac.year)
+                    print(io)
+                    usuario=us+'.'+uar+io
+                    usuario=unicodedata.normalize('NFKD', usuario)
+                    usuario=''.join([c for c in usuario if not unicodedata.combining(c)])
+                    print(f'Usuario: {usuario}')
+                    contra=rut
+                    print(contra)
+                    sena= nombre_pac.split()[-1].lower()
+                    print(sena)
+                    contrasena=contra+sena
+                    Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':'lazarino18@gmail.com'}
+                    q_dict = QueryDict('', mutable=True)
+                    q_dict.update(Reg)
+                    formulario = FormRegistrarUsuario(data=q_dict)
+                    if formulario.is_valid():
+                        formulario.save()
+                        user = User.objects.get(username = usuario)
+                        grupo_Pacientes = Group.objects.get(name='Pacientes')
+                        user.groups.add(grupo_Pacientes)
+                        usuario = User.objects.filter(username=usuario)[0]
+                        formPac = FormPaciente()
+                        formPac.save(usuario)
+                        Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente = nombre_pac, Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
+                        messages.success(request, "Exito al actualizar")
+                        url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}&rut={}'.format(nombre_pac,id_fecha,rut)
+                        return redirect(url)
+                else:
+                    print('Else del POST con rut')
+                    formulario_pac = FormPaciente(initial = datos_form)
+                    messages.error(request, "Error")
             else:
-                print('Else del POST con rut')
-                formulario_pac = FormPaciente(initial = datos_form)
-                messages.error(request, "Error")
+                formulario_pac = FormPaciente(data = request.POST)
+                csrfmiddlewaretoken=request.POST['csrfmiddlewaretoken']
+                if formulario_pac.is_valid():
+                    nombre_pac = formulario_pac.cleaned_data['nom_com_pac']
+                    rut_pac = formulario_pac.cleaned_data['rut_pac']
+                    sexo_pac = formulario_pac.cleaned_data['sexo_pac']
+                    fecha_nac_pac = formulario_pac.cleaned_data['fecha_nac_pac']
+                    direccion_pac = formulario_pac.cleaned_data['direccion_pac']
+                    telefono_pac = formulario_pac.cleaned_data['telefono_pac']
+                    first_login = False
 
-
+                    us = nombre_pac[:2].lower()
+                    uar = " ".join(nombre_pac.split()[2:3]).lower()
+                    print(f'uar: {uar}')
+                    io = str(fecha_nac_pac.year)
+                    print(io)
+                    usuario=us+'.'+uar+io
+                    usuario=unicodedata.normalize('NFKD', usuario)
+                    usuario=''.join([c for c in usuario if not unicodedata.combining(c)])
+                    print(f'Usuario: {usuario}')
+                    contra=rut
+                    print(contra)
+                    sena= nombre_pac.split()[-1].lower()
+                    print(sena)
+                    contrasena=contra+sena
+                    Reg = {'csrfmiddlewaretoken':csrfmiddlewaretoken,'username':usuario,'password1':contrasena,'password2':contrasena,'email':'lazarino18@gmail.com'}
+                    q_dict = QueryDict('', mutable=True)
+                    q_dict.update(Reg)
+                    formulario = FormRegistrarUsuario(data=q_dict)
+                    if formulario.is_valid():
+                        formulario.save()
+                        user = User.objects.get(username = usuario)
+                        grupo_Pacientes = Group.objects.get(name='Pacientes')
+                        user.groups.add(grupo_Pacientes)
+                        usuario = User.objects.filter(username=usuario)[0]
+                        formPac = FormPaciente()
+                        formPac.save(usuario)
+                        Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente = nombre_pac, Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
+                        messages.success(request, "Exito al actualizar")
+                        url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}&rut={}'.format(nombre_pac,id_fecha,rut)
+                        return redirect(url)
+                else:
+                    print('Else del POST con rut')
+                    formulario_pac = FormPaciente(initial = datos_form)
+                    messages.error(request, "Error")
 
     return render(request, 'Clientes/perfil_cliente.html', formulario_pac)
 
@@ -996,7 +1042,7 @@ def agregar_empleado(request):
                 Especialista.objects.create(ID_Especialista=id_especialista, Nombre_completo_E=nom_com_especialista, Fecha_de_nacimiento_E=fecha_nac_especialista, Direccion_E=direccion_especialista, Foto_E = foto_e,
                                             Telefono_E=contacto_especialista, ini_con_especialista=fecha_ini_con,fin_con_especialista=fecha_ini_fin,Rut=rut, Sexo=sexo, Especialidad_P=especialidad_p, 
                                             Especialidad_S=especialidad_s, Usuario_E=Usuario_E, Dia_Esp_P=dia_p, Dia_Esp_S = dia_s, Minutes_Esp_P_Lun = Minutes_Esp_P_Lun, Minutes_Esp_P_Mar = Minutes_Esp_P_Mar,
-                                            Minutes_Esp_P_Mie = Minutes_Esp_P_Mie, Minutes_Esp_P_Jue = Minutes_Esp_P_Jue, Minutes_Esp_P_Sab = Minutes_Esp_P_Sab, Minutes_Esp_P_Dom = Minutes_Esp_P_Dom,
+                                            Minutes_Esp_P_Mie = Minutes_Esp_P_Mie, Minutes_Esp_P_Jue = Minutes_Esp_P_Jue, Minutes_Esp_P_Vie = Minutes_Esp_P_Vie, Minutes_Esp_P_Sab = Minutes_Esp_P_Sab, Minutes_Esp_P_Dom = Minutes_Esp_P_Dom,
                                             Minutes_Esp_S_Lun = Minutes_Esp_S_Lun, Minutes_Esp_S_Mar = Minutes_Esp_S_Mar, Minutes_Esp_S_Mie = Minutes_Esp_S_Mie, Minutes_Esp_S_Jue = Minutes_Esp_S_Jue,
                                             Minutes_Esp_S_Vie = Minutes_Esp_S_Vie, Minutes_Esp_S_Sab = Minutes_Esp_S_Sab, Minutes_Esp_S_Dom = Minutes_Esp_S_Dom)
                 
@@ -1247,6 +1293,7 @@ def dias_minutos_especialidad(dia_seleccionado, dias_str, dias_especialista, fec
         minutos_esp = dias_especialista[0].__dict__[Minutes_Esp_Dinamico]
         especialidad = dias_especialista[0].Especialidad_P
         print(f'Especialidad_P: {especialidad}')
+        print(f'Especialidad_P minutos_esp: {minutos_esp}')
     else:
         dia_seleccionado = dia_seleccionado.replace('lun','Lun').replace('mar','Mar').replace('mie','Mie').replace('jue','Jue').replace('vie','Vie').replace('sab','Sab').replace('dom','Dom')
         Minutes_Esp_Dinamico = "Minutes_Esp_S_" + dia_seleccionado
@@ -1500,33 +1547,7 @@ def agregar_cita_medica(request):
             print(f'nom_pac{nom_pac}')
             url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(nom_pac,id_fecha,id_ficha, diagnostico)
             return redirect(url)
-
-            #     redireccion_valor = request.POST.get('redireccionar')
-            #     redireccion_valor_o = request.POST.get('redireccionar_o')
-            #     print(redireccion_valor)
-
-            #     if redireccion_valor == "1":
-            #         cita = form_Post.save()
-            #         messages.success(request, "Cita médica agregada con éxito")
-            #         id_ficha = cita.ID_Ficha_Cita
-            #         url =  reverse('receta_medica') + '?nom_pac={}&id_fecha={}&id_ficha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha,id_ficha)
-            #         return redirect(url)
-                
-            #     if redireccion_valor_o == "1":
-            #         cita = form_Post.save()
-            #         messages.success(request, "Cita médica agregada con éxito")
-            #         id_ficha = cita.ID_Ficha_Cita
-            #         url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&id_ficha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha,id_ficha)
-            #         return redirect(url)
-
-            #     # valor = form_Post.cleaned_data['Receta_Cita']
-            #     # valor2 = form_Post.cleaned_data['Examenes_Cita']
-            #     # print(f'valor de descripcion_receta: {valor}')
-            #     # print(f'valor de Examenes_Cita: {valor2}')
-            #     form_Post.save()
-            #     messages.success(request, "Cita médica agregada con éxito")
-            #     url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}'.format(form_Post.cleaned_data['Nombre_Com_Pac'],id_fecha)
-            #     return redirect(url)
+        
 
         Cita_Medica = Ficha_Cita.objects.get(ID_Ficha_Cita=id_ficha)
         Ficha_Medica_Pac = Cita_Medica.Ficha_Medica_Pac
@@ -1548,7 +1569,7 @@ def agregar_cita_medica(request):
     else:
         if request.method == 'POST':
             form_Post = FormCitaMedica(data=request.POST)
-            print(form_Post)
+            print(f'EStoy aqui:{form_Post}')
             if form_Post.is_valid():
                 atencion = form_Post.save()
                 messages.success(request, "Diagnostico médica agregada con éxito")
@@ -1561,7 +1582,16 @@ def agregar_cita_medica(request):
                 print('dentro del examen')
                 url =  reverse('orden_examen') + '?nom_pac={}&id_fecha={}&id_ficha={}&diagnostico={}'.format(Nombre_Com_Pac,id_fecha,id_ficha, diagnostico)
                 return redirect(url)
-
+            if 'finalizar_atencion' in request.POST:
+                print('Estoy aqui')
+                if Cita.objects.filter(ID_Cita = id_fecha).exists():
+                    print('Entre aqui')
+                    Cita.objects.filter(ID_Cita = id_fecha).delete()
+                else:
+                    CitaSinUsuario.objects.filter(ID_Cita = id_fecha).delete()
+                    
+                return redirect('index')
+        
         Ficha_Medica_Pac = request.GET.get('Ficha_Medica_Pac')
         RUT_Pac = request.GET.get('RUT_Pac')
         Nombre_Com_Pac = request.GET.get('Nombre_Com_Pac')
@@ -1616,7 +1646,7 @@ def ver_receta_medica(request):
         else:
             esp = especialista.Especialidad_S
 
-        data = {"Especialista_receta":especialista, "Especialidad_receta":esp, "Rut_esp_receta":rut_esp, 
+        data = {"Especialista_receta":especialista, "Especialidad_receta":esp, "Rut_esp_receta":rut_esp, 'Diagnostico_pac_receta':diagnostico,
                 "Nompre_pac_receta":nom_pac, "Rut_pac_receta":rut_pac, "Edad_pac_receta":edad, "Direccion_pac_receta":direccion}    
         
         form_receta = FormReceta(initial = data)
@@ -1647,7 +1677,7 @@ def ver_receta_medica(request):
             
     return render(request, "Especialistas/receta_medica.html",context)
 
-#TODO PROBAR CON UN BUBBLE QUE MUESTRE LOS EXAMENES
+#TODO EL TIPO DE PREVISION DEBE SER EL DEL QUE SE ASIGNO EN LA CITA
 def ver_orden_examen(request):
     nom_pac = request.GET.get('nom_pac')
     id_fecha = request.GET.get('id_fecha')
@@ -1917,6 +1947,124 @@ def operador_lista_agenda(request):
         url = reverse('calendario_especialista')+'?especialista_select={}'.format(especialista_select)
         return redirect(url)
     return render(request, 'Operador/Consultar_Agenda/operador_listar_especialista.html',context)
+
+def operador_lista_agenda_dos(request):
+    lista_especialista = Especialista.objects.all()
+    context = {'lista_especialista': lista_especialista}
+    if request.method == 'POST':
+        especialista_select = request.POST.get('consultar')
+        print(especialista_select)
+        url = reverse('agenda_citas_medico')+'?especialista_select={}'.format(especialista_select)
+        return redirect(url)
+    return render(request, 'Operador/Consultar_Agenda/operador_listar_especialista_dos.html',context)
+
+def operador_agenda_medica(request):
+    fecha = date.today()
+    id_especialista = request.GET.get('especialista_select')
+    Especialista_Cont = Especialista.objects.get(ID_Especialista=id_especialista)
+    nom_medico = Especialista_Cont.Nombre_completo_E.split(' ')
+    nom_medico = nom_medico[0]+ ' ' + nom_medico[-2]
+    cita_con_usuario = Cita.objects.filter(ID_Especialista = id_especialista, Fecha_Cita=fecha)
+    cita_sin_usuario = CitaSinUsuario.objects.filter(ID_Especialista = id_especialista, Fecha_Cita=fecha)
+    hay_cita_con_usuario = cita_con_usuario.exists()
+    hay_cita_sin_usuario = cita_sin_usuario.exists()
+    lista_agenda=[]
+    lista_sin=[]
+    if cita_sin_usuario.exists():
+        for cita_sin in cita_sin_usuario:
+            cita_sin.Confirmacion_Cita_Operador
+            rut_cita = cita_sin.Rut_Paciente
+            print(f'rut {rut_cita}')
+            paciente = None
+            nombre_com = None
+            telefono = cita_sin.Telefono_Contacto
+            lista_sin.append({'cita_sin':cita_sin, 'paciente':paciente, 'nombre_com':nombre_com, 'telefono':telefono, 'rut_cita':rut_cita})
+    if cita_con_usuario.exists():
+        for cita in cita_con_usuario:
+            paciente = Paciente.objects.get(Usuario_P = cita.ID_Cliente)
+            nombre_com = paciente.Nombre_Paciente
+            nombre = nombre_com.split()
+            nombre_pac = nombre[0]
+            apellido_pac = " ".join(nombre[-2:-1])
+            rut_cita = paciente.Rut
+            edad = date.today().year - paciente.Fecha_de_nacimiento_P.year
+            lista_agenda.append({'cita':cita, 'paciente':paciente,"nombre_pac":nombre_pac,"apellido_pac":apellido_pac, "rut_cita":rut_cita, "edad":edad, "nombre_com":nombre_com})
+    context = {'Especialista_Cont':Especialista_Cont, 'nom_medico':nom_medico, 'lista_sin':lista_sin,
+                'lista_agenda':lista_agenda, 'hay_cita_con_usuario':hay_cita_con_usuario, 'hay_cita_sin_usuario':hay_cita_sin_usuario,
+                'cita_con_usuario':cita_con_usuario, 'cita_sin_usuario':cita_sin_usuario}
+    
+    if request.method == 'POST':
+        id_cita = request.POST.get('cita_seleccionada')
+        print(f'valor id_cita{id_cita}')
+        if id_cita is None:
+            id_cita = request.POST.get('cita_hidden')
+            print(f'valor id_cita None {id_cita}')
+        id_cita = id_cita.replace("de ","").replace("a las ","")
+        id_cita = id_cita.replace('Enero','January').replace('Febrero','February').replace('Marzo','March').replace('Abril','April').replace('Mayo','May').replace('Junio','June').replace('Julio','July').replace('Agosto','August').replace('Septiembre','September').replace('Octubre','October').replace('Noviembre','November').replace('Diciembre','December')
+        print(f'Cual es la cita {id_cita}')
+  
+        id_cita = datetime.strptime(id_cita, "%d %B %Y %H:%M")
+                                 
+        if Cita.objects.filter(ID_Cita = id_cita).exists():
+            cita_confirmada = Cita.objects.get(ID_Cita = id_cita)
+            cita_confirmada.Confirmacion_Cita_Operador = True
+            nom_pac= cita_confirmada.ID_Cliente
+            
+            print(f'nom_pac{nom_pac}')
+            cita_confirmada.save()
+            messages.success(request, "Paciente confirmado.")
+
+            id_cobro = Cobro.objects.all().count()+1
+            rut = Paciente.objects.get(Usuario_P = nom_pac).Rut
+            esp = cita_confirmada.ID_Especialista
+            especialista = Especialista.objects.get(Nombre_completo_E = esp)
+
+            #Obtener especialidad
+            hoy = date.today()
+            #Remplaso el dia en ingles por el valor que le indicamos en el modelo.
+            hoy = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+
+            #Cobro de especialidades
+            cobro_especialidad = CobrosEspecialistas.objects.get(ID_Especialista = especialista)
+
+            #Valida si el dia se encuentra en alguna de de las listas de dias de la especialidad y el cobro de ella
+            if hoy in especialista.Dia_Esp_P:
+                especialidad = especialista.Especialidad_P
+                cobro_atencion = cobro_especialidad.Monto_Esp_P
+                print(f'Valor de hoy {hoy}')
+            else:
+                especialidad = especialista.Especialidad_S
+                cobro_atencion = cobro_especialidad.Monto_Esp_S
+                print(f'Valor de hoy {hoy} dentro del else')
+
+
+            print(f'Especialista encontrado :{especialista}')
+            print(f'Rut del paciente: {rut}')
+
+            cobro_cita =  Cobro.objects.create(ID_Cobro = id_cobro, Rut_Pac_Cobro = rut, Especialista_Cobro=especialista,
+                                               Especialidad_Cobro = especialidad, Monto = cobro_atencion, Estado_cobro='Por pagar')
+            
+            redireccion_confirmar = request.POST.get('redireccion_confirmar')
+            print(f'Valor redirect: {redireccion_confirmar}')
+            if redireccion_confirmar == 1:
+                print('PRueba')
+            else:
+                url = reverse('agenda_citas_medico')+ "?especialista_select={}".format(id_especialista)
+                return redirect(url) 
+        else:
+            cita_confirmada = CitaSinUsuario.objects.get(ID_Cita = id_cita)
+            cita_confirmada.Confirmacion_Cita_Operador = True
+            rut_pac = cita_confirmada.Rut_Paciente
+            cita_confirmada.save()
+            messages.success(request, "Paciente confirmado.")
+            if Paciente.objects.filter(Rut=rut_pac).exists():
+                url = reverse('agenda_citas_medico')+ "?especialista_select={}".format(id_especialista)
+                return redirect(url)
+            else:
+                url = reverse('perfil')+ "?rut={}&id_cita={}".format(rut_pac,id_cita)
+                return redirect(url)
+    return render(request, 'Operador/Consultar_Agenda/operador_agenda_especialista.html', context)
+
 
 def operador_calendario_especialista(request):
     id_especialista = request.GET.get('especialista_select')

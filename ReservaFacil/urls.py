@@ -44,6 +44,11 @@ urlpatterns = [
 
     #Consultar_Agenda
     path('agenda_citas/', views.operador_lista_agenda, name='agenda_citas'),
+
+    path('agenda_citas_dos/', views.operador_lista_agenda_dos, name='agenda_citas_dos'),
+    path('agenda_citas_medico/', views.operador_agenda_medica, name='agenda_citas_medico'),
+
+
     path('agendar_citas_paciente/', views.operador_agendar_cita, name='agendar_citas_paciente'),
     
     path('calendario_especialista/', views.operador_calendario_especialista, name='calendario_especialista'),

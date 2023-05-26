@@ -424,16 +424,26 @@ body{
         box-shadow: 0px 1px 1px;
     }
 
-    .div-calendario .div-padding{
+    /* .div-calendario .div-padding{
         display: flex;
         flex-direction: row;
         padding-top: 20px;
         padding-left: 40px;
-    }
+    } */
 
     .div-citas-hoy{
         height: 530px;
         width: 700px;
+        background-color: #ffffff;
+        text-align: center;
+        margin: auto;
+        margin-left: 1.7rem;
+        border-radius: 10px;
+        box-shadow: 0px 1px 1px;
+    }
+    .div-citas-confirmacion{
+        height: 530px;
+        width: 900px;
         background-color: #ffffff;
         text-align: center;
         margin: auto;

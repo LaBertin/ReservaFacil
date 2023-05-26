@@ -1,0 +1,129 @@
+
+{% extends "../../Clientes/index.html" %}
+{% load static %}
+{% block footer %}
+<div class="div-grande">
+    <div class="bubble-text" id="mensajeCita" style="display:none;">
+        <br>
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+            </svg>
+    </div>
+        <h1>Desea crear una Orden de Examenes?</h1>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="col btn-naranja-mediano">
+            <button class="btn-naranja-mediano" onclick="ConfirmarPago(true)" id="conf_create_receta" type="submit" name="conf_create_rec">Realizar Pago</button>
+        </div>
+        <br>
+        <div class="col">
+        <button class="btn-naranja-mediano" onclick="ConfirmarAgenda()">Cancelar</button>
+        </div>      
+    </div>
+
+    <div class="row h-100 ">
+
+        <div class="col-md-3 align-self-center">
+            <h3>Agenda Medico</h3>
+            <img src="{% static Especialista_Cont.Foto_E.url %}" alt="Foto del especialista" class="img-redonda" width="150" height="150"> 
+            <h2 class="titulo-seleccionar-area"> {{nom_medico}}</h2>
+        </div>
+        <div class="col-md-9 d-flex align-items-center">
+            <div class="d-flex align-items-center">
+                    
+                <div class="table-responsive div-citas-confirmacion ">
+                    <table class="table table-hover table-pagination">
+                        <tr>
+                            <td>Hora Cita</td>
+                            <td>Paciente</td>
+                            <td>Rut</td>
+                            <td>Edad</td>
+                            <td>Estado Confirmacion</td>
+                            <td>Confirmar</td>
+                        </tr>
+                        {% if hay_cita_con_usuario %}
+                            {% for cita_con in lista_agenda %}
+                            <tr>
+                                <td>{{cita_con.cita.Hora_Cita}}</td>
+                                <td>{{cita_con.nombre_com|default:"No disponible"}}</td>
+                                <td>{{cita_con.rut_cita}}</td>
+                                <td>{{cita_con.edad|default:"No disponible"}}</td>
+                                {% if cita_con.cita.Confirmacion_Cita_Operador %}
+                                    <td><span  class="text-success">Confirmado</span> </td>
+                                    <td>
+                                        <button type="submit" disabled="True" name="cita_seleccionada" class="btn-naranja-pequeno">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                              </svg>
+                                        </button>
+                                    </td>
+                                {% else %}
+                                    <td><span class="text-warning">Sin confirmar</span></td>
+                                    <form method="POST" id="form_confirmar_cita">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="redireccion_confirmar" value ="0" id="redireccion_confirmar">
+                                        <input type="hidden" name="cita_hidden" value ="{{cita_con.cita.ID_Cita}}" id="cita_hidden">
+                                        <td><button type="button" onclick="mostrarMensajeCitaRecetaDos()" name="cita_seleccionada" class="btn-naranja-pequeno" value="{{cita_con.cita.ID_Cita}}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                              </svg>
+                                        </button></td>
+                                    </form>
+                                {% endif %}
+        
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if hay_cita_sin_usuario %}
+                            {% for cita_sin in lista_sin %}
+                            <tr>
+                                <td>{{cita_sin.cita_sin.Hora_Cita}}</td>
+                                <td>{{cita_sin.nombre_com|default:"No disponible"}}</td>
+                                <td>{{cita_sin.rut_cita}}</td>
+                                <td>{{cita_sin.edad|default:"No disponible"}}</td>
+                                {% if cita_sin.Confirmacion_Cita_Operador %}
+                                    <td>Confirmado</td>
+                                {% else %}
+                                    <td>Sin confirmar</td>
+                                {% endif %}
+                                <form method="POST" id="form_confirmar_cita">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="redireccion_confirmar" value ="0" id="redireccion_confirmar">
+                                    <input type="hidden" name="cita_hidden" value ="{{cita_sin.cita_sin.ID_Cita}}" id="cita_hidden">
+                                    <td><button type="button" onclick="mostrarMensajeCitaRecetaDos()" name="cita_seleccionada" class="btn-naranja-pequeno" value="{{cita_sin.cita_sin.ID_Cita}}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                          </svg>
+                                    </button></td>
+                                </form>
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                        {% if not cita_sin_usuario.exists and not cita_con_usuario.exists %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><h5>Sin registro de reservas</h5></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% endif %}
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex align-items-center">
+        <button  type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+        <button type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button> 
+    </div>
+</div>
+    {% endblock %}
+    

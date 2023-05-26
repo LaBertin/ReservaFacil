@@ -101,7 +101,27 @@ function finalizarCitaMedicaOrden(redireccionar_o){
 
 
 function finalizarCita(){
-  var form = document.getElementById('form_cita');
+  var form = document.getElementById('form_confirmar_cita');
   form.submit()
 }
+
+function ConfirmarAgenda() {
+  var form = event.target.closest('form_confirmar_cita');
+  form.submit();
+}
+
+
+function ConfirmarPago(redireccion_confirmar){
+  var form = document.getElementById('form_confirmar_cita');
+  console.log(form)
+  if (redireccion_confirmar) {
+    var redirectInput = document.getElementById('redireccion_confirmar');
+    console.log(redirectInput)
+    redirectInput.value = "1";
+    console.log(redirectInput)
+  }
+  form.submit();
+}
+
+
 

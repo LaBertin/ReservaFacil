@@ -1,0 +1,53 @@
+{% extends "../../Clientes/index.html" %}
+{% block footer %}
+<title>Consultar Agenda</title>
+<div id="main-content-centro">
+
+    <div class="div-mediano">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags}} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <h2 id="titulo-Operador">Seleccione Fecha</h2>
+            <div class="table-responsive-lg">
+                <table class="table table-hover">
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Telefono</td>
+                        <td>Especialidades</td>
+                        <td>Dias de Atencion</td>
+                        <td></td>
+                    </tr>
+                    {% for x in lista_especialista %}
+                        <tr>
+                            <td>{{x.Nombre_completo_E}}</td>
+                            <td>{{x.Telefono_E}}</td>
+                            <td>{{x.Especialidad_P}}
+                                {% if  x.Especialidad_S is not None %}
+                                <br>
+                                {{x.Especialidad_S}}
+                                {% endif %}
+                            </td>
+                            <td>{{x.Dia_Esp_P}}<br>{{x.Dia_Esp_S}}</td>
+                            <td>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button class="btn-naranja-mediano" value="{{x.ID_Especialista}}"
+                                    type="submit" name="consultar">Consultar agenda</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>      
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" onclick="goBack()" style="align-self: auto;">Atras</a></button> 
+            <button id="btn-home-cerrar-sesion" type="button" class="btn-naranja-mediano" style="align-self: auto;"><a href="/">Inicio</a></button>
+        </div>
+    
+</div>
+{% endblock %}
