@@ -118,11 +118,14 @@ def index(request):
             if cita_sin_usuario.exists():
                 for cita_sin in cita_sin_usuario:
                     rut_cita = cita_sin.Rut_Paciente
-                    print(f'rut {rut_cita}')
-                    paciente = None
-                    nombre_com = None
+                    paciente = Paciente.objects.get(Rut = rut_cita)
+                    nombre_com = paciente.Nombre_Paciente
+                    nombre = nombre_com.split()
+                    nombre_pac = nombre[0]
+                    apellido_pac = " ".join(nombre[-2:-1])
+                    edad = date.today().year - paciente.Fecha_de_nacimiento_P.year
                     telefono = cita_sin.Telefono_Contacto
-                    lista_sin.append({'cita_sin':cita_sin, 'paciente':paciente, 'nombre_com':nombre_com, 'telefono':telefono, 'rut_cita':rut_cita})
+                    lista_sin.append({'cita_sin':cita_sin, 'paciente':paciente, 'nombre_com':nombre_com, 'telefono':telefono, 'rut_cita':rut_cita, "edad":edad})
             if cita_con_usuario.exists():
                 for cita in cita_con_usuario:
                     paciente = Paciente.objects.get(Usuario_P = cita.ID_Cliente)
@@ -265,8 +268,9 @@ def perfil_cliente(request):
     id_cita =request.GET.get('id_cita')
     rut = request.GET.get('rut')
     id_fecha = request.GET.get('id_fecha')
+    telefono = request.GET.get('telefono')
     print(f'Rut desde ficha: {rut}')
-    datos_form = {'rut_pac':rut}
+    datos_form = {'rut_pac':rut, 'telefono_pac':telefono}
     formulario_pac = {'formulario_pac': FormPaciente(initial = datos_form), 'id_cita':id_cita}
     if rut is None:
         print('Estoy dentro del rut is None')
@@ -332,9 +336,16 @@ def perfil_cliente(request):
                         formPac = FormPaciente()
                         formPac.save(usuario)
                         Paciente.objects.filter(Usuario_P = usuario).update(Nombre_Paciente = nombre_pac, Rut=rut_pac,Sexo=sexo_pac,Fecha_de_nacimiento_P=fecha_nac_pac,Direccion_P=direccion_pac,Telefono_P=telefono_pac,Primer_Login=first_login)
+                        
+                        usuario_operador = request.user
+                        validar_usuario = User.objects.get(username = usuario_operador)
                         messages.success(request, "Exito al actualizar")
-                        url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}&rut={}'.format(nombre_pac,id_fecha,rut)
-                        return redirect(url)
+                        if validar_usuario.groups.filter(name='Operadores'):
+                            url = reverse('index')
+                            return redirect(url)
+                        else:
+                            url = reverse('ficha_medica') + '?nom_pac={}&id_fecha={}&rut={}'.format(nombre_pac,id_fecha,rut)
+                            return redirect(url)
                 else:
                     print('Else del POST con rut')
                     formulario_pac = FormPaciente(initial = datos_form)
@@ -2125,7 +2136,8 @@ def operador_agendar_cita(request):
         print(f'Datos {rut} {email} {telefono} {esp}')
         context = {'valor':valor , 'fecha':fecha}
         messages.success(request, "Hora creada con éxito")
-        return render(request, 'clientes/cliente_Hora_creada.html', context)
+        url = reverse('perfil') + '?rut={}&telefono={}'.format(rut,telefono)
+        return redirect(url)
     return render(request, 'Operador/Consultar_Agenda/operador_agendar_cita.html', context)
 
 def operador_modificar_cita(request):
