@@ -105,15 +105,17 @@
             <input type="hidden" name="redireccionar" id="redireccionar_field" value="0">
             <input type="hidden" name="redireccionar_o" id="redireccionar_o_field" value="0">
             <br>
-            <button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano row-margin" value="{{Ficha_Med_Pac.ID_Ficha_Medica}}">Ver Ficha Médica</button>
+
+            <button type="submit" name="ver_ficha_medica" class="btn-naranja-mediano row-margin" value="{{Ficha_Medica_Pac}}">Ver Ficha Médica</button>
+            
             {% if validar_receta is not None %}
-                <button type="submit" class="btn-naranja-mediano row-margin" name="ver_receta" value="{{validar_receta}}">Ver Receta</button>
+                <button type="submit" class="btn-naranja-mediano row-margin" name="ver_receta" value="{{validar_receta}},{{Ficha_Medica_Pac}}">Ver Receta</button>
             {% else %}
                 <button type="submit" class="btn-naranja-mediano row-margin" name="Receta">Agregar Receta</button>
             {% endif %}
 
             {% if validar_orden is not None %}
-            <button type="submit" class="btn-naranja-mediano row-margin" name="ver_examen" value="{{validar_orden}}">Ver Orden Examen</button>
+            <button type="submit" class="btn-naranja-mediano row-margin" name="ver_examen" value="{{validar_orden}},{{Ficha_Medica_Pac}}">Ver Orden Examen</button>
             {% else %}
             <button type="submit" class="btn-naranja-mediano row-margin" name="Examen" >Agregar Orden Examen</button>
             {% endif %}

@@ -144,6 +144,7 @@ class CitaSinUsuario(models.Model):
     Email_Contacto = models.EmailField(null=True)
     Telefono_Contacto = models.IntegerField(null=True)
     ID_Especialista = models.ForeignKey(Especialista, on_delete=models.RESTRICT)
+    Metodo_Pago_Cita = models.CharField(choices = TIPO_ATENCION, max_length=10, null=True)
     
     def __datetime__ (self):
         return f'{self.ID_Cita} {self.Fecha_Cita} {self.Hora_Cita}'
