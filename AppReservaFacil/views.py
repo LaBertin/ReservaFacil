@@ -2261,6 +2261,7 @@ def operador_modificar_cita(request):
 
         if Paciente.objects.filter(Rut = valor).exists():
             pacientes = Paciente.objects.get(Rut = valor)
+            print(pacientes.Usuario_P)
             citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P)
             print(f'Citas con usuario  {citas_usuarios} ')
             if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
