@@ -1465,10 +1465,19 @@ def filtro_ficha_medica(request):
             return redirect(url)
         if 'ver_ficha_medica' in request.POST:
             ID_Ficha_Medica = request.POST.get('ver_ficha_medica')
-            
             url = reverse('ver_ficha_medica') + '?ID_Ficha_Medica={}'.format(ID_Ficha_Medica)
             return redirect(url)
-    
+        if 'ver_receta' in request.POST:
+            receta = request.POST.get('ver_receta')
+            print(f'Numero de receta en ver receta: {receta}')
+            url = reverse('receta_medica') + '?receta={}'.format(receta)
+            return redirect(url)
+        if 'ver_examen' in request.POST:
+            orden = request.POST.get('ver_examen')
+            print(f'Numero de receta en ver orden: {orden}')
+            url = reverse('orden_examen') + '?orden={}'.format(orden)
+            return redirect(url)
+        
     if Paciente.objects.filter(Nombre_Paciente = nom_pac).exists():
         rut_pac = Paciente.objects.get(Nombre_Paciente = nom_pac).Rut  # Obtiene el Rut del paciente correspondiente al nombre obtenido en la solicitud GET
     else:

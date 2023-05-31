@@ -4,17 +4,27 @@ html{
 /*Header, identaré todo lo que esté en el header para diferenciar entre items*/
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
 
+
+@font-face{
+    font-family: 'Montserrat';
+    src: url('/static/fonts/Montserrat-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-size: 14px;
+}
+
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins','sans-serif';
+    /* font-family: 'Poppins','sans-serif'; */
+    font-family: 'Montserrat', sans-serif;
 }
 /*Header, identaré todo lo que esté en el header para diferenciar entre items*/
 header {
     height: 80px;
     background-color: #42444E;
-    
+    font-family: 'Montserrat', sans-serif;
 }   
     .btn-rojo-pequeno{
         height: 40px;
@@ -43,7 +53,8 @@ header {
     .btn-naranja-pequeno{
         height: 40px;
         width: 70px;
-        background-color: #FAA92F;
+        
+        background-color: #66B2FE;
         border-style: none;
         border-radius: 5px;
         margin: auto;
@@ -51,7 +62,7 @@ header {
         .btn-naranja-pequeno:hover{
             text-decoration: none;
             color: #000000;
-            background-color: #FAA92F;
+            background-color: #176BC0;
         }
         /*Modifico el text dentro del btn para que no aparezca el underline*/
         .btn-naranja-pequeno a{
@@ -67,7 +78,8 @@ header {
     .btn-naranja-mediano{
         height: 40px;
         width: 140px;
-        background-color: #FAA92F;
+        background-color: #66B2FE;
+        font-size: 14px;
         border-style: none;
         border-radius: 5px;
         margin: auto;
@@ -75,7 +87,7 @@ header {
         .btn-naranja-mediano:hover{
             text-decoration: none;
             color: #000000;
-            background-color: #FAA92F;
+            background-color: #176BC0;
         }
         /*Modifico el text dentro del btn para que no aparezca el underline*/
         .btn-naranja-mediano a{
@@ -179,7 +191,7 @@ header {
     .btn-naranja-mediano-operador{
         height: 50px;
         width: 180px;
-        background-color: #FAA92F;
+        background-color: #66B2FE;
         border-style: none;
         border-radius: 5px;
         margin: 2ex;
@@ -187,7 +199,7 @@ header {
         .btn-naranja-mediano-operador:hover{
             text-decoration: none;
             color: #000000;
-            background-color: #FAA92F;
+            background-color: #176BC0;
         }
         /*Modifico el text dentro del btn para que no aparezca el underline*/
         .btn-naranja-mediano-operador a{
