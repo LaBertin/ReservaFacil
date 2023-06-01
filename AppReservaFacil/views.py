@@ -2262,12 +2262,13 @@ def operador_modificar_cita(request):
         if Paciente.objects.filter(Rut = valor).exists():
             pacientes = Paciente.objects.get(Rut = valor)
             print(pacientes.Usuario_P)
+            nom_pac =pacientes.Nombre_Paciente
             citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P)
             print(f'Citas con usuario  {citas_usuarios} ')
             if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
                 citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor)
                 print(f'Citas con usuario y sin {citas_usuarios} {citas_sin_usuario}')
-            if Paciente.objects.filter(Rut = valor).exists() and len(citas_usuarios) == 0:
+            if Paciente.objects.filter(Rut = valor).exists() and len(citas_usuarios) == 0 and len(citas_sin_usuario) == 0:
                 messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
                 return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
 
@@ -2283,7 +2284,7 @@ def operador_modificar_cita(request):
             messages.error(request, "El rut ingresado no figura en el sistema.")
             return render(request, 'Operador/Modificar_Cita/operador_modificar_cita.html')
 
-        context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
+        context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario, 'nom_pac':nom_pac}
 
         return render (request, 'Operador/Modificar_Cita/operador_modificar_lista.html',context)
         
