@@ -473,7 +473,7 @@ def cliente_Agendar_hora(request):
 
             qspecialista = {'qspecialista':qspecialista, 'qsListaEspecialidad':qsListaEspecialidad,'especialidad_select':especialidad_select, 'metodo': metodo}
 
-            return render(request, 'clientes/listar_Especialistas.html', qspecialista)
+            return render(request, 'Clientes/listar_Especialistas.html', qspecialista)
         if 'pedir_cita' in request.POST:    
             global Especialistas
             global dias_es
@@ -515,7 +515,7 @@ def cliente_Agendar_hora(request):
                 'metodo': metodo
             }
 
-            return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)    
+            return render(request, 'Clientes/cliente_Seleccionar_Fecha.html', dataformDate)    
         if 'seleccionar_hora' in request.POST:
             global Fecha
             Fecha = DateForm(request.POST)
@@ -568,10 +568,10 @@ def cliente_Agendar_hora(request):
 
                     print(list_Citas_Reservadas)
                     list_horas = {'list_horas':list_horas, 'list_Citas_Reservadas':list_Citas_Reservadas , 'metodo': metodo}
-                    return render(request, 'clientes/cliente_Seleccionar_Hora.html', list_horas)
+                    return render(request, 'Clientes/cliente_Seleccionar_Hora.html', list_horas)
                 else:
                     messages.error(request, "Ingrese una fecha en los dias: "+dias_es+".")
-                    return render(request, 'clientes/cliente_Seleccionar_Fecha.html',dataformDate)
+                    return render(request, 'Clientes/cliente_Seleccionar_Fecha.html',dataformDate)
         #Si pulsa el botón de seleccionar hora
         if 'hora_seleccionada' in request.POST:
             print("Hora Seleccionada")
@@ -600,7 +600,7 @@ def cliente_Agendar_hora(request):
             print(f'metodo de pago Antes de agregar la cita: {metodo}')
             if cita_existe:
                 messages.error(request, "La cita seleccionada ya ha sido reservada")
-                return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
+                return render(request, 'Clientes/cliente_Seleccionar_Fecha.html', dataformDate)
             else:
                 if Citas_Usuario<3:
                     Cita.objects.create(ID_Cita=feccha_id,Fecha_Cita=Fecha, Hora_Cita=hora_seleccionada, ID_Cliente=Usuario, ID_Especialista=Especialistas[0], Metodo_Pago_Cita= metodo)
@@ -613,11 +613,11 @@ def cliente_Agendar_hora(request):
                         [Mail]  
                     )
                     """
-                    return render(request, 'clientes/cliente_Hora_creada.html', {'fecha':Fecha, 'valor':hora_seleccionada})
+                    return render(request, 'Clientes/cliente_Hora_creada.html', {'fecha':Fecha, 'valor':hora_seleccionada})
                 else:
                     messages.error(request, "Ha alcanzado el máximo de citas solicitadas en esta fecha: 3.")
-                    return render(request, 'clientes/cliente_Seleccionar_Fecha.html', dataformDate)
-    return render(request, 'clientes/cliente_Agendar_Hora.html', formulario_area_medica)
+                    return render(request, 'Clientes/cliente_Seleccionar_Fecha.html', dataformDate)
+    return render(request, 'Clientes/cliente_Agendar_Hora.html', formulario_area_medica)
 
 def dias_trabaja_especialista(dias_en):
     # Obtener la fecha actual
@@ -700,14 +700,14 @@ def Cliente_anular_hora(request):
                 )
         """
         messages.success(request, "Cita anulada con éxito")
-        return render(request, 'clientes/cliente_Hora_anulada.html', {'hora_principal':Anular_Hora_Principal})
+        return render(request, 'Clientes/cliente_Hora_anulada.html', {'hora_principal':Anular_Hora_Principal})
     if request.user.is_authenticated:
         Usuario = User.objects.get(username=request.user.username)
         citas_cliente = Cita.objects.filter(ID_Cliente=Usuario)
         
-        return render(request, 'clientes/cliente_Anular_Hora.html', {'citas_cliente':citas_cliente})
+        return render(request, 'Clientes/cliente_Anular_Hora.html', {'citas_cliente':citas_cliente})
     else:
-        return render(request, 'clientes/cliente_Anular_Hora.html')    
+        return render(request, 'Clientes/cliente_Anular_Hora.html')    
 
 def Cliente_consultar_hora(request):
     if 'confirmar_cita' in request.POST:
@@ -794,14 +794,14 @@ def Cliente_consultar_hora(request):
         print(Consultar_Hora)
         Cita_Seleccionada = Cita.objects.filter(ID_Cita=Consultar_Hora)
         print(Cita_Seleccionada)
-        return render(request, 'clientes/cliente_Confirmar_Hora.html', {'cita_seleccionada':Cita_Seleccionada})
+        return render(request, 'Clientes/cliente_Confirmar_Hora.html', {'cita_seleccionada':Cita_Seleccionada})
     if request.user.is_authenticated:
         Usuario = User.objects.get(username=request.user.username)
         citas_cliente = Cita.objects.filter(ID_Cliente=Usuario)
         
-        return render(request, 'clientes/cliente_Consultar_Cita.html', {'citas_cliente':citas_cliente})
+        return render(request, 'Clientes/cliente_Consultar_Cita.html', {'citas_cliente':citas_cliente})
     else:
-        return render(request, 'clientes/cliente_Consultar_Cita.html')
+        return render(request, 'Clientes/cliente_Consultar_Cita.html')
 #Views Admin
 def agregar_empleado(request):
     nuevo_emp_form = {
@@ -1163,7 +1163,7 @@ def agregar_operador(request):
             print("Error formulario isnt valid")
             
     
-    return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
+    return render(request, "admin/admin_agregar_Operador.html",nuevo_o_form)
 
 def admin_Eliminar_Operador(request):
     if request.method == 'POST':
@@ -2381,7 +2381,7 @@ def operador_modificar_fecha(request):
 
         context = {'valor':valor , 'fecha':fecha}
         messages.success(request,"Cita cambiada exitosamente.")
-        return render(request, 'clientes/cliente_Hora_creada.html', context)
+        return render(request, 'Clientes/cliente_Hora_creada.html', context)
         # url = reverse('index')
         # return redirect(url)
 
