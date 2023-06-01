@@ -2403,60 +2403,39 @@ def operador_confirmacion(request):
         print(dia_escrito)
         valor = request.POST.get('rut')
         # api_response = respuesta_api(request, valor)
+        if  Paciente.objects.filter(Rut = valor).exists():
+            paciente = Paciente.objects.get(Rut = valor)
+            pac_usuario = paciente.Usuario_P
+            print(paciente)
+            print(pac_usuario)
+            
+            if Cita.objects.filter(ID_Cliente = pac_usuario, Fecha_Cita = hoy).exists():
+                print('entre al if cita')
+                citas_usuarios = Cita.objects.filter(ID_Cliente = pac_usuario, Fecha_Cita = hoy)
+                especialista_con = Especialista.objects.get(ID_Especialista = citas_usuarios[0].ID_Especialista.ID_Especialista)
+                if dia_escrito in especialista_con.Dia_Esp_P:
+                    especialidad_ = especialista_con.Especialidad_P
+                else:
+                    especialidad_ = especialista_con.Especialidad_S
 
-        if Paciente.objects.filter(Rut = valor).exists():
-            pacientes = Paciente.objects.get(Rut = valor)
-            citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P, Fecha_Cita = hoy)
-            especialista_con = Especialista.objects.get(ID_Especialista = citas_usuarios[0].ID_Especialista.ID_Especialista)
-            print(especialista_con)
-
-            if dia_escrito in especialista_con.Dia_Esp_P:
-                especialidad_ = especialista_con.Especialidad_P
-            else:
-                especialidad_ = especialista_con.Especialidad_S
-    
-            print(f'Citas con usuario  {citas_usuarios} ')
-            print(f'Especialidad con usuario: {especialidad_}')
-
+            print(CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists())
             if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
                 citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
+                
                 especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
-            
-                print(especialista)
                 if dia_escrito in especialista.Dia_Esp_P:
                     especialidad_sin = especialista.Especialidad_P
                 else:
                     especialidad_sin = especialista.Especialidad_S
-
-                print(f'Citas con usuario y sin {citas_usuarios} {citas_sin_usuario}')
-                print(f'Especialidad sin usuario dentro del if con usuario: {especialidad_sin}')
-
-            if Paciente.objects.filter(Rut = valor).exists() and len(citas_usuarios) == 0:
+            print(citas_usuarios)
+            print(citas_sin_usuario)
+            print(Paciente.objects.filter(Rut = valor).exists() and citas_usuarios is None and citas_sin_usuario is None)
+            if Paciente.objects.filter(Rut = valor).exists() and citas_usuarios is None and citas_sin_usuario is None:
                 messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
                 return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html')
-
-        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
-            citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
-            especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
-            
-            print(f'Especialista {especialista}')
-
-            if dia_escrito in especialista.Dia_Esp_P:
-                especialidad_sin = especialista.Especialidad_P
-            else:
-                especialidad_sin = especialista.Especialidad_S
-
-            print(f'Citas sin usuario {citas_sin_usuario}')
-            print(f'Especialidad con usuario: {especialidad_sin}')
-        
-        
-        elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists() and Paciente.objects.filter(Rut = valor).exists() and citas_usuarios is None and citas_sin_usuario is None:
-            messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
-            return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html')
-        
-
-        #TODO ARREGLAR LOGICA
         else:
+
+
             if 'seleccion' in request.POST:
                 print('Estoy en el post de seleccion')
                 cita = request.POST.get('seleccion')
@@ -2466,7 +2445,6 @@ def operador_confirmacion(request):
                 print(f'Cual es la cita {cita}')
                 cita = datetime.strptime(cita, "%d %B %Y %H:%M")
                 print(f'Cita replace {cita}')
-
                 if Cita.objects.filter(ID_Cita = cita).exists():
                     cita_confirmada = Cita.objects.get(ID_Cita = cita)
                     cita_confirmada.Confirmacion_Cita_Operador = True
@@ -2479,9 +2457,87 @@ def operador_confirmacion(request):
                     cita_confirmada.save()
                     messages.success(request, "Paciente confirmado.")
                     return redirect('confirmacion')
-                
-            messages.error(request, "No se encontraron citas con el rut ingresado.")  
+            messages.error(request, "El rut ingresado no figura en el sistema.")
             return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
+        # if Paciente.objects.filter(Rut = valor).exists():
+        #     pacientes = Paciente.objects.get(Rut = valor)
+        #     citas_usuarios = Cita.objects.filter(ID_Cliente = pacientes.Usuario_P, Fecha_Cita = hoy)
+        #     print(citas_usuarios)
+        #     especialista_con = Especialista.objects.get(ID_Especialista = citas_usuarios[0].ID_Especialista.ID_Especialista)
+        #     print(especialista_con)
+
+        #     if dia_escrito in especialista_con.Dia_Esp_P:
+        #         especialidad_ = especialista_con.Especialidad_P
+        #     else:
+        #         especialidad_ = especialista_con.Especialidad_S
+    
+        #     print(f'Citas con usuario  {citas_usuarios} ')
+        #     print(f'Especialidad con usuario: {especialidad_}')
+
+        #     if CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
+        #         citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
+        #         especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
+            
+        #         print(especialista)
+        #         if dia_escrito in especialista.Dia_Esp_P:
+        #             especialidad_sin = especialista.Especialidad_P
+        #         else:
+        #             especialidad_sin = especialista.Especialidad_S
+
+        #         print(f'Citas con usuario y sin {citas_usuarios} {citas_sin_usuario}')
+        #         print(f'Especialidad sin usuario dentro del if con usuario: {especialidad_sin}')
+
+        #     if Paciente.objects.filter(Rut = valor).exists() and len(citas_usuarios) == 0:
+        #         messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
+        #         return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html')
+
+        # elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists():
+        #     citas_sin_usuario = CitaSinUsuario.objects.filter(Rut_Paciente = valor, Fecha_Cita = hoy)
+        #     especialista = Especialista.objects.get(ID_Especialista = citas_sin_usuario[0].ID_Especialista.ID_Especialista)
+            
+        #     print(f'Especialista {especialista}')
+
+        #     if dia_escrito in especialista.Dia_Esp_P:
+        #         especialidad_sin = especialista.Especialidad_P
+        #     else:
+        #         especialidad_sin = especialista.Especialidad_S
+
+        #     print(f'Citas sin usuario {citas_sin_usuario}')
+        #     print(f'Especialidad con usuario: {especialidad_sin}')
+        
+        
+        # elif CitaSinUsuario.objects.filter(Rut_Paciente = valor).exists() and Paciente.objects.filter(Rut = valor).exists() and citas_usuarios is None and citas_sin_usuario is None:
+        #     messages.error(request, "El rut ingresado no tiene ninguna cita agendada.")
+        #     return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html')
+        
+
+        #TODO ARREGLAR LOGICA
+        # else:
+        #     if 'seleccion' in request.POST:
+        #         print('Estoy en el post de seleccion')
+        #         cita = request.POST.get('seleccion')
+        #         print(type(cita))
+        #         cita = cita.replace("de ","").replace("a las ","")
+        #         cita = cita.replace('Enero','January').replace('Febrero','February').replace('Marzo','March').replace('Abril','April').replace('Mayo','May').replace('Junio','June').replace('Julio','July').replace('Agosto','August').replace('Septiembre','September').replace('Octubre','October').replace('Noviembre','November').replace('Diciembre','December')
+        #         print(f'Cual es la cita {cita}')
+        #         cita = datetime.strptime(cita, "%d %B %Y %H:%M")
+        #         print(f'Cita replace {cita}')
+
+        #         if Cita.objects.filter(ID_Cita = cita).exists():
+        #             cita_confirmada = Cita.objects.get(ID_Cita = cita)
+        #             cita_confirmada.Confirmacion_Cita_Operador = True
+        #             cita_confirmada.save()
+        #             messages.success(request, "Paciente confirmado.")
+        #             return redirect('confirmacion')
+        #         else:
+        #             cita_confirmada = CitaSinUsuario.objects.get(ID_Cita = cita)
+        #             cita_confirmada.Confirmacion_Cita_Operador = True
+        #             cita_confirmada.save()
+        #             messages.success(request, "Paciente confirmado.")
+        #             return redirect('confirmacion')
+                
+        #     messages.error(request, "No se encontraron citas con el rut ingresado.")  
+        #     return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
 
         # context = {'citas':citas_usuarios, 'citas_sin_usuario':citas_sin_usuario}
         # url = reverse('confirmacion_citas') + '?cita={}&citas_sin_usuario={}&valor={}'.format(citas_usuarios, citas_sin_usuario, valor)
