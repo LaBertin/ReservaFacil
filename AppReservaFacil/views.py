@@ -802,7 +802,7 @@ def Cliente_consultar_hora(request):
         return render(request, 'Clientes/cliente_Consultar_Cita.html', {'citas_cliente':citas_cliente})
     else:
         return render(request, 'Clientes/cliente_Consultar_Cita.html')
-#Views Admin
+#Views admin
 def agregar_empleado(request):
     nuevo_emp_form = {
         'formEspecialista': FormEspecialista()
@@ -1097,7 +1097,7 @@ def admin_Eliminar_Especialista(request):
             
     Especialistas_All = Especialista.objects.all()
     contexto = {'Especialistas_All':Especialistas_All}
-    return render(request, 'Admin/admin_Eliminar_Especialista.html', contexto)
+    return render(request, 'admin/admin_Eliminar_Especialista.html', contexto)
 
 def agregar_operador(request):
     nuevo_o_form={'formOperador':FormOperador()}
@@ -1152,7 +1152,7 @@ def agregar_operador(request):
                                         Telefono_O=contacto_operador_o, Fecha_de_contrato_O = fecha_ini_con_operador_o,
                                         Fecha_fin_de_contrato_O = fecha_fin_con_operador_o, Usuario_O=Usuario_O)
                 messages.success(request, "¡Operador registrado exitosamente!")
-                return render(request, "Admin/admin_agregar_Operador.html",nuevo_o_form)
+                return render(request, "admin/admin_agregar_Operador.html",nuevo_o_form)
             else:
                 formulario=FormOperador()
                 print("Error formulario isnt valid 2")
@@ -1179,7 +1179,7 @@ def admin_Eliminar_Operador(request):
             
     Operadores_All = Operador.objects.all()
     contexto = {'Operadores_All':Operadores_All}
-    return render(request, 'Admin/admin_Eliminar_Operador.html', contexto)
+    return render(request, 'admin/admin_Eliminar_Operador.html', contexto)
 
 def obtener_especialidades(request, area_medica_id):
     especialidades = Especialidad.objects.filter(Area_Medica_F=area_medica_id)
@@ -1197,7 +1197,7 @@ def admin_Agregar_Especialidad(request):
 
     formulario = FormEspecialidad()
     contexto = {'FormEspecialidad':formulario}
-    return render(request, 'Admin/admin_agregar_Especialidad.html', contexto)
+    return render(request, 'admin/admin_agregar_Especialidad.html', contexto)
 
 def admin_Eliminar_Especialidad(request):
     if request.method == 'POST':
@@ -1212,7 +1212,7 @@ def admin_Eliminar_Especialidad(request):
             
     Especialidades_All = Especialidad.objects.all()
     contexto = {'Especialidades_All':Especialidades_All}
-    return render(request, 'Admin/admin_Eliminar_Especialidad.html', contexto)
+    return render(request, 'admin/admin_Eliminar_Especialidad.html', contexto)
 #Views Especialistas
 def especialista_Agenda(request):
     form_agenda = {'form_agenda': DateForm()}
