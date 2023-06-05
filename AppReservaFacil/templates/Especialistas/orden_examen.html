@@ -1,4 +1,5 @@
 {% extends "../Clientes/index.html" %}
+{% load static %}
 {% block footer %}
 <title>Crear Ficha Médica - Examenes</title>
 <script src="../../static/js/mostrarMensaje.js"></script>
@@ -149,63 +150,30 @@
 
             <div class="row row-margin">
                 <div class="col-md-12 border border-info rounded-1">
-                    <div class="form">
-                        <div class="row row-margin table-responsive"> 
-                            <div class="col-md-6" style="display:flex; align-items: center;">
-                                <input style=" display: flex; width: 100%; " type="text" id="searchInput" placeholder="Buscar...">
-                            </div>
-                            <div class="col-md-6" style="display:flex; align-items: center;">
-                                <button style=' display: flex; width: 100%;' class="btn btn-primary" onclick="filterTable()">Filtrar</button>
-                            </div>
-                            <table id="tabladinamica" class="table table-hover">
-                                {% for x in formExamenes.examenes %}
-                                {% if forloop.counter0|divisibleby:5 %}
-                                    <tr> <!-- Nueva fila cada 5 botones -->
-                                {% endif %}
-                                <td class="border border-info">
-                                    {{x}}
-                                </td> 
-                                {% if forloop.counter|divisibleby:5 or forloop.last %}
-                                    </tr> <!-- Cierre de la fila si se llegó al límite de 5 botones o es el último elemento -->
-                                {% endif %}
-                                {% endfor %}
+                    
+                            <input type="text" name="pruebacosa" id="pruebacosa">
+                            <button type="button" onclick="prueba()">Agregar</button>
+                            <table class="table"  id="seleccion">
+                                <tbody id = "seleccion-body">
+                                    <tr>
+                                        <td>Examen</td>
+                                        <td>Eliminar</td>
+                                    </tr>
+                                </tbody>
                             </table>
-                        </div>
-                    </div>
+                            <div class="notDisplay">
+
+                                {{formExamenes.examenes}}
+                            </div>
+                        
+                    
                 </div>
             </div>  
                 <button type="submit" class="btn-naranja-mediano">Agregar Orden</button>
                 <button type="button" class="btn-naranja-mediano row-margin"><a href="{{ request.META.HTTP_REFERER }}">Volver</a></button>
             </form>
         {% endif %}
-
-        <script>
-            function filterTable() {
-                event.preventDefault();
-                var input, filter, table, tr, td, i, txtValue;
-                input = document.getElementById("searchInput");
-                filter = input.value.toUpperCase();
-                table = document.getElementById("tabladinamica");
-                tr = table.getElementsByTagName("tr");
-                
-          for (i = 0; i < tr.length; i++) {
-              for(j = 0; j < 5; j++){
-                td = tr[i].getElementsByTagName("td")[j];
-                console.log(`Inner ${td.innerText}`)
-                if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    td.style.display = "";
-                    td.classList.add("highlight");
-                } else {
-                    td.style.display = "none";
-                    td.classList.remove("highlight");
-                }
-              }
-            }
-          }
-        }
-        </script>
+        <script src="{% static 'js/orden_examen.js' %}"></script>
         
     </div>
         

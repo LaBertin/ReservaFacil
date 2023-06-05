@@ -243,8 +243,8 @@ class FormExamenes(forms.Form):
     diagnostico = forms.CharField(widget=forms.TextInput(attrs={'class': 'input border-0 border-bottom'}),max_length = 80, required=True)
     nombre_medico = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}),max_length=256, required=True)
     rut_medico = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly','class': 'input border-0 border-bottom'}),max_length=9, required=True)
-    examenes = forms.CharField(widget=forms.CheckboxSelectMultiple(choices=EXAMENES, attrs={'class':'boton'}))
-    # examenes = forms.MultipleChoiceField(widget=forms.TextInput(attrs={'class': 'input border-0 border-bottom'}))
+    # examenes = forms.CharField(widget=forms.CheckboxSelectMultiple(choices=EXAMENES, attrs={'class':'boton'}))
+    examenes = forms.CharField(widget=forms.TextInput(attrs={'class': 'input border-0 border-bottom'}))
 
     def save(self):
         OrdenExamenes = Examene.objects.create(
@@ -258,7 +258,7 @@ class FormExamenes(forms.Form):
             Diagnostico_orden = self.cleaned_data['diagnostico'],
             Nombre_Medico_orden = self.cleaned_data['nombre_medico'],
             Rut_Medico_orden = self.cleaned_data['rut_medico'],
-            Examenes = self.cleaned_data['examenes'].replace("'","").strip('][').split(', ')
+            Examenes = self.cleaned_data['examenes']
         )
         return OrdenExamenes
 

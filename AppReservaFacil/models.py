@@ -222,7 +222,7 @@ class Examene (models.Model):
     Diagnostico_orden = models.CharField(max_length=80, null=True)
     Nombre_Medico_orden = models.CharField(max_length=256, null=True)
     Rut_Medico_orden = models.CharField(max_length = 9,null=True)
-    Examenes = MultiSelectField(choices=EXAMENES,null=True)
+    Examenes = models.CharField(max_length=256, null=True)
     
     def __str__(self):
         return f'{self.Numero_orden_examen}'

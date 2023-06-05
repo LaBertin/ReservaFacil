@@ -1720,7 +1720,7 @@ def ver_orden_examen(request):
         diagnostico_orden = examen.Diagnostico_orden
         nombre_med_orden = examen.Nombre_Medico_orden
         rut_med_orden = examen.Rut_Medico_orden
-        examenes_orden = examen.Examenes
+        examenes_orden = examen.Examenes.split(',')
         print(examenes_orden)
         data = {'nombre_pac':nom_pac_orden, 'rut_pac':rut_pac_orden, 'edad_pac':edad_pac_orden, 'Fecha_Cita':fecha_pac_orden, 'nombre_medico':nombre_med_orden,
             'rut_medico':rut_med_orden, 'diagnostico':diagnostico_orden, 'servicio': servicio_orden, 'prevision':prevision_orden}
@@ -1751,7 +1751,13 @@ def ver_orden_examen(request):
     
     if request.method =='POST':
         form_com = FormExamenes(data = request.POST)
+        print(form_com)
+        print(form_com.is_valid())
         if form_com.is_valid():
+            #Obtengo la cadena de texto y le aplico split para almacenarla sin formato lista
+            texto = form_com.cleaned_data['examenes']
+            print(type(texto))
+
             examen = form_com.save()
             Ficha_Cita.objects.filter(ID_Ficha_Cita = id_ficha).update(Examene = examen)
             messages.success(request, "Orden de examenes registrada")
