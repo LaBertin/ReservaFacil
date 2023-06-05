@@ -2669,10 +2669,24 @@ def operador_pagar(request):
         if metodo_pago_boleta == 'Efectivo':
             monto_boleta = request.POST.get('Monto_boleta_form')
             monto_efectivo_boleta = request.POST.get('Monto_efectivo')
+            atencion = request.POST.get('Tipo_atencion_form')
             print(f'Monto Boleta: {monto_boleta}')
             print(f'Monto Efectivo: {monto_efectivo_boleta}')
-            
-            if monto_efectivo_boleta < monto_boleta:
+            print(atencion)
+            if atencion !='Particular':
+                print(f'estoy en atencion {atencion}')
+                form_pago = FormBoleta(data=request.POST)
+
+                print(form_pago.is_valid())
+                if form_pago.is_valid():
+                    form_pago.save()
+                    cobro.Estado_cobro = 'Pagado'
+                    cobro.save()
+                    messages.success(request, "Operacion Exitosa")
+                    url = reverse('cobros_paciente')+"?rut={}".format(rut)
+                    return redirect(url) 
+                
+            elif monto_efectivo_boleta < monto_boleta:
                 print('Dentro del if')
                 messages.error(request, "El monto de efectivo debe ser superior al monto a pagar")
                 return render(request, 'Operador/Pago/operador_pagar.html',context)
