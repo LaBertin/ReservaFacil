@@ -2442,10 +2442,9 @@ def operador_confirmacion(request):
                 return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html')
         else:
 
-
-            if 'seleccion' in request.POST:
+            if request.method == 'POST':
                 print('Estoy en el post de seleccion')
-                cita = request.POST.get('seleccion')
+                cita = request.POST.get('cita_hidden')
                 print(type(cita))
                 cita = cita.replace("de ","").replace("a las ","")
                 cita = cita.replace('Enero','January').replace('Febrero','February').replace('Marzo','March').replace('Abril','April').replace('Mayo','May').replace('Junio','June').replace('Julio','July').replace('Agosto','August').replace('Septiembre','September').replace('Octubre','October').replace('Noviembre','November').replace('Diciembre','December')
@@ -2455,14 +2454,101 @@ def operador_confirmacion(request):
                 if Cita.objects.filter(ID_Cita = cita).exists():
                     cita_confirmada = Cita.objects.get(ID_Cita = cita)
                     cita_confirmada.Confirmacion_Cita_Operador = True
+                    nom_pac= cita_confirmada.ID_Cliente
                     cita_confirmada.save()
                     messages.success(request, "Paciente confirmado.")
+                    id_cobro = Cobro.objects.all().count()+1
+                    rut = Paciente.objects.get(Usuario_P = nom_pac).Rut
+                    esp = cita_confirmada.ID_Especialista
+                    especialista = Especialista.objects.get(Nombre_completo_E = esp)
+
+                    #Obtener especialidad
+                    hoy = date.today()
+                    #Remplaso el dia en ingles por el valor que le indicamos en el modelo.
+                    hoy = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+
+                    #Cobro de especialidades
+                    cobro_especialidad = CobrosEspecialistas.objects.get(ID_Especialista = especialista)
+
+                    #Valida si el dia se encuentra en alguna de de las listas de dias de la especialidad y el cobro de ella
+                    if hoy in especialista.Dia_Esp_P:
+                        especialidad = especialista.Especialidad_P
+                        cobro_atencion = cobro_especialidad.Monto_Esp_P
+                        print(f'Valor de hoy {hoy}')
+                    else:
+                        especialidad = especialista.Especialidad_S
+                        cobro_atencion = cobro_especialidad.Monto_Esp_S
+                        print(f'Valor de hoy {hoy} dentro del else')
+
+
+                    print(f'Especialista encontrado :{especialista}')
+                    print(f'Rut del paciente: {rut}')
+                    metodo = cita_confirmada.Metodo_Pago_Cita
+
+                    cobro_cita =  Cobro.objects.create(ID_Cobro = id_cobro, Rut_Pac_Cobro = rut, Especialista_Cobro=especialista,
+                                                    Especialidad_Cobro = especialidad, Monto = cobro_atencion, Metodo = metodo, Estado_cobro='Por pagar')
+                    
+                    id_cobro = cobro_cita.ID_Cobro
+
+                    redireccion_confirmar = request.POST.get('redireccion_confirmar')
+                    print(f'Valor redirect: {redireccion_confirmar}')
+                    if redireccion_confirmar == "1":
+                        print('redireccion_confirmar if')
+                        url = reverse('operador_pagar')+"?id_cobro={}&rut={}&metodo={}".format(id_cobro, rut, metodo)
+                        return redirect(url)
+                    else:
+                        print('redireccion_confirmar else')
+                        url = reverse('confirmacion')
+                        return redirect(url) 
                     return redirect('confirmacion')
                 else:
                     cita_confirmada = CitaSinUsuario.objects.get(ID_Cita = cita)
                     cita_confirmada.Confirmacion_Cita_Operador = True
                     cita_confirmada.save()
                     messages.success(request, "Paciente confirmado.")
+                    id_cobro = Cobro.objects.all().count()+1
+                    rut = Paciente.objects.get(Usuario_P = nom_pac).Rut
+                    esp = cita_confirmada.ID_Especialista
+                    especialista = Especialista.objects.get(Nombre_completo_E = esp)
+
+                    #Obtener especialidad
+                    hoy = date.today()
+                    #Remplaso el dia en ingles por el valor que le indicamos en el modelo.
+                    hoy = hoy.strftime('%A').replace('Monday','lun').replace('Tuesday','mar').replace('Wednesday','mie').replace('Thursday','jue').replace('Friday','vie').replace('Saturday','sab').replace('Sunday','dom')
+
+                    #Cobro de especialidades
+                    cobro_especialidad = CobrosEspecialistas.objects.get(ID_Especialista = especialista)
+
+                    #Valida si el dia se encuentra en alguna de de las listas de dias de la especialidad y el cobro de ella
+                    if hoy in especialista.Dia_Esp_P:
+                        especialidad = especialista.Especialidad_P
+                        cobro_atencion = cobro_especialidad.Monto_Esp_P
+                        print(f'Valor de hoy {hoy}')
+                    else:
+                        especialidad = especialista.Especialidad_S
+                        cobro_atencion = cobro_especialidad.Monto_Esp_S
+                        print(f'Valor de hoy {hoy} dentro del else')
+
+
+                    print(f'Especialista encontrado :{especialista}')
+                    print(f'Rut del paciente: {rut}')
+                    metodo = cita_confirmada.Metodo_Pago_Cita
+
+                    cobro_cita =  Cobro.objects.create(ID_Cobro = id_cobro, Rut_Pac_Cobro = rut, Especialista_Cobro=especialista,
+                                                    Especialidad_Cobro = especialidad, Monto = cobro_atencion, Metodo = metodo, Estado_cobro='Por pagar')
+                    
+                    id_cobro = cobro_cita.ID_Cobro
+
+                    redireccion_confirmar = request.POST.get('redireccion_confirmar')
+                    print(f'Valor redirect: {redireccion_confirmar}')
+                    if redireccion_confirmar == "1":
+                        print('redireccion_confirmar if')
+                        url = reverse('operador_pagar')+"?id_cobro={}&rut={}&metodo={}".format(id_cobro, rut, metodo)
+                        return redirect(url)
+                    else:
+                        print('redireccion_confirmar else')
+                        url = reverse('confirmacion')
+                        return redirect(url)
                     return redirect('confirmacion')
             messages.error(request, "El rut ingresado no figura en el sistema.")
             return render(request, 'Operador/Confirmacion/operador_confirmar_paciente.html', context)
