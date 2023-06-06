@@ -2445,6 +2445,7 @@ def operador_confirmacion(request):
             if request.method == 'POST':
                 print('Estoy en el post de seleccion')
                 cita = request.POST.get('cita_hidden')
+                print(cita)
                 print(type(cita))
                 cita = cita.replace("de ","").replace("a las ","")
                 cita = cita.replace('Enero','January').replace('Febrero','February').replace('Marzo','March').replace('Abril','April').replace('Mayo','May').replace('Junio','June').replace('Julio','July').replace('Agosto','August').replace('Septiembre','September').replace('Octubre','October').replace('Noviembre','November').replace('Diciembre','December')
@@ -2453,7 +2454,11 @@ def operador_confirmacion(request):
                 print(f'Cita replace {cita}')
                 if Cita.objects.filter(ID_Cita = cita).exists():
                     cita_confirmada = Cita.objects.get(ID_Cita = cita)
+                    print(f'Verificando {cita_confirmada}')
+                    print(cita_confirmada.Confirmacion_Cita_Operador)
                     cita_confirmada.Confirmacion_Cita_Operador = True
+                    print(f'Verificando cambio de {cita_confirmada}')
+                    print(cita_confirmada.Confirmacion_Cita_Operador)
                     nom_pac= cita_confirmada.ID_Cliente
                     cita_confirmada.save()
                     messages.success(request, "Paciente confirmado.")

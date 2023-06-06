@@ -20,6 +20,7 @@
                 <br>
                 <div class="col btn-naranja-mediano">
                     <button class="btn-naranja-mediano" onclick="ConfirmarPago(true)" id="conf_create_receta" type="submit" name="conf_create_rec">Pagar</button>
+
                 </div>
                 <br>
                 <div class="col">
@@ -57,19 +58,29 @@
                             <td>{{x.Fecha_Cita}}</td>
                             <td>{{x.Hora_Cita}}</td>
                             {% if x.Confirmacion_Cita_Operador == False %}
-                                <td><a class="text-warning">Sin Confirmar</a></td>
-                            {% else %}
-                                <td><a class="text-success">Confirmado</a></td>
-                            {% endif %}
-                                <td>
+                            <td><span class="text-warning">Sin confirmar</span></td>
+                            <td>
                                 <form method="POST" id="form_confirmar_cita">
                                     {% csrf_token %}
                                     <input type="hidden" name="redireccion_confirmar" value ="0" id="redireccion_confirmar">
                                     <input type="hidden" name="cita_hidden" value ="{{x.ID_Cita}}" id="cita_hidden">
                                     <button class="btn-naranja-mediano" value="{{x.ID_Cita}}"
-                                    type="button" id="seleccion" name="seleccion" onclick="mostrarMensajeCitaRecetaDos()">Confirmar</button>
+                                    type="button" id="seleccion" name="seleccion" onclick="probandocosas('{{x.ID_Cita}}')">Confirmar</button>
                                 </form>
                             </td>
+                            {% else %}
+                            <td><span  class="text-success">Confirmado</span> </td>
+                            <td>
+                                <form method="POST" id="form_confirmar_cita">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="redireccion_confirmar" value ="0" id="redireccion_confirmar">
+                                    <input type="hidden" name="cita_hidden" value ="{{x.ID_Cita}}" id="cita_hidden">
+                                    <button class="btn-naranja-mediano" value="{{x.ID_Cita}}"
+                                    type="button" id="seleccion" disabled="True" name="seleccion" onclick="probandocosas('{{x.ID_Cita}}')">Confirmar</button>
+                                </form>
+                            </td>
+                            {% endif %}
+                               
                         </tr>
                         {% endfor %}
                         
@@ -78,19 +89,29 @@
                                 <td>{{y.Fecha_Cita}}</td>
                                 <td>{{y.Hora_Cita}}</td>
                                 {% if y.Confirmacion_Cita_Operador == False %}
-                                    <td><a class="text-warning">Sin Confirmar</a></td>
-                                {% else %}
-                                    <td><a class="text-success">Confirmado</a></td>
-                                {% endif %}
+                                <td><span class="text-warning">Sin confirmar</span></td>
                                     <td>
+                                        <form method="POST" id="form_confirmar_cita">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="redireccion_confirmar" value ="0" id="redireccion_confirmar">
+                                            <input type="hidden" name="cita_hidden" value ="{{y.ID_Cita}}" id="cita_hidden">
+                                            <button class="btn-naranja-mediano" value="{{y.ID_Cita}}"
+                                            type="button" id="seleccion" name="seleccion" onclick="probandocosas('{{y.ID_Cita}}')">Confirmar</button>
+                                        </form>
+                                    </td>
+                                {% else %}
+                                <td><span  class="text-success">Confirmado</span> </td>
+                                <td>
                                     <form method="POST" id="form_confirmar_cita">
                                         {% csrf_token %}
                                         <input type="hidden" name="redireccion_confirmar" value ="0" id="redireccion_confirmar">
                                         <input type="hidden" name="cita_hidden" value ="{{y.ID_Cita}}" id="cita_hidden">
                                         <button class="btn-naranja-mediano" value="{{y.ID_Cita}}"
-                                        type="button" id="seleccion" name="seleccion" onclick="mostrarMensajeCitaRecetaDos()">Confirmar</button>
+                                        type="button" id="seleccion" name="seleccion" onclick="probandocosas('{{y.ID_Cita}}')">Confirmar</button>
                                     </form>
                                 </td>
+                                {% endif %}
+                                    
                             </tr>
                         {% endfor %}
 

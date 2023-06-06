@@ -123,5 +123,10 @@ function ConfirmarPago(redireccion_confirmar){
   form.submit();
 }
 
+function probandocosas(idcita){
+  document.getElementById("mensajeCita").style.display = "block";
+  var campoHidden = document.getElementById("cita_hidden")
+  campoHidden.value = idcita
 
+}
 
